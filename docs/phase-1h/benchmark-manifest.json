@@ -1,0 +1,682 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-fixtures",
+  "generatedAt": "deterministic; timestamps intentionally omitted",
+  "generator": "tools/phase-1h/generate-fixtures.ts",
+  "fixturePolicy": "Every input and ground-truth image is generated locally from repository code. No scraped, user, provider-generated, or sensitive image is included.",
+  "counts": {
+    "clean": 20,
+    "empty": 3,
+    "multi_subject": 3,
+    "badly_occluded": 3,
+    "total": 29
+  },
+  "fixtures": [
+    {
+      "id": "clean-dog-side",
+      "category": "clean",
+      "subject": "dog",
+      "expectedOutcome": "accept",
+      "description": "One centered dog against a generated textured background.",
+      "renderer": "animal-dog",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-dog-side.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 148856,
+        "sha256": "75c1cad83c21e6a1b15d5a8691b2f366d3d2b429ce57cd7de768922c64b836d1"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-dog-side.png",
+        "mediaType": "image/png",
+        "byteLength": 2766,
+        "sha256": "749b3afa36db5d094ac3eb6246381241280579785870af9736509d575eea8a69"
+      }
+    },
+    {
+      "id": "clean-horse-profile",
+      "category": "clean",
+      "subject": "horse",
+      "expectedOutcome": "accept",
+      "description": "One centered horse against a generated textured background.",
+      "renderer": "animal-horse",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-horse-profile.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 147501,
+        "sha256": "9901cbd52612a8f64f77321450ed7a711abed9d5f37a34044bc0a9f76cd518c1"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-horse-profile.png",
+        "mediaType": "image/png",
+        "byteLength": 2898,
+        "sha256": "03fdc317f2ae79b4802fbec105f73ce753279f3a8eec811eeb66ff4709e90a41"
+      }
+    },
+    {
+      "id": "clean-cat-seated",
+      "category": "clean",
+      "subject": "cat",
+      "expectedOutcome": "accept",
+      "description": "One centered cat against a generated textured background.",
+      "renderer": "animal-cat",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-cat-seated.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 142493,
+        "sha256": "9a610697da728f2af3019d95bd38c456b937dc9e7d6f0a01520bfa8b01a5cab4"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-cat-seated.png",
+        "mediaType": "image/png",
+        "byteLength": 2778,
+        "sha256": "60d0bb047c567ec1da41352c7b99a80c2c7052a5b6e0e9f9780b7607ef4191b3"
+      }
+    },
+    {
+      "id": "clean-rabbit",
+      "category": "clean",
+      "subject": "rabbit",
+      "expectedOutcome": "accept",
+      "description": "One centered rabbit against a generated textured background.",
+      "renderer": "animal-rabbit",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-rabbit.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 141266,
+        "sha256": "a417e174992f4e4f3ba565ea9872be02cbbaff5070ab5142f840d86ac381a05e"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-rabbit.png",
+        "mediaType": "image/png",
+        "byteLength": 2650,
+        "sha256": "a5ba85c15b90aea3ccf669baea1a86756c1baab340aa5446344c2b3d1c62f031"
+      }
+    },
+    {
+      "id": "clean-bird",
+      "category": "clean",
+      "subject": "bird",
+      "expectedOutcome": "accept",
+      "description": "One centered bird against a generated textured background.",
+      "renderer": "animal-bird",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-bird.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 147950,
+        "sha256": "aad917afc13c36bc79b2acb80a3daf517ab91ea8b2e91c0c34f906a3afc00be3"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-bird.png",
+        "mediaType": "image/png",
+        "byteLength": 2466,
+        "sha256": "34aaf13ffffe7421807575e872930c3e42be78e62f562c83fb08c7640a954a55"
+      }
+    },
+    {
+      "id": "clean-fish",
+      "category": "clean",
+      "subject": "fish",
+      "expectedOutcome": "accept",
+      "description": "One centered fish against a generated textured background.",
+      "renderer": "animal-fish",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-fish.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 148673,
+        "sha256": "107f27b93e3b6c525b40c28239ccee9ab343752e9a9ad35486ed5015616706a1"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-fish.png",
+        "mediaType": "image/png",
+        "byteLength": 2582,
+        "sha256": "fd1cc7869688806755fac71d7c9788b0bca725117d42bf76a3fa8394e12e4027"
+      }
+    },
+    {
+      "id": "clean-butterfly",
+      "category": "clean",
+      "subject": "butterfly",
+      "expectedOutcome": "accept",
+      "description": "One centered butterfly against a generated textured background.",
+      "renderer": "animal-butterfly",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-butterfly.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 125362,
+        "sha256": "873c5692767a07b3deaa0277c029ae498739d7659d95486fdd2564f68810e7f0"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-butterfly.png",
+        "mediaType": "image/png",
+        "byteLength": 2778,
+        "sha256": "d23b690de9fdb1d9de52bc6ca1740a2c0957118069f7bb4885559f2065be3cb9"
+      }
+    },
+    {
+      "id": "clean-turtle",
+      "category": "clean",
+      "subject": "turtle",
+      "expectedOutcome": "accept",
+      "description": "One centered turtle against a generated textured background.",
+      "renderer": "animal-turtle",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-turtle.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 139484,
+        "sha256": "61559c6b9290880f55a9071ece6d6497268afa3b4711f7aa170c4e681d171285"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-turtle.png",
+        "mediaType": "image/png",
+        "byteLength": 2541,
+        "sha256": "5b91e3c647d5297c167df40b4a6d3e4835c870eecfb3f9cb12b8a7477e98c571"
+      }
+    },
+    {
+      "id": "clean-fox",
+      "category": "clean",
+      "subject": "fox",
+      "expectedOutcome": "accept",
+      "description": "One centered fox against a generated textured background.",
+      "renderer": "animal-fox",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-fox.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 146225,
+        "sha256": "49fa73b4408dbec2dc8dacfe2a10cf9720c500c7a8ac3d8af04018065f5fd603"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-fox.png",
+        "mediaType": "image/png",
+        "byteLength": 2937,
+        "sha256": "a3aa61d662d01ecd5feb1bf6e3269e63ba2c3395d174f5d5e6f0052f842c4aa2"
+      }
+    },
+    {
+      "id": "clean-elephant",
+      "category": "clean",
+      "subject": "elephant",
+      "expectedOutcome": "accept",
+      "description": "One centered elephant against a generated textured background.",
+      "renderer": "animal-elephant",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-elephant.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 137342,
+        "sha256": "5c18474856c94d6170318ef7aa47a8581c2b5e34e5e44b470540971df97c220e"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-elephant.png",
+        "mediaType": "image/png",
+        "byteLength": 2713,
+        "sha256": "3a306bf95d9e224a5513fff72d84d73a4a6f96756d97ca2bdb0942fcab9ee776"
+      }
+    },
+    {
+      "id": "clean-ball",
+      "category": "clean",
+      "subject": "ball",
+      "expectedOutcome": "accept",
+      "description": "One centered ball against a generated textured background.",
+      "renderer": "object-ball",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-ball.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 140954,
+        "sha256": "0ba1a91cee67f840c61924474eaf3064b0426e2f7682c2d54ab887b7208f2d82"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-ball.png",
+        "mediaType": "image/png",
+        "byteLength": 2351,
+        "sha256": "85e453a89b045e713c5cda4d599629fd63fb7a26d14e6a519bad6b2059248414"
+      }
+    },
+    {
+      "id": "clean-chair",
+      "category": "clean",
+      "subject": "chair",
+      "expectedOutcome": "accept",
+      "description": "One centered chair against a generated textured background.",
+      "renderer": "object-chair",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-chair.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 141939,
+        "sha256": "3e98f708e221bc51e2d21a3da2669e465115c90400b8351ca828b4e0c4d16b60"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-chair.png",
+        "mediaType": "image/png",
+        "byteLength": 2624,
+        "sha256": "a1b398c4423ac25af2a37a8d033939225ffa9ecf666c8f20e6039afb11f388e9"
+      }
+    },
+    {
+      "id": "clean-boot",
+      "category": "clean",
+      "subject": "boot",
+      "expectedOutcome": "accept",
+      "description": "One centered boot against a generated textured background.",
+      "renderer": "object-boot",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-boot.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 138698,
+        "sha256": "0ec135442353ac3ffdead2072143d6e8d00ae77a16fe808a5984895af25e0bc2"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-boot.png",
+        "mediaType": "image/png",
+        "byteLength": 2409,
+        "sha256": "d9f932274f5ccf46359b53b2f37f2d94047a8add582ee95ed440d89ccd3b933e"
+      }
+    },
+    {
+      "id": "clean-watering-can",
+      "category": "clean",
+      "subject": "watering can",
+      "expectedOutcome": "accept",
+      "description": "One centered watering can against a generated textured background.",
+      "renderer": "object-watering-can",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-watering-can.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 143476,
+        "sha256": "a5a347ce0a1095262b02c4ac096306a518c294d034c221379b6cc23bceac73d5"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-watering-can.png",
+        "mediaType": "image/png",
+        "byteLength": 2608,
+        "sha256": "ea8a0ad8dfd1216e9c5506cdc5bf020bd8cea0c6749a149892b6f951d69726a5"
+      }
+    },
+    {
+      "id": "clean-umbrella",
+      "category": "clean",
+      "subject": "umbrella",
+      "expectedOutcome": "accept",
+      "description": "One centered umbrella against a generated textured background.",
+      "renderer": "object-umbrella",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-umbrella.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 134073,
+        "sha256": "06da7179ad4875802cccdbcc79579ac1f257ec3d123587d0124924bf9604b22f"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-umbrella.png",
+        "mediaType": "image/png",
+        "byteLength": 2490,
+        "sha256": "13e9ecd995fa5aa89fe60a37219015c2206ebbdfbbc70662654a37c152c4424f"
+      }
+    },
+    {
+      "id": "clean-guitar",
+      "category": "clean",
+      "subject": "guitar",
+      "expectedOutcome": "accept",
+      "description": "One centered guitar against a generated textured background.",
+      "renderer": "object-guitar",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-guitar.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 146448,
+        "sha256": "e7433d5d3054f24c2c162d8a689a927b829350c991f2eade30adef284de97019"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-guitar.png",
+        "mediaType": "image/png",
+        "byteLength": 2507,
+        "sha256": "9a8c4eb17b8b3215e891c7c446548786c813fbee486d746ff925ac5df575572b"
+      }
+    },
+    {
+      "id": "clean-bicycle",
+      "category": "clean",
+      "subject": "bicycle",
+      "expectedOutcome": "accept",
+      "description": "One centered bicycle against a generated textured background.",
+      "renderer": "object-bicycle",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-bicycle.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 142557,
+        "sha256": "31da9bc77ca2978b6f84f3fc3f8a8e471c581035475d58d5d0877abe3f7452cb"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-bicycle.png",
+        "mediaType": "image/png",
+        "byteLength": 3256,
+        "sha256": "819cf9b8d0c00f05afdf6d292390068c4f39db76cd289f2cfce49fb7165c4414"
+      }
+    },
+    {
+      "id": "clean-teapot",
+      "category": "clean",
+      "subject": "teapot",
+      "expectedOutcome": "accept",
+      "description": "One centered teapot against a generated textured background.",
+      "renderer": "object-teapot",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-teapot.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 141405,
+        "sha256": "0f2fe0afeb96e5b74cf2af5af32c5811e3cb60036ce02de83e0d29b2e06e41e9"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-teapot.png",
+        "mediaType": "image/png",
+        "byteLength": 2717,
+        "sha256": "927aa76c14630c0779dfdd56419fc5168d596bb9e255d25e975a2b39d68085b3"
+      }
+    },
+    {
+      "id": "clean-lamp",
+      "category": "clean",
+      "subject": "table lamp",
+      "expectedOutcome": "accept",
+      "description": "One centered table lamp against a generated textured background.",
+      "renderer": "object-lamp",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-lamp.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 145879,
+        "sha256": "3478409c079b0f171a336c105385d501e7244e9182cf274f28fb06292d8c1849"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-lamp.png",
+        "mediaType": "image/png",
+        "byteLength": 2322,
+        "sha256": "9e84bbfa111127c8faa7dfef90c8c20a4fe4baaced968d23d35893f399a36021"
+      }
+    },
+    {
+      "id": "clean-toy-plane",
+      "category": "clean",
+      "subject": "toy airplane",
+      "expectedOutcome": "accept",
+      "description": "One centered toy airplane against a generated textured background.",
+      "renderer": "object-plane",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/clean-toy-plane.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 149046,
+        "sha256": "d745ea2bd7cfe8dd261c9e7cbd677b4afd81c022eb8e016c67587567bfb63527"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/clean-toy-plane.png",
+        "mediaType": "image/png",
+        "byteLength": 2512,
+        "sha256": "d24bcfe22c91ea54757a76517604de81843acc61ea76df009f0df7b2223a6608"
+      }
+    },
+    {
+      "id": "empty-soft-gradient",
+      "category": "empty",
+      "subject": "none",
+      "expectedOutcome": "reject",
+      "description": "Generated soft gradient with no foreground subject.",
+      "renderer": "empty-gradient",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/empty-soft-gradient.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 168789,
+        "sha256": "43cb87793b536c44f14b5003e73b957ede60a432c9a40b26ab89c7310229c825"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/empty-soft-gradient.png",
+        "mediaType": "image/png",
+        "byteLength": 1578,
+        "sha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2"
+      }
+    },
+    {
+      "id": "empty-speckled-wall",
+      "category": "empty",
+      "subject": "none",
+      "expectedOutcome": "reject",
+      "description": "Generated lightly speckled wall with no foreground subject.",
+      "renderer": "empty-speckles",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/empty-speckled-wall.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 169512,
+        "sha256": "95dadf51a27955d155366400a1bc58cfeee1d26cf77fbffc4a2d448318fb1bf2"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/empty-speckled-wall.png",
+        "mediaType": "image/png",
+        "byteLength": 1578,
+        "sha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2"
+      }
+    },
+    {
+      "id": "empty-floor-horizon",
+      "category": "empty",
+      "subject": "none",
+      "expectedOutcome": "reject",
+      "description": "Generated wall and floor horizon with no foreground subject.",
+      "renderer": "empty-horizon",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/empty-floor-horizon.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 114629,
+        "sha256": "e03d3773b29cbd266cc2c1bc0d31796e07bc7a83b88fa9ad7733a4c2d6034469"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/empty-floor-horizon.png",
+        "mediaType": "image/png",
+        "byteLength": 1578,
+        "sha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2"
+      }
+    },
+    {
+      "id": "multi-dog-and-ball",
+      "category": "multi_subject",
+      "subject": "dog and ball",
+      "expectedOutcome": "reject",
+      "description": "Two separated generated subjects: a dog and a ball.",
+      "renderer": "multi-dog-ball",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/multi-dog-and-ball.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 151127,
+        "sha256": "f531fbfe14fec143a3654d4f3b20889c05d0808576ee1dccb6911badd98b8645"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/multi-dog-and-ball.png",
+        "mediaType": "image/png",
+        "byteLength": 2774,
+        "sha256": "760f3fcdff87990d79b5f8e0c85aa7535e332682257e50c258049b6f32bbaea7"
+      }
+    },
+    {
+      "id": "multi-chair-and-lamp",
+      "category": "multi_subject",
+      "subject": "chair and lamp",
+      "expectedOutcome": "reject",
+      "description": "Two separated generated object subjects: a chair and a lamp.",
+      "renderer": "multi-chair-lamp",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/multi-chair-and-lamp.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 149767,
+        "sha256": "80a164d176a8b92133d2fa8e610d5697b97975dc61967761951d0758ec9c6a2e"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/multi-chair-and-lamp.png",
+        "mediaType": "image/png",
+        "byteLength": 2573,
+        "sha256": "a3dba3a28f5dc46a21ebe842ab11ad897253d81e4a3310d12359cf6277eaa146"
+      }
+    },
+    {
+      "id": "multi-bird-and-fish",
+      "category": "multi_subject",
+      "subject": "bird and fish",
+      "expectedOutcome": "reject",
+      "description": "Two separated generated animal subjects: a bird and a fish.",
+      "renderer": "multi-bird-fish",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/multi-bird-and-fish.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 153841,
+        "sha256": "88c21bb7287e09ec2098f0c39f5030619e341fa4343e21b1f05adda5e87e0f87"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/multi-bird-and-fish.png",
+        "mediaType": "image/png",
+        "byteLength": 2742,
+        "sha256": "4939493baddb6eba9e860f43e74bc5fcd6de723e26c4346839c943c3d0741b97"
+      }
+    },
+    {
+      "id": "occluded-dog",
+      "category": "badly_occluded",
+      "subject": "dog",
+      "expectedOutcome": "reject",
+      "description": "Generated dog split into disconnected visible fragments by a wide occluder.",
+      "renderer": "occluded-dog",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/occluded-dog.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 131624,
+        "sha256": "83972a0c76452f252639a771c2290798704742f8ac5ab6cb29105e86326025ba"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/occluded-dog.png",
+        "mediaType": "image/png",
+        "byteLength": 2486,
+        "sha256": "0ec9834106ec2f35b34055892bc6822cd38dc07a30d33873389988b698dc191f"
+      }
+    },
+    {
+      "id": "occluded-chair",
+      "category": "badly_occluded",
+      "subject": "chair",
+      "expectedOutcome": "reject",
+      "description": "Generated chair split into disconnected visible fragments by a wide occluder.",
+      "renderer": "occluded-chair",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/occluded-chair.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 122916,
+        "sha256": "15633b4dc02fb029c28529743f75b9560776e2f25a95c43520c8d4c36dccea63"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/occluded-chair.png",
+        "mediaType": "image/png",
+        "byteLength": 2337,
+        "sha256": "06e1edaee6e2a42f61f8f9d6f6380cc20b97e38dde78d1132355a7fdf56e74d5"
+      }
+    },
+    {
+      "id": "occluded-plane",
+      "category": "badly_occluded",
+      "subject": "toy airplane",
+      "expectedOutcome": "reject",
+      "description": "Generated airplane split into disconnected visible fragments by a wide occluder.",
+      "renderer": "occluded-plane",
+      "rightsBasis": "repository-local procedural fixture generated solely for testing",
+      "input": {
+        "path": "tests/fixtures/phase-1h/input/occluded-plane.png",
+        "mediaType": "image/png",
+        "pixelWidth": 480,
+        "pixelHeight": 480,
+        "byteLength": 135258,
+        "sha256": "0aeb6ef012e9de435edc4ea28c71eeaadb87c42cad4dc9de60d06a6a64a2867a"
+      },
+      "groundTruth": {
+        "path": "tests/fixtures/phase-1h/ground-truth/occluded-plane.png",
+        "mediaType": "image/png",
+        "byteLength": 2219,
+        "sha256": "379a69285e10d901b68ca62c1b5e4c8d212ddac3680938dc15d6934b96109041"
+      }
+    }
+  ]
+}

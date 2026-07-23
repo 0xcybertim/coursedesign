@@ -1,0 +1,4150 @@
+{
+  "schemaVersion": "1.0.0-phase1h-b1-vectorization-benchmark",
+  "vectorizerVersion": "1.0.0-phase1h-b1",
+  "validatorVersion": "1.0.0-phase1h-b1",
+  "executionBoundary": {
+    "externalProviderCallsMade": 0,
+    "retriesMade": 0,
+    "networkRequired": false,
+    "sourceCorpus": "26 approved local remove.bg masks plus 3 repository ground-truth empty masks whose provider requests returned HTTP 400"
+  },
+  "summary": {
+    "fixtures": 29,
+    "accepted": 18,
+    "rejected": 11,
+    "acceptedClean": 18,
+    "rejectedClean": 2,
+    "rejectedNegativeCases": 9,
+    "deterministicRepeatMatches": 29,
+    "findingCounts": {
+      "empty_mask": 3,
+      "holes_not_supported": 2,
+      "multiple_significant_subjects": 3,
+      "outside_prototype_envelope": 3
+    }
+  },
+  "results": [
+    {
+      "fixtureId": "clean-dog-side",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-dog-side.png",
+      "sourceMaskSha256": "f8ce9d740ae39e7b799eab27d5dea788ed504da5323b36a6b2b8b9892fc9a928",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6625,
+              "y": 2771
+            },
+            {
+              "x": 7125,
+              "y": 3729
+            },
+            {
+              "x": 7292,
+              "y": 3750
+            },
+            {
+              "x": 7396,
+              "y": 3813
+            },
+            {
+              "x": 7458,
+              "y": 3813
+            },
+            {
+              "x": 7979,
+              "y": 3083
+            },
+            {
+              "x": 7979,
+              "y": 4438
+            },
+            {
+              "x": 8042,
+              "y": 4729
+            },
+            {
+              "x": 7979,
+              "y": 5063
+            },
+            {
+              "x": 7813,
+              "y": 5354
+            },
+            {
+              "x": 7458,
+              "y": 5625
+            },
+            {
+              "x": 7208,
+              "y": 5708
+            },
+            {
+              "x": 7063,
+              "y": 5708
+            },
+            {
+              "x": 7042,
+              "y": 5875
+            },
+            {
+              "x": 6833,
+              "y": 6208
+            },
+            {
+              "x": 6583,
+              "y": 6417
+            },
+            {
+              "x": 6250,
+              "y": 6583
+            },
+            {
+              "x": 6250,
+              "y": 8250
+            },
+            {
+              "x": 5625,
+              "y": 8250
+            },
+            {
+              "x": 5625,
+              "y": 6771
+            },
+            {
+              "x": 5313,
+              "y": 6833
+            },
+            {
+              "x": 4896,
+              "y": 6854
+            },
+            {
+              "x": 4333,
+              "y": 6813
+            },
+            {
+              "x": 4125,
+              "y": 6750
+            },
+            {
+              "x": 4083,
+              "y": 6750
+            },
+            {
+              "x": 4083,
+              "y": 8250
+            },
+            {
+              "x": 3458,
+              "y": 8250
+            },
+            {
+              "x": 3458,
+              "y": 6521
+            },
+            {
+              "x": 3229,
+              "y": 6417
+            },
+            {
+              "x": 2896,
+              "y": 6104
+            },
+            {
+              "x": 2750,
+              "y": 5813
+            },
+            {
+              "x": 2729,
+              "y": 5625
+            },
+            {
+              "x": 2771,
+              "y": 5375
+            },
+            {
+              "x": 1521,
+              "y": 4354
+            },
+            {
+              "x": 1479,
+              "y": 4229
+            },
+            {
+              "x": 1521,
+              "y": 4083
+            },
+            {
+              "x": 1708,
+              "y": 3979
+            },
+            {
+              "x": 1854,
+              "y": 4021
+            },
+            {
+              "x": 3000,
+              "y": 5000
+            },
+            {
+              "x": 3083,
+              "y": 5000
+            },
+            {
+              "x": 3229,
+              "y": 4854
+            },
+            {
+              "x": 3583,
+              "y": 4667
+            },
+            {
+              "x": 4333,
+              "y": 4458
+            },
+            {
+              "x": 4896,
+              "y": 4417
+            },
+            {
+              "x": 5313,
+              "y": 4438
+            },
+            {
+              "x": 5958,
+              "y": 4583
+            },
+            {
+              "x": 6000,
+              "y": 4375
+            },
+            {
+              "x": 6104,
+              "y": 4167
+            },
+            {
+              "x": 6292,
+              "y": 3958
+            },
+            {
+              "x": 6500,
+              "y": 3833
+            }
+          ],
+          "polygonSha256": "3d554a5d0aae69b6120c35ac91b08b74b3f66c272ac750803a49d45a4cecf23d",
+          "sourceMaskSha256": "f8ce9d740ae39e7b799eab27d5dea788ed504da5323b36a6b2b8b9892fc9a928",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 32598,
+            "retainedForegroundFraction": 0.141484375,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 59
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-horse-profile",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-horse-profile.png",
+      "sourceMaskSha256": "873d28c3b79c2ff65709976094b1317ef98194b7d6db3506a13dd9293d0aa095",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6813,
+              "y": 1833
+            },
+            {
+              "x": 7104,
+              "y": 2604
+            },
+            {
+              "x": 7479,
+              "y": 2625
+            },
+            {
+              "x": 7792,
+              "y": 2104
+            },
+            {
+              "x": 7750,
+              "y": 2771
+            },
+            {
+              "x": 8021,
+              "y": 3021
+            },
+            {
+              "x": 8125,
+              "y": 3396
+            },
+            {
+              "x": 8021,
+              "y": 3750
+            },
+            {
+              "x": 7833,
+              "y": 3958
+            },
+            {
+              "x": 7458,
+              "y": 4146
+            },
+            {
+              "x": 7167,
+              "y": 4167
+            },
+            {
+              "x": 6958,
+              "y": 5438
+            },
+            {
+              "x": 7042,
+              "y": 5813
+            },
+            {
+              "x": 6938,
+              "y": 6167
+            },
+            {
+              "x": 6625,
+              "y": 6500
+            },
+            {
+              "x": 6271,
+              "y": 6708
+            },
+            {
+              "x": 6063,
+              "y": 6771
+            },
+            {
+              "x": 6063,
+              "y": 8500
+            },
+            {
+              "x": 5458,
+              "y": 8500
+            },
+            {
+              "x": 5458,
+              "y": 6938
+            },
+            {
+              "x": 5125,
+              "y": 7000
+            },
+            {
+              "x": 4688,
+              "y": 7021
+            },
+            {
+              "x": 4083,
+              "y": 6979
+            },
+            {
+              "x": 3750,
+              "y": 6896
+            },
+            {
+              "x": 3729,
+              "y": 8500
+            },
+            {
+              "x": 3125,
+              "y": 8500
+            },
+            {
+              "x": 3125,
+              "y": 6688
+            },
+            {
+              "x": 2771,
+              "y": 6500
+            },
+            {
+              "x": 2500,
+              "y": 6229
+            },
+            {
+              "x": 2375,
+              "y": 5917
+            },
+            {
+              "x": 2208,
+              "y": 5750
+            },
+            {
+              "x": 2125,
+              "y": 5583
+            },
+            {
+              "x": 2063,
+              "y": 5542
+            },
+            {
+              "x": 1979,
+              "y": 5375
+            },
+            {
+              "x": 1313,
+              "y": 4458
+            },
+            {
+              "x": 1313,
+              "y": 4229
+            },
+            {
+              "x": 1438,
+              "y": 4125
+            },
+            {
+              "x": 1625,
+              "y": 4146
+            },
+            {
+              "x": 2208,
+              "y": 4938
+            },
+            {
+              "x": 2479,
+              "y": 5375
+            },
+            {
+              "x": 2521,
+              "y": 5375
+            },
+            {
+              "x": 2771,
+              "y": 5104
+            },
+            {
+              "x": 3125,
+              "y": 4896
+            },
+            {
+              "x": 3583,
+              "y": 4729
+            },
+            {
+              "x": 3958,
+              "y": 4646
+            },
+            {
+              "x": 4688,
+              "y": 4583
+            },
+            {
+              "x": 5125,
+              "y": 4604
+            },
+            {
+              "x": 5646,
+              "y": 4688
+            },
+            {
+              "x": 5958,
+              "y": 4792
+            },
+            {
+              "x": 6208,
+              "y": 3688
+            },
+            {
+              "x": 6146,
+              "y": 3396
+            },
+            {
+              "x": 6167,
+              "y": 3229
+            },
+            {
+              "x": 6313,
+              "y": 2938
+            },
+            {
+              "x": 6563,
+              "y": 2729
+            },
+            {
+              "x": 6708,
+              "y": 2688
+            }
+          ],
+          "polygonSha256": "2bae6ecc11d1d8739fd0898a691991e362d1917d988b91fe620d398619d20b79",
+          "sourceMaskSha256": "873d28c3b79c2ff65709976094b1317ef98194b7d6db3506a13dd9293d0aa095",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 1,
+            "removedIslandPixels": 1,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 35589,
+            "retainedForegroundFraction": 0.15446614583333335,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 59
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-cat-seated",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-cat-seated.png",
+      "sourceMaskSha256": "732dae84dc04aba5b50670348b3d1bad6d3199d31d715451c1daa47225ca5877",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 4188,
+              "y": 1938
+            },
+            {
+              "x": 4667,
+              "y": 2813
+            },
+            {
+              "x": 4875,
+              "y": 2771
+            },
+            {
+              "x": 5396,
+              "y": 2771
+            },
+            {
+              "x": 5667,
+              "y": 2833
+            },
+            {
+              "x": 6271,
+              "y": 2021
+            },
+            {
+              "x": 6250,
+              "y": 3271
+            },
+            {
+              "x": 6333,
+              "y": 3333
+            },
+            {
+              "x": 6500,
+              "y": 3688
+            },
+            {
+              "x": 6521,
+              "y": 4208
+            },
+            {
+              "x": 6458,
+              "y": 4417
+            },
+            {
+              "x": 6333,
+              "y": 4646
+            },
+            {
+              "x": 6250,
+              "y": 4708
+            },
+            {
+              "x": 6250,
+              "y": 4771
+            },
+            {
+              "x": 6354,
+              "y": 4854
+            },
+            {
+              "x": 6542,
+              "y": 5125
+            },
+            {
+              "x": 6750,
+              "y": 5604
+            },
+            {
+              "x": 6833,
+              "y": 5979
+            },
+            {
+              "x": 6833,
+              "y": 6625
+            },
+            {
+              "x": 6667,
+              "y": 7229
+            },
+            {
+              "x": 6354,
+              "y": 7750
+            },
+            {
+              "x": 6083,
+              "y": 8021
+            },
+            {
+              "x": 5813,
+              "y": 8208
+            },
+            {
+              "x": 5542,
+              "y": 8333
+            },
+            {
+              "x": 5208,
+              "y": 8417
+            },
+            {
+              "x": 4688,
+              "y": 8417
+            },
+            {
+              "x": 4354,
+              "y": 8333
+            },
+            {
+              "x": 3979,
+              "y": 8146
+            },
+            {
+              "x": 3542,
+              "y": 7750
+            },
+            {
+              "x": 3229,
+              "y": 7229
+            },
+            {
+              "x": 3125,
+              "y": 6833
+            },
+            {
+              "x": 2563,
+              "y": 5896
+            },
+            {
+              "x": 2479,
+              "y": 5813
+            },
+            {
+              "x": 2208,
+              "y": 5313
+            },
+            {
+              "x": 1979,
+              "y": 5229
+            },
+            {
+              "x": 1896,
+              "y": 5146
+            },
+            {
+              "x": 1771,
+              "y": 4833
+            },
+            {
+              "x": 1771,
+              "y": 4438
+            },
+            {
+              "x": 1896,
+              "y": 4125
+            },
+            {
+              "x": 1979,
+              "y": 4042
+            },
+            {
+              "x": 2146,
+              "y": 3979
+            },
+            {
+              "x": 2333,
+              "y": 4042
+            },
+            {
+              "x": 2479,
+              "y": 4229
+            },
+            {
+              "x": 2542,
+              "y": 4438
+            },
+            {
+              "x": 2521,
+              "y": 4896
+            },
+            {
+              "x": 3104,
+              "y": 5833
+            },
+            {
+              "x": 3188,
+              "y": 5479
+            },
+            {
+              "x": 3354,
+              "y": 5125
+            },
+            {
+              "x": 3542,
+              "y": 4854
+            },
+            {
+              "x": 3875,
+              "y": 4563
+            },
+            {
+              "x": 3750,
+              "y": 4208
+            },
+            {
+              "x": 3750,
+              "y": 3771
+            },
+            {
+              "x": 3875,
+              "y": 3438
+            },
+            {
+              "x": 4000,
+              "y": 3292
+            }
+          ],
+          "polygonSha256": "32ed8e472ffa4af86a52bc8bf9cd2350c7c6276cd659dfd1d43f51e96ce7ba7c",
+          "sourceMaskSha256": "732dae84dc04aba5b50670348b3d1bad6d3199d31d715451c1daa47225ca5877",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 1,
+            "removedIslandPixels": 1,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 42748,
+            "retainedForegroundFraction": 0.18553819444444444,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 99
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-rabbit",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-rabbit.png",
+      "sourceMaskSha256": "9cc123f54819723873e23f5cc389feb16953aaf4753b3a4212105594585f2360",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 7188,
+              "y": 1000
+            },
+            {
+              "x": 7271,
+              "y": 1021
+            },
+            {
+              "x": 7458,
+              "y": 1271
+            },
+            {
+              "x": 7583,
+              "y": 1688
+            },
+            {
+              "x": 7646,
+              "y": 2083
+            },
+            {
+              "x": 7688,
+              "y": 2813
+            },
+            {
+              "x": 7667,
+              "y": 3354
+            },
+            {
+              "x": 7542,
+              "y": 4083
+            },
+            {
+              "x": 7708,
+              "y": 4271
+            },
+            {
+              "x": 7854,
+              "y": 4646
+            },
+            {
+              "x": 7854,
+              "y": 5042
+            },
+            {
+              "x": 7729,
+              "y": 5375
+            },
+            {
+              "x": 7563,
+              "y": 5604
+            },
+            {
+              "x": 7354,
+              "y": 5771
+            },
+            {
+              "x": 7042,
+              "y": 5917
+            },
+            {
+              "x": 6813,
+              "y": 5958
+            },
+            {
+              "x": 6875,
+              "y": 6146
+            },
+            {
+              "x": 6875,
+              "y": 6604
+            },
+            {
+              "x": 6792,
+              "y": 6896
+            },
+            {
+              "x": 6458,
+              "y": 7396
+            },
+            {
+              "x": 6083,
+              "y": 7688
+            },
+            {
+              "x": 5646,
+              "y": 7896
+            },
+            {
+              "x": 5104,
+              "y": 8021
+            },
+            {
+              "x": 4354,
+              "y": 8000
+            },
+            {
+              "x": 3938,
+              "y": 7896
+            },
+            {
+              "x": 3583,
+              "y": 7729
+            },
+            {
+              "x": 3250,
+              "y": 7500
+            },
+            {
+              "x": 2938,
+              "y": 7146
+            },
+            {
+              "x": 2792,
+              "y": 6854
+            },
+            {
+              "x": 2750,
+              "y": 6604
+            },
+            {
+              "x": 2542,
+              "y": 6542
+            },
+            {
+              "x": 2354,
+              "y": 6375
+            },
+            {
+              "x": 2250,
+              "y": 6146
+            },
+            {
+              "x": 2229,
+              "y": 5979
+            },
+            {
+              "x": 2250,
+              "y": 5792
+            },
+            {
+              "x": 2354,
+              "y": 5563
+            },
+            {
+              "x": 2479,
+              "y": 5438
+            },
+            {
+              "x": 2646,
+              "y": 5354
+            },
+            {
+              "x": 2917,
+              "y": 5354
+            },
+            {
+              "x": 3104,
+              "y": 5438
+            },
+            {
+              "x": 3250,
+              "y": 5271
+            },
+            {
+              "x": 3542,
+              "y": 5063
+            },
+            {
+              "x": 3938,
+              "y": 4875
+            },
+            {
+              "x": 4229,
+              "y": 4792
+            },
+            {
+              "x": 4813,
+              "y": 4729
+            },
+            {
+              "x": 5458,
+              "y": 4813
+            },
+            {
+              "x": 5479,
+              "y": 4542
+            },
+            {
+              "x": 5604,
+              "y": 4271
+            },
+            {
+              "x": 5708,
+              "y": 4125
+            },
+            {
+              "x": 5875,
+              "y": 4000
+            },
+            {
+              "x": 5792,
+              "y": 3396
+            },
+            {
+              "x": 5771,
+              "y": 2896
+            },
+            {
+              "x": 5833,
+              "y": 2063
+            },
+            {
+              "x": 5979,
+              "y": 1479
+            },
+            {
+              "x": 6188,
+              "y": 1167
+            },
+            {
+              "x": 6292,
+              "y": 1125
+            },
+            {
+              "x": 6417,
+              "y": 1167
+            },
+            {
+              "x": 6625,
+              "y": 1479
+            },
+            {
+              "x": 6771,
+              "y": 2063
+            },
+            {
+              "x": 6792,
+              "y": 1792
+            },
+            {
+              "x": 6896,
+              "y": 1375
+            },
+            {
+              "x": 7000,
+              "y": 1146
+            }
+          ],
+          "polygonSha256": "e2d03b2cce5153bcb9c5b0e4a0167110dae594699f97f7c6c83752296aac9c24",
+          "sourceMaskSha256": "9cc123f54819723873e23f5cc389feb16953aaf4753b3a4212105594585f2360",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 44566,
+            "retainedForegroundFraction": 0.19342881944444446,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 79
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-bird",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-bird.png",
+      "sourceMaskSha256": "39ac0b566ef1c351f198b9b086688c221ea83a4ac78fc6cd2262e7e3b58deb0e",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6813,
+              "y": 3521
+            },
+            {
+              "x": 7125,
+              "y": 3563
+            },
+            {
+              "x": 7500,
+              "y": 3750
+            },
+            {
+              "x": 7771,
+              "y": 4063
+            },
+            {
+              "x": 7854,
+              "y": 4271
+            },
+            {
+              "x": 7875,
+              "y": 4458
+            },
+            {
+              "x": 8896,
+              "y": 4854
+            },
+            {
+              "x": 7854,
+              "y": 5125
+            },
+            {
+              "x": 7833,
+              "y": 4833
+            },
+            {
+              "x": 7771,
+              "y": 5042
+            },
+            {
+              "x": 7500,
+              "y": 5354
+            },
+            {
+              "x": 7250,
+              "y": 5500
+            },
+            {
+              "x": 7021,
+              "y": 5563
+            },
+            {
+              "x": 7021,
+              "y": 5833
+            },
+            {
+              "x": 6854,
+              "y": 6250
+            },
+            {
+              "x": 6458,
+              "y": 6667
+            },
+            {
+              "x": 5979,
+              "y": 6938
+            },
+            {
+              "x": 5604,
+              "y": 7063
+            },
+            {
+              "x": 5125,
+              "y": 7146
+            },
+            {
+              "x": 4750,
+              "y": 7146
+            },
+            {
+              "x": 4542,
+              "y": 8208
+            },
+            {
+              "x": 4396,
+              "y": 8208
+            },
+            {
+              "x": 4354,
+              "y": 8125
+            },
+            {
+              "x": 4542,
+              "y": 7146
+            },
+            {
+              "x": 3958,
+              "y": 7063
+            },
+            {
+              "x": 3292,
+              "y": 6792
+            },
+            {
+              "x": 2833,
+              "y": 6417
+            },
+            {
+              "x": 2708,
+              "y": 6250
+            },
+            {
+              "x": 2583,
+              "y": 6000
+            },
+            {
+              "x": 2583,
+              "y": 5917
+            },
+            {
+              "x": 2521,
+              "y": 5938
+            },
+            {
+              "x": 2250,
+              "y": 6438
+            },
+            {
+              "x": 2167,
+              "y": 6521
+            },
+            {
+              "x": 1417,
+              "y": 4667
+            },
+            {
+              "x": 2542,
+              "y": 5500
+            },
+            {
+              "x": 2583,
+              "y": 5271
+            },
+            {
+              "x": 2833,
+              "y": 4854
+            },
+            {
+              "x": 3104,
+              "y": 4604
+            },
+            {
+              "x": 3583,
+              "y": 4333
+            },
+            {
+              "x": 4250,
+              "y": 4146
+            },
+            {
+              "x": 4771,
+              "y": 4104
+            },
+            {
+              "x": 5313,
+              "y": 4146
+            },
+            {
+              "x": 5813,
+              "y": 4271
+            },
+            {
+              "x": 5875,
+              "y": 4063
+            },
+            {
+              "x": 6146,
+              "y": 3750
+            },
+            {
+              "x": 6396,
+              "y": 3604
+            }
+          ],
+          "polygonSha256": "d5b3bc9b8096b260ea7670a377adf1397efe662aeda79cd1dca2c9190ade38b9",
+          "sourceMaskSha256": "39ac0b566ef1c351f198b9b086688c221ea83a4ac78fc6cd2262e7e3b58deb0e",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 1,
+            "removedIslandPixels": 1,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 33649,
+            "retainedForegroundFraction": 0.14604600694444445,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 75
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-fish",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-fish.png",
+      "sourceMaskSha256": "0e938a035c9521f0c068f523d7e9606aa345ec13ec41328e8b5606c01fb42735",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 5729,
+              "y": 2667
+            },
+            {
+              "x": 6000,
+              "y": 3833
+            },
+            {
+              "x": 6500,
+              "y": 4000
+            },
+            {
+              "x": 6896,
+              "y": 4229
+            },
+            {
+              "x": 7208,
+              "y": 4521
+            },
+            {
+              "x": 7375,
+              "y": 4792
+            },
+            {
+              "x": 7438,
+              "y": 4979
+            },
+            {
+              "x": 7438,
+              "y": 5375
+            },
+            {
+              "x": 7313,
+              "y": 5688
+            },
+            {
+              "x": 6979,
+              "y": 6063
+            },
+            {
+              "x": 6500,
+              "y": 6354
+            },
+            {
+              "x": 5854,
+              "y": 6563
+            },
+            {
+              "x": 5438,
+              "y": 6625
+            },
+            {
+              "x": 4479,
+              "y": 6604
+            },
+            {
+              "x": 3813,
+              "y": 6438
+            },
+            {
+              "x": 3208,
+              "y": 6125
+            },
+            {
+              "x": 2896,
+              "y": 5833
+            },
+            {
+              "x": 2729,
+              "y": 5563
+            },
+            {
+              "x": 2688,
+              "y": 5375
+            },
+            {
+              "x": 2646,
+              "y": 5375
+            },
+            {
+              "x": 2229,
+              "y": 5813
+            },
+            {
+              "x": 2229,
+              "y": 5854
+            },
+            {
+              "x": 1917,
+              "y": 6146
+            },
+            {
+              "x": 1917,
+              "y": 6188
+            },
+            {
+              "x": 1604,
+              "y": 6479
+            },
+            {
+              "x": 1604,
+              "y": 6521
+            },
+            {
+              "x": 1292,
+              "y": 6813
+            },
+            {
+              "x": 1292,
+              "y": 3521
+            },
+            {
+              "x": 2542,
+              "y": 4833
+            },
+            {
+              "x": 2542,
+              "y": 4875
+            },
+            {
+              "x": 2688,
+              "y": 4979
+            },
+            {
+              "x": 2729,
+              "y": 4792
+            },
+            {
+              "x": 2896,
+              "y": 4521
+            },
+            {
+              "x": 3333,
+              "y": 4146
+            },
+            {
+              "x": 4000,
+              "y": 3854
+            },
+            {
+              "x": 4479,
+              "y": 3750
+            },
+            {
+              "x": 4875,
+              "y": 3729
+            },
+            {
+              "x": 5542,
+              "y": 2896
+            },
+            {
+              "x": 5646,
+              "y": 2813
+            }
+          ],
+          "polygonSha256": "6dd37dd031d4cdedcedeca24fb1e5e2571cbf43f967f755fbf0a821cca6abf4d",
+          "sourceMaskSha256": "0e938a035c9521f0c068f523d7e9606aa345ec13ec41328e8b5606c01fb42735",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 32535,
+            "retainedForegroundFraction": 0.1412109375,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 82
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-butterfly",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-butterfly.png",
+      "sourceMaskSha256": "33a6104e794f6f777353c2b3df1b856c8ce90c8e2f4625370454bc8dbfbca75f",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 4104,
+              "y": 2146
+            },
+            {
+              "x": 4208,
+              "y": 2208
+            },
+            {
+              "x": 4521,
+              "y": 2771
+            },
+            {
+              "x": 4833,
+              "y": 3021
+            },
+            {
+              "x": 5000,
+              "y": 3271
+            },
+            {
+              "x": 5188,
+              "y": 3021
+            },
+            {
+              "x": 5500,
+              "y": 2771
+            },
+            {
+              "x": 5813,
+              "y": 2208
+            },
+            {
+              "x": 5917,
+              "y": 2146
+            },
+            {
+              "x": 6000,
+              "y": 2250
+            },
+            {
+              "x": 5792,
+              "y": 2583
+            },
+            {
+              "x": 6083,
+              "y": 2500
+            },
+            {
+              "x": 6333,
+              "y": 2479
+            },
+            {
+              "x": 6729,
+              "y": 2542
+            },
+            {
+              "x": 7021,
+              "y": 2667
+            },
+            {
+              "x": 7458,
+              "y": 3021
+            },
+            {
+              "x": 7688,
+              "y": 3333
+            },
+            {
+              "x": 7833,
+              "y": 3625
+            },
+            {
+              "x": 7938,
+              "y": 3917
+            },
+            {
+              "x": 8021,
+              "y": 4333
+            },
+            {
+              "x": 8021,
+              "y": 5021
+            },
+            {
+              "x": 7938,
+              "y": 5438
+            },
+            {
+              "x": 7833,
+              "y": 5729
+            },
+            {
+              "x": 7688,
+              "y": 6021
+            },
+            {
+              "x": 7417,
+              "y": 6354
+            },
+            {
+              "x": 7500,
+              "y": 6708
+            },
+            {
+              "x": 7479,
+              "y": 7313
+            },
+            {
+              "x": 7396,
+              "y": 7583
+            },
+            {
+              "x": 7188,
+              "y": 7938
+            },
+            {
+              "x": 6958,
+              "y": 8167
+            },
+            {
+              "x": 6667,
+              "y": 8333
+            },
+            {
+              "x": 6375,
+              "y": 8417
+            },
+            {
+              "x": 6000,
+              "y": 8417
+            },
+            {
+              "x": 5813,
+              "y": 8375
+            },
+            {
+              "x": 5438,
+              "y": 8167
+            },
+            {
+              "x": 5208,
+              "y": 7938
+            },
+            {
+              "x": 5083,
+              "y": 7729
+            },
+            {
+              "x": 4938,
+              "y": 7729
+            },
+            {
+              "x": 4813,
+              "y": 7938
+            },
+            {
+              "x": 4438,
+              "y": 8271
+            },
+            {
+              "x": 4021,
+              "y": 8417
+            },
+            {
+              "x": 3625,
+              "y": 8417
+            },
+            {
+              "x": 3333,
+              "y": 8333
+            },
+            {
+              "x": 3083,
+              "y": 8188
+            },
+            {
+              "x": 2833,
+              "y": 7938
+            },
+            {
+              "x": 2625,
+              "y": 7583
+            },
+            {
+              "x": 2521,
+              "y": 7208
+            },
+            {
+              "x": 2521,
+              "y": 6708
+            },
+            {
+              "x": 2604,
+              "y": 6354
+            },
+            {
+              "x": 2417,
+              "y": 6146
+            },
+            {
+              "x": 2188,
+              "y": 5729
+            },
+            {
+              "x": 2021,
+              "y": 5167
+            },
+            {
+              "x": 2000,
+              "y": 4333
+            },
+            {
+              "x": 2083,
+              "y": 3917
+            },
+            {
+              "x": 2188,
+              "y": 3625
+            },
+            {
+              "x": 2417,
+              "y": 3208
+            },
+            {
+              "x": 2563,
+              "y": 3021
+            },
+            {
+              "x": 2896,
+              "y": 2729
+            },
+            {
+              "x": 3167,
+              "y": 2583
+            },
+            {
+              "x": 3458,
+              "y": 2500
+            },
+            {
+              "x": 3938,
+              "y": 2500
+            },
+            {
+              "x": 4229,
+              "y": 2583
+            },
+            {
+              "x": 4021,
+              "y": 2250
+            }
+          ],
+          "polygonSha256": "63230603c64697a5040ac4a6e680e2152eae1f4d9e20442c540c15eb0d1a1316",
+          "sourceMaskSha256": "33a6104e794f6f777353c2b3df1b856c8ce90c8e2f4625370454bc8dbfbca75f",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 68161,
+            "retainedForegroundFraction": 0.29583767361111113,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 123
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-turtle",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-turtle.png",
+      "sourceMaskSha256": "f0bd4ad7a39ae4192219a87c6fae68e60bc6a57d3241877df5b452f19c197cc6",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 5938,
+              "y": 3354
+            },
+            {
+              "x": 6271,
+              "y": 3417
+            },
+            {
+              "x": 6563,
+              "y": 3625
+            },
+            {
+              "x": 6646,
+              "y": 3771
+            },
+            {
+              "x": 6688,
+              "y": 3958
+            },
+            {
+              "x": 6667,
+              "y": 4104
+            },
+            {
+              "x": 6583,
+              "y": 4271
+            },
+            {
+              "x": 6833,
+              "y": 4438
+            },
+            {
+              "x": 7042,
+              "y": 4688
+            },
+            {
+              "x": 7313,
+              "y": 4646
+            },
+            {
+              "x": 7646,
+              "y": 4688
+            },
+            {
+              "x": 7979,
+              "y": 4833
+            },
+            {
+              "x": 8167,
+              "y": 5000
+            },
+            {
+              "x": 8271,
+              "y": 5167
+            },
+            {
+              "x": 8333,
+              "y": 5438
+            },
+            {
+              "x": 8271,
+              "y": 5729
+            },
+            {
+              "x": 8167,
+              "y": 5896
+            },
+            {
+              "x": 7979,
+              "y": 6063
+            },
+            {
+              "x": 7771,
+              "y": 6167
+            },
+            {
+              "x": 7542,
+              "y": 6229
+            },
+            {
+              "x": 7208,
+              "y": 6229
+            },
+            {
+              "x": 7063,
+              "y": 6479
+            },
+            {
+              "x": 6833,
+              "y": 6708
+            },
+            {
+              "x": 6583,
+              "y": 6875
+            },
+            {
+              "x": 6646,
+              "y": 6979
+            },
+            {
+              "x": 6688,
+              "y": 7188
+            },
+            {
+              "x": 6646,
+              "y": 7375
+            },
+            {
+              "x": 6563,
+              "y": 7521
+            },
+            {
+              "x": 6396,
+              "y": 7667
+            },
+            {
+              "x": 6146,
+              "y": 7771
+            },
+            {
+              "x": 5750,
+              "y": 7771
+            },
+            {
+              "x": 5625,
+              "y": 7729
+            },
+            {
+              "x": 5333,
+              "y": 7521
+            },
+            {
+              "x": 5250,
+              "y": 7333
+            },
+            {
+              "x": 4375,
+              "y": 7354
+            },
+            {
+              "x": 3667,
+              "y": 7188
+            },
+            {
+              "x": 3604,
+              "y": 7188
+            },
+            {
+              "x": 3604,
+              "y": 7313
+            },
+            {
+              "x": 3500,
+              "y": 7521
+            },
+            {
+              "x": 3208,
+              "y": 7729
+            },
+            {
+              "x": 3083,
+              "y": 7771
+            },
+            {
+              "x": 2708,
+              "y": 7771
+            },
+            {
+              "x": 2375,
+              "y": 7625
+            },
+            {
+              "x": 2188,
+              "y": 7375
+            },
+            {
+              "x": 2146,
+              "y": 7188
+            },
+            {
+              "x": 2167,
+              "y": 7042
+            },
+            {
+              "x": 2271,
+              "y": 6833
+            },
+            {
+              "x": 2438,
+              "y": 6688
+            },
+            {
+              "x": 2625,
+              "y": 6625
+            },
+            {
+              "x": 2625,
+              "y": 6583
+            },
+            {
+              "x": 2417,
+              "y": 6375
+            },
+            {
+              "x": 2271,
+              "y": 6125
+            },
+            {
+              "x": 2188,
+              "y": 5896
+            },
+            {
+              "x": 2167,
+              "y": 5625
+            },
+            {
+              "x": 1813,
+              "y": 5583
+            },
+            {
+              "x": 1250,
+              "y": 5875
+            },
+            {
+              "x": 1250,
+              "y": 4979
+            },
+            {
+              "x": 1813,
+              "y": 5271
+            },
+            {
+              "x": 1958,
+              "y": 5229
+            },
+            {
+              "x": 2208,
+              "y": 5229
+            },
+            {
+              "x": 2375,
+              "y": 4833
+            },
+            {
+              "x": 2625,
+              "y": 4563
+            },
+            {
+              "x": 2375,
+              "y": 4438
+            },
+            {
+              "x": 2188,
+              "y": 4188
+            },
+            {
+              "x": 2146,
+              "y": 3979
+            },
+            {
+              "x": 2188,
+              "y": 3792
+            },
+            {
+              "x": 2271,
+              "y": 3646
+            },
+            {
+              "x": 2438,
+              "y": 3500
+            },
+            {
+              "x": 2688,
+              "y": 3396
+            },
+            {
+              "x": 3083,
+              "y": 3396
+            },
+            {
+              "x": 3396,
+              "y": 3542
+            },
+            {
+              "x": 3542,
+              "y": 3708
+            },
+            {
+              "x": 3604,
+              "y": 3958
+            },
+            {
+              "x": 3667,
+              "y": 3958
+            },
+            {
+              "x": 3896,
+              "y": 3875
+            },
+            {
+              "x": 4375,
+              "y": 3792
+            },
+            {
+              "x": 5250,
+              "y": 3813
+            },
+            {
+              "x": 5292,
+              "y": 3688
+            },
+            {
+              "x": 5438,
+              "y": 3521
+            },
+            {
+              "x": 5625,
+              "y": 3417
+            }
+          ],
+          "polygonSha256": "975242687c7ba2f809b7dfea370c3e4f0a2db13ff0bb92916f7689199feb19ad",
+          "sourceMaskSha256": "f0bd4ad7a39ae4192219a87c6fae68e60bc6a57d3241877df5b452f19c197cc6",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 46480,
+            "retainedForegroundFraction": 0.20173611111111112,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 105
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-fox",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-fox.png",
+      "sourceMaskSha256": "75b3fae9df65c9d4176f2c268b97dd89208077c87b80d1c8e5772ff71fc445f5",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6771,
+              "y": 2188
+            },
+            {
+              "x": 7375,
+              "y": 3458
+            },
+            {
+              "x": 7125,
+              "y": 3542
+            },
+            {
+              "x": 7125,
+              "y": 3583
+            },
+            {
+              "x": 7208,
+              "y": 3625
+            },
+            {
+              "x": 7438,
+              "y": 3646
+            },
+            {
+              "x": 7479,
+              "y": 3604
+            },
+            {
+              "x": 8188,
+              "y": 2542
+            },
+            {
+              "x": 8125,
+              "y": 4292
+            },
+            {
+              "x": 8083,
+              "y": 4292
+            },
+            {
+              "x": 7958,
+              "y": 4146
+            },
+            {
+              "x": 7813,
+              "y": 4208
+            },
+            {
+              "x": 7646,
+              "y": 4188
+            },
+            {
+              "x": 8229,
+              "y": 4833
+            },
+            {
+              "x": 7063,
+              "y": 6167
+            },
+            {
+              "x": 6917,
+              "y": 6479
+            },
+            {
+              "x": 6604,
+              "y": 6771
+            },
+            {
+              "x": 6188,
+              "y": 6979
+            },
+            {
+              "x": 6188,
+              "y": 8417
+            },
+            {
+              "x": 5625,
+              "y": 8417
+            },
+            {
+              "x": 5625,
+              "y": 7167
+            },
+            {
+              "x": 4813,
+              "y": 7250
+            },
+            {
+              "x": 4063,
+              "y": 7167
+            },
+            {
+              "x": 4063,
+              "y": 8417
+            },
+            {
+              "x": 3500,
+              "y": 8417
+            },
+            {
+              "x": 3500,
+              "y": 7021
+            },
+            {
+              "x": 3167,
+              "y": 6875
+            },
+            {
+              "x": 2917,
+              "y": 6708
+            },
+            {
+              "x": 2688,
+              "y": 6479
+            },
+            {
+              "x": 2521,
+              "y": 6125
+            },
+            {
+              "x": 2396,
+              "y": 6063
+            },
+            {
+              "x": 1063,
+              "y": 4979
+            },
+            {
+              "x": 1000,
+              "y": 4771
+            },
+            {
+              "x": 1063,
+              "y": 4542
+            },
+            {
+              "x": 1271,
+              "y": 4375
+            },
+            {
+              "x": 1542,
+              "y": 4375
+            },
+            {
+              "x": 2792,
+              "y": 5354
+            },
+            {
+              "x": 3000,
+              "y": 5167
+            },
+            {
+              "x": 3333,
+              "y": 4979
+            },
+            {
+              "x": 3729,
+              "y": 4833
+            },
+            {
+              "x": 4229,
+              "y": 4729
+            },
+            {
+              "x": 4792,
+              "y": 4688
+            },
+            {
+              "x": 5208,
+              "y": 4708
+            },
+            {
+              "x": 5625,
+              "y": 4771
+            },
+            {
+              "x": 6063,
+              "y": 4896
+            },
+            {
+              "x": 6833,
+              "y": 3688
+            },
+            {
+              "x": 6833,
+              "y": 3646
+            },
+            {
+              "x": 6708,
+              "y": 3688
+            }
+          ],
+          "polygonSha256": "99e4c7d7e70aacfac21bccd8877a60989f222d2b79e2b4b45ede95e077413c75",
+          "sourceMaskSha256": "75b3fae9df65c9d4176f2c268b97dd89208077c87b80d1c8e5772ff71fc445f5",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 1,
+            "removedIslandPixels": 1,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 36853,
+            "retainedForegroundFraction": 0.15995225694444445,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 62
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-elephant",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-elephant.png",
+      "sourceMaskSha256": "acd00e51079c8b552f49aa0122052ca1509f5ecf900cd7c719b7eaeb81530b39",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6292,
+              "y": 3500
+            },
+            {
+              "x": 6646,
+              "y": 3563
+            },
+            {
+              "x": 6875,
+              "y": 3708
+            },
+            {
+              "x": 7333,
+              "y": 3708
+            },
+            {
+              "x": 7646,
+              "y": 3792
+            },
+            {
+              "x": 7979,
+              "y": 3979
+            },
+            {
+              "x": 8229,
+              "y": 4229
+            },
+            {
+              "x": 8375,
+              "y": 4479
+            },
+            {
+              "x": 8458,
+              "y": 4750
+            },
+            {
+              "x": 8458,
+              "y": 5188
+            },
+            {
+              "x": 8313,
+              "y": 5583
+            },
+            {
+              "x": 8146,
+              "y": 5771
+            },
+            {
+              "x": 8417,
+              "y": 7396
+            },
+            {
+              "x": 8375,
+              "y": 7667
+            },
+            {
+              "x": 8188,
+              "y": 7792
+            },
+            {
+              "x": 7979,
+              "y": 7771
+            },
+            {
+              "x": 7854,
+              "y": 7667
+            },
+            {
+              "x": 7792,
+              "y": 7458
+            },
+            {
+              "x": 7604,
+              "y": 6167
+            },
+            {
+              "x": 7521,
+              "y": 6167
+            },
+            {
+              "x": 7333,
+              "y": 6229
+            },
+            {
+              "x": 7125,
+              "y": 6229
+            },
+            {
+              "x": 7000,
+              "y": 6458
+            },
+            {
+              "x": 6771,
+              "y": 6729
+            },
+            {
+              "x": 6396,
+              "y": 7021
+            },
+            {
+              "x": 6104,
+              "y": 7167
+            },
+            {
+              "x": 6104,
+              "y": 8458
+            },
+            {
+              "x": 5375,
+              "y": 8458
+            },
+            {
+              "x": 5375,
+              "y": 7396
+            },
+            {
+              "x": 5063,
+              "y": 7458
+            },
+            {
+              "x": 4292,
+              "y": 7458
+            },
+            {
+              "x": 3813,
+              "y": 7375
+            },
+            {
+              "x": 3667,
+              "y": 7313
+            },
+            {
+              "x": 3625,
+              "y": 7313
+            },
+            {
+              "x": 3625,
+              "y": 8458
+            },
+            {
+              "x": 2896,
+              "y": 8458
+            },
+            {
+              "x": 2896,
+              "y": 6958
+            },
+            {
+              "x": 2583,
+              "y": 6729
+            },
+            {
+              "x": 2313,
+              "y": 6396
+            },
+            {
+              "x": 2146,
+              "y": 6042
+            },
+            {
+              "x": 2104,
+              "y": 5875
+            },
+            {
+              "x": 2104,
+              "y": 5563
+            },
+            {
+              "x": 1500,
+              "y": 4875
+            },
+            {
+              "x": 1500,
+              "y": 4688
+            },
+            {
+              "x": 1563,
+              "y": 4646
+            },
+            {
+              "x": 1708,
+              "y": 4667
+            },
+            {
+              "x": 2167,
+              "y": 5229
+            },
+            {
+              "x": 2313,
+              "y": 4875
+            },
+            {
+              "x": 2583,
+              "y": 4542
+            },
+            {
+              "x": 2958,
+              "y": 4250
+            },
+            {
+              "x": 3417,
+              "y": 4021
+            },
+            {
+              "x": 3813,
+              "y": 3896
+            },
+            {
+              "x": 4292,
+              "y": 3813
+            },
+            {
+              "x": 5063,
+              "y": 3813
+            },
+            {
+              "x": 5542,
+              "y": 3896
+            },
+            {
+              "x": 5542,
+              "y": 3854
+            },
+            {
+              "x": 5792,
+              "y": 3646
+            },
+            {
+              "x": 6021,
+              "y": 3542
+            }
+          ],
+          "polygonSha256": "450afaf972eb171fa268e28b7f270730d0aae34ec7e2d1e84b6137e57a67c624",
+          "sourceMaskSha256": "acd00e51079c8b552f49aa0122052ca1509f5ecf900cd7c719b7eaeb81530b39",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 49770,
+            "retainedForegroundFraction": 0.216015625,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 93
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-ball",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-ball.png",
+      "sourceMaskSha256": "bb961b7d558d398e3e82e18d3a0aa7f3142872faaebeecccd1a57d82b2dfc43e",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 3979,
+              "y": 2771
+            },
+            {
+              "x": 4125,
+              "y": 2792
+            },
+            {
+              "x": 4188,
+              "y": 2917
+            },
+            {
+              "x": 4688,
+              "y": 2792
+            },
+            {
+              "x": 5333,
+              "y": 2792
+            },
+            {
+              "x": 5729,
+              "y": 2875
+            },
+            {
+              "x": 6104,
+              "y": 3021
+            },
+            {
+              "x": 6396,
+              "y": 3188
+            },
+            {
+              "x": 6854,
+              "y": 3583
+            },
+            {
+              "x": 7083,
+              "y": 3875
+            },
+            {
+              "x": 7313,
+              "y": 4313
+            },
+            {
+              "x": 7479,
+              "y": 4938
+            },
+            {
+              "x": 7479,
+              "y": 5583
+            },
+            {
+              "x": 7354,
+              "y": 6104
+            },
+            {
+              "x": 7208,
+              "y": 6438
+            },
+            {
+              "x": 6958,
+              "y": 6813
+            },
+            {
+              "x": 6563,
+              "y": 7208
+            },
+            {
+              "x": 6104,
+              "y": 7479
+            },
+            {
+              "x": 6125,
+              "y": 7646
+            },
+            {
+              "x": 6021,
+              "y": 7750
+            },
+            {
+              "x": 5875,
+              "y": 7729
+            },
+            {
+              "x": 5813,
+              "y": 7604
+            },
+            {
+              "x": 5292,
+              "y": 7729
+            },
+            {
+              "x": 4708,
+              "y": 7729
+            },
+            {
+              "x": 4375,
+              "y": 7667
+            },
+            {
+              "x": 3917,
+              "y": 7500
+            },
+            {
+              "x": 3625,
+              "y": 7333
+            },
+            {
+              "x": 3167,
+              "y": 6938
+            },
+            {
+              "x": 2938,
+              "y": 6646
+            },
+            {
+              "x": 2708,
+              "y": 6208
+            },
+            {
+              "x": 2542,
+              "y": 5583
+            },
+            {
+              "x": 2542,
+              "y": 4938
+            },
+            {
+              "x": 2667,
+              "y": 4417
+            },
+            {
+              "x": 2813,
+              "y": 4083
+            },
+            {
+              "x": 3063,
+              "y": 3708
+            },
+            {
+              "x": 3458,
+              "y": 3313
+            },
+            {
+              "x": 3896,
+              "y": 3042
+            },
+            {
+              "x": 3875,
+              "y": 2875
+            }
+          ],
+          "polygonSha256": "3e90403459c17e27a7cc2ea0decffcc86380ac9581d781d283db132d9e0be6a6",
+          "sourceMaskSha256": "bb961b7d558d398e3e82e18d3a0aa7f3142872faaebeecccd1a57d82b2dfc43e",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 44697,
+            "retainedForegroundFraction": 0.19399739583333334,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 119
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-chair",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-chair.png",
+      "sourceMaskSha256": "853f9fd3dacbcfaa72c51b6fc6c69546de900ba250bece9d19206d0c50179a4a",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 3188,
+              "y": 2458
+            },
+            {
+              "x": 6813,
+              "y": 2458
+            },
+            {
+              "x": 6813,
+              "y": 5313
+            },
+            {
+              "x": 7313,
+              "y": 5313
+            },
+            {
+              "x": 7313,
+              "y": 6500
+            },
+            {
+              "x": 6896,
+              "y": 6500
+            },
+            {
+              "x": 6896,
+              "y": 8625
+            },
+            {
+              "x": 6250,
+              "y": 8625
+            },
+            {
+              "x": 6250,
+              "y": 6500
+            },
+            {
+              "x": 3771,
+              "y": 6500
+            },
+            {
+              "x": 3771,
+              "y": 8625
+            },
+            {
+              "x": 3125,
+              "y": 8625
+            },
+            {
+              "x": 3125,
+              "y": 6500
+            },
+            {
+              "x": 2688,
+              "y": 6500
+            },
+            {
+              "x": 2688,
+              "y": 5313
+            },
+            {
+              "x": 3188,
+              "y": 5313
+            }
+          ],
+          "polygonSha256": "a100e1a5bf508e5b9fb79ac5ff276f0c239d0339ba5a383100c8fe19c0b76065",
+          "sourceMaskSha256": "853f9fd3dacbcfaa72c51b6fc6c69546de900ba250bece9d19206d0c50179a4a",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 42816,
+            "retainedForegroundFraction": 0.18583333333333332,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 87
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-boot",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-boot.png",
+      "sourceMaskSha256": "50fef2a126552feb3487b7b6b531d294998c2f7791ab9c335f798ddf9172ef34",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 3333,
+              "y": 2146
+            },
+            {
+              "x": 6354,
+              "y": 2146
+            },
+            {
+              "x": 6354,
+              "y": 6063
+            },
+            {
+              "x": 8104,
+              "y": 6792
+            },
+            {
+              "x": 8104,
+              "y": 8042
+            },
+            {
+              "x": 3021,
+              "y": 8042
+            },
+            {
+              "x": 3021,
+              "y": 6375
+            },
+            {
+              "x": 3646,
+              "y": 5667
+            }
+          ],
+          "polygonSha256": "3ccea2503647617560bbd2dcede6f08259001a26905f4d37b5b1715b9ba0c07e",
+          "sourceMaskSha256": "50fef2a126552feb3487b7b6b531d294998c2f7791ab9c335f798ddf9172ef34",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 47375,
+            "retainedForegroundFraction": 0.2056206597222222,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 84
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-watering-can",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-watering-can.png",
+      "sourceMaskSha256": "422ea0870d368d53ac4a48bd91634b6d70182fabd26c903fa45941c8762c7f8f",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 7500,
+              "y": 2646
+            },
+            {
+              "x": 7708,
+              "y": 2667
+            },
+            {
+              "x": 7833,
+              "y": 2771
+            },
+            {
+              "x": 8604,
+              "y": 4625
+            },
+            {
+              "x": 8625,
+              "y": 4833
+            },
+            {
+              "x": 8583,
+              "y": 4938
+            },
+            {
+              "x": 8396,
+              "y": 5063
+            },
+            {
+              "x": 8188,
+              "y": 5042
+            },
+            {
+              "x": 8063,
+              "y": 4938
+            },
+            {
+              "x": 7479,
+              "y": 3521
+            },
+            {
+              "x": 6833,
+              "y": 4229
+            },
+            {
+              "x": 6896,
+              "y": 4458
+            },
+            {
+              "x": 6896,
+              "y": 7521
+            },
+            {
+              "x": 3271,
+              "y": 7521
+            },
+            {
+              "x": 3271,
+              "y": 6229
+            },
+            {
+              "x": 1333,
+              "y": 6854
+            },
+            {
+              "x": 1458,
+              "y": 6104
+            },
+            {
+              "x": 3271,
+              "y": 5125
+            },
+            {
+              "x": 3229,
+              "y": 4333
+            },
+            {
+              "x": 3333,
+              "y": 4125
+            },
+            {
+              "x": 3542,
+              "y": 3917
+            },
+            {
+              "x": 4021,
+              "y": 3667
+            },
+            {
+              "x": 4667,
+              "y": 3521
+            },
+            {
+              "x": 5583,
+              "y": 3542
+            },
+            {
+              "x": 5958,
+              "y": 3625
+            },
+            {
+              "x": 6417,
+              "y": 3813
+            },
+            {
+              "x": 7271,
+              "y": 2854
+            },
+            {
+              "x": 7271,
+              "y": 2813
+            },
+            {
+              "x": 7396,
+              "y": 2688
+            }
+          ],
+          "polygonSha256": "7ad92ab0c443a5dbafe6c49ddea0b7f4900264738a42552e599b4c5b9e0042ee",
+          "sourceMaskSha256": "422ea0870d368d53ac4a48bd91634b6d70182fabd26c903fa45941c8762c7f8f",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 40619,
+            "retainedForegroundFraction": 0.17629774305555557,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 96
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-umbrella",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-umbrella.png",
+      "sourceMaskSha256": "de78241be2c0d04446c6a37156f4b01e1c10b51c5340a77e53df876a4603276b",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 4979,
+              "y": 2125
+            },
+            {
+              "x": 6813,
+              "y": 2583
+            },
+            {
+              "x": 7479,
+              "y": 3208
+            },
+            {
+              "x": 7521,
+              "y": 3208
+            },
+            {
+              "x": 7646,
+              "y": 3354
+            },
+            {
+              "x": 8021,
+              "y": 3646
+            },
+            {
+              "x": 8625,
+              "y": 5167
+            },
+            {
+              "x": 8563,
+              "y": 5396
+            },
+            {
+              "x": 8375,
+              "y": 5604
+            },
+            {
+              "x": 7792,
+              "y": 5917
+            },
+            {
+              "x": 7083,
+              "y": 6125
+            },
+            {
+              "x": 6521,
+              "y": 6229
+            },
+            {
+              "x": 5688,
+              "y": 6313
+            },
+            {
+              "x": 5188,
+              "y": 6313
+            },
+            {
+              "x": 5188,
+              "y": 7938
+            },
+            {
+              "x": 5917,
+              "y": 8396
+            },
+            {
+              "x": 5958,
+              "y": 8583
+            },
+            {
+              "x": 5917,
+              "y": 8667
+            },
+            {
+              "x": 5833,
+              "y": 8708
+            },
+            {
+              "x": 5646,
+              "y": 8667
+            },
+            {
+              "x": 4917,
+              "y": 8167
+            },
+            {
+              "x": 4813,
+              "y": 8146
+            },
+            {
+              "x": 4813,
+              "y": 6313
+            },
+            {
+              "x": 4333,
+              "y": 6313
+            },
+            {
+              "x": 3500,
+              "y": 6229
+            },
+            {
+              "x": 2396,
+              "y": 5979
+            },
+            {
+              "x": 2125,
+              "y": 5875
+            },
+            {
+              "x": 1646,
+              "y": 5604
+            },
+            {
+              "x": 1458,
+              "y": 5396
+            },
+            {
+              "x": 1396,
+              "y": 5188
+            },
+            {
+              "x": 1438,
+              "y": 5000
+            },
+            {
+              "x": 1563,
+              "y": 4854
+            },
+            {
+              "x": 2021,
+              "y": 3646
+            },
+            {
+              "x": 2063,
+              "y": 3646
+            },
+            {
+              "x": 2417,
+              "y": 3292
+            },
+            {
+              "x": 2646,
+              "y": 3125
+            },
+            {
+              "x": 3208,
+              "y": 2583
+            }
+          ],
+          "polygonSha256": "06dd37a0fca8ec5ae683d70716101fec3d4fca0e117015d6a09decbf61b50eab",
+          "sourceMaskSha256": "de78241be2c0d04446c6a37156f4b01e1c10b51c5340a77e53df876a4603276b",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 54004,
+            "retainedForegroundFraction": 0.2343923611111111,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 105
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-guitar",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-guitar.png",
+      "sourceMaskSha256": "c563ddf07cb2d6072c8888cdfd82fa93c9256137c25fd0bc352d810ff9cb8704",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6458,
+              "y": 1750
+            },
+            {
+              "x": 7167,
+              "y": 2146
+            },
+            {
+              "x": 7063,
+              "y": 2271
+            },
+            {
+              "x": 6688,
+              "y": 2979
+            },
+            {
+              "x": 5917,
+              "y": 4271
+            },
+            {
+              "x": 5979,
+              "y": 4729
+            },
+            {
+              "x": 5958,
+              "y": 5000
+            },
+            {
+              "x": 5875,
+              "y": 5313
+            },
+            {
+              "x": 5646,
+              "y": 5688
+            },
+            {
+              "x": 5792,
+              "y": 6146
+            },
+            {
+              "x": 5833,
+              "y": 6563
+            },
+            {
+              "x": 5792,
+              "y": 7000
+            },
+            {
+              "x": 5646,
+              "y": 7458
+            },
+            {
+              "x": 5375,
+              "y": 7896
+            },
+            {
+              "x": 5125,
+              "y": 8146
+            },
+            {
+              "x": 4708,
+              "y": 8396
+            },
+            {
+              "x": 4354,
+              "y": 8500
+            },
+            {
+              "x": 3854,
+              "y": 8500
+            },
+            {
+              "x": 3479,
+              "y": 8396
+            },
+            {
+              "x": 3146,
+              "y": 8208
+            },
+            {
+              "x": 2813,
+              "y": 7896
+            },
+            {
+              "x": 2500,
+              "y": 7354
+            },
+            {
+              "x": 2375,
+              "y": 6875
+            },
+            {
+              "x": 2375,
+              "y": 6271
+            },
+            {
+              "x": 2542,
+              "y": 5688
+            },
+            {
+              "x": 2813,
+              "y": 5250
+            },
+            {
+              "x": 3063,
+              "y": 5000
+            },
+            {
+              "x": 3396,
+              "y": 4813
+            },
+            {
+              "x": 3375,
+              "y": 4729
+            },
+            {
+              "x": 3438,
+              "y": 4292
+            },
+            {
+              "x": 3688,
+              "y": 3792
+            },
+            {
+              "x": 4000,
+              "y": 3500
+            },
+            {
+              "x": 4458,
+              "y": 3313
+            },
+            {
+              "x": 4896,
+              "y": 3313
+            },
+            {
+              "x": 5167,
+              "y": 3396
+            },
+            {
+              "x": 5396,
+              "y": 3542
+            }
+          ],
+          "polygonSha256": "57d121e8002fcc958ecd8430d611864274e82868094983da30c4adaf60454470",
+          "sourceMaskSha256": "c563ddf07cb2d6072c8888cdfd82fa93c9256137c25fd0bc352d810ff9cb8704",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 36228,
+            "retainedForegroundFraction": 0.15723958333333332,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 83
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-bicycle",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-bicycle.png",
+      "sourceMaskSha256": "4c0e409cf07cdfe1e8255c60b2c10059b3e40f26550d8961857dbf324e93e499",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "holes_not_supported",
+            "message": "Phase 1H-B1 supports one outer contour and no holes."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 1,
+          "retainedForegroundPixels": 31941,
+          "retainedForegroundFraction": 0.1386328125,
+          "enclosedHoleCount": 4,
+          "maximumCoreRadiusPixels": 25
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-teapot",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-teapot.png",
+      "sourceMaskSha256": "3a0d8507eb70c0f2e4c21038a4a3b78d142eff0857369eaeb61a804b10f2713c",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "holes_not_supported",
+            "message": "Phase 1H-B1 supports one outer contour and no holes."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 1,
+          "removedIslandPixels": 1,
+          "significantComponentCount": 1,
+          "retainedForegroundPixels": 43910,
+          "retainedForegroundFraction": 0.19058159722222223,
+          "enclosedHoleCount": 1,
+          "maximumCoreRadiusPixels": 106
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-lamp",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-lamp.png",
+      "sourceMaskSha256": "b42386d30ad40a6cbfe45827f67a54189abdfaeb56b25c98056b46bcc0163d19",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 3333,
+              "y": 2542
+            },
+            {
+              "x": 6688,
+              "y": 2542
+            },
+            {
+              "x": 7479,
+              "y": 5104
+            },
+            {
+              "x": 5292,
+              "y": 5104
+            },
+            {
+              "x": 5292,
+              "y": 7313
+            },
+            {
+              "x": 5729,
+              "y": 7333
+            },
+            {
+              "x": 6208,
+              "y": 7417
+            },
+            {
+              "x": 6771,
+              "y": 7625
+            },
+            {
+              "x": 6958,
+              "y": 7792
+            },
+            {
+              "x": 7000,
+              "y": 7917
+            },
+            {
+              "x": 6958,
+              "y": 8063
+            },
+            {
+              "x": 6771,
+              "y": 8229
+            },
+            {
+              "x": 6208,
+              "y": 8438
+            },
+            {
+              "x": 5729,
+              "y": 8521
+            },
+            {
+              "x": 5021,
+              "y": 8563
+            },
+            {
+              "x": 4500,
+              "y": 8542
+            },
+            {
+              "x": 3667,
+              "y": 8396
+            },
+            {
+              "x": 3250,
+              "y": 8229
+            },
+            {
+              "x": 3063,
+              "y": 8063
+            },
+            {
+              "x": 3021,
+              "y": 7938
+            },
+            {
+              "x": 3063,
+              "y": 7792
+            },
+            {
+              "x": 3188,
+              "y": 7667
+            },
+            {
+              "x": 3417,
+              "y": 7542
+            },
+            {
+              "x": 4021,
+              "y": 7375
+            },
+            {
+              "x": 4708,
+              "y": 7313
+            },
+            {
+              "x": 4708,
+              "y": 5104
+            },
+            {
+              "x": 2542,
+              "y": 5104
+            }
+          ],
+          "polygonSha256": "e93ab8617366eda0b29562126cef086f7602f9de89c801ad61c181a8b89ae85e",
+          "sourceMaskSha256": "b42386d30ad40a6cbfe45827f67a54189abdfaeb56b25c98056b46bcc0163d19",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 36351,
+            "retainedForegroundFraction": 0.1577734375,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 69
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "clean-toy-plane",
+      "category": "clean",
+      "providerMaskExpectation": "accept",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/clean-toy-plane.png",
+      "sourceMaskSha256": "64c1310de43f6c8677c1fb2af07045627b9db5ce99eca6402ef59321289853e7",
+      "result": {
+        "status": "accepted",
+        "findings": [],
+        "silhouette": {
+          "schemaVersion": "1.0.0-phase1h-b1-wing-silhouette",
+          "coordinateSystem": {
+            "width": 10000,
+            "height": 10000,
+            "origin": "top-left",
+            "winding": "clockwise-screen-coordinates"
+          },
+          "points": [
+            {
+              "x": 6083,
+              "y": 2479
+            },
+            {
+              "x": 6750,
+              "y": 2667
+            },
+            {
+              "x": 6042,
+              "y": 4542
+            },
+            {
+              "x": 5979,
+              "y": 4792
+            },
+            {
+              "x": 8708,
+              "y": 5292
+            },
+            {
+              "x": 8750,
+              "y": 5958
+            },
+            {
+              "x": 5896,
+              "y": 5938
+            },
+            {
+              "x": 6771,
+              "y": 7854
+            },
+            {
+              "x": 6083,
+              "y": 8063
+            },
+            {
+              "x": 4229,
+              "y": 6042
+            },
+            {
+              "x": 1125,
+              "y": 6083
+            },
+            {
+              "x": 1125,
+              "y": 5500
+            },
+            {
+              "x": 1979,
+              "y": 5313
+            },
+            {
+              "x": 1938,
+              "y": 5208
+            },
+            {
+              "x": 1854,
+              "y": 5208
+            },
+            {
+              "x": 1292,
+              "y": 3958
+            },
+            {
+              "x": 1896,
+              "y": 3833
+            },
+            {
+              "x": 1896,
+              "y": 3875
+            },
+            {
+              "x": 2875,
+              "y": 5000
+            },
+            {
+              "x": 3333,
+              "y": 5021
+            },
+            {
+              "x": 4250,
+              "y": 4813
+            },
+            {
+              "x": 6021,
+              "y": 2604
+            }
+          ],
+          "polygonSha256": "15486c65f72aec50d00769d7be6b549e7c0a7c900c0867fda121cd3761e59e8e",
+          "sourceMaskSha256": "64c1310de43f6c8677c1fb2af07045627b9db5ce99eca6402ef59321289853e7",
+          "vectorizerVersion": "1.0.0-phase1h-b1",
+          "validatorVersion": "1.0.0-phase1h-b1",
+          "cleanup": {
+            "sourceWidth": 480,
+            "sourceHeight": 480,
+            "binaryThreshold": 128,
+            "removedIslandCount": 0,
+            "removedIslandPixels": 0,
+            "significantComponentCount": 1,
+            "retainedForegroundPixels": 31862,
+            "retainedForegroundFraction": 0.13828993055555555,
+            "enclosedHoleCount": 0,
+            "maximumCoreRadiusPixels": 67
+          },
+          "validationFindings": []
+        }
+      }
+    },
+    {
+      "fixtureId": "empty-soft-gradient",
+      "category": "empty",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "local-ground-truth-for-provider-empty-rejection",
+      "sourcePath": "tests/fixtures/phase-1h/ground-truth/empty-soft-gradient.png",
+      "sourceMaskSha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "empty_mask",
+            "message": "No significant foreground subject remains after cleanup."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 0,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "empty-speckled-wall",
+      "category": "empty",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "local-ground-truth-for-provider-empty-rejection",
+      "sourcePath": "tests/fixtures/phase-1h/ground-truth/empty-speckled-wall.png",
+      "sourceMaskSha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "empty_mask",
+            "message": "No significant foreground subject remains after cleanup."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 0,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "empty-floor-horizon",
+      "category": "empty",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "local-ground-truth-for-provider-empty-rejection",
+      "sourcePath": "tests/fixtures/phase-1h/ground-truth/empty-floor-horizon.png",
+      "sourceMaskSha256": "ef278a06cbc3b49348db4216091cd286a5fc5942ac1eac21666923f81a72e9e2",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "empty_mask",
+            "message": "No significant foreground subject remains after cleanup."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 0,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "multi-dog-and-ball",
+      "category": "multi_subject",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/multi-dog-and-ball.png",
+      "sourceMaskSha256": "6340af1d843690482aa290e81ebd671bb9c1275e2eccb4851dd67c067713d6f5",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "multiple_significant_subjects",
+            "message": "More than one significant subject is present."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 2,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "multi-chair-and-lamp",
+      "category": "multi_subject",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/multi-chair-and-lamp.png",
+      "sourceMaskSha256": "c4f1baf8417fe73a13b1e21cfd10f87f3f1ca7ffbc3599501864d5d65ef8b41e",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "multiple_significant_subjects",
+            "message": "More than one significant subject is present."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 2,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "multi-bird-and-fish",
+      "category": "multi_subject",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/multi-bird-and-fish.png",
+      "sourceMaskSha256": "54092d9cf1b519b72cce04adbfb7d4c78ef2bfee46522b559271593d897ff67e",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "multiple_significant_subjects",
+            "message": "More than one significant subject is present."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 2,
+          "retainedForegroundPixels": 0,
+          "retainedForegroundFraction": 0,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 0
+        }
+      }
+    },
+    {
+      "fixtureId": "occluded-dog",
+      "category": "badly_occluded",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/occluded-dog.png",
+      "sourceMaskSha256": "ad4534326cf854cb243671550af5efb8d49cfca437fcf13266f1280a3e4c2d80",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "outside_prototype_envelope",
+            "message": "The contour extends beyond the Phase 1H-B1 prototype envelope."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 1,
+          "retainedForegroundPixels": 56288,
+          "retainedForegroundFraction": 0.24430555555555555,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 72
+        }
+      }
+    },
+    {
+      "fixtureId": "occluded-chair",
+      "category": "badly_occluded",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/occluded-chair.png",
+      "sourceMaskSha256": "0c8a45ac799a20b6ea7355a9227ea7a8ae00371a49ab09c27bda667b7082375a",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "outside_prototype_envelope",
+            "message": "The contour extends beyond the Phase 1H-B1 prototype envelope."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 1,
+          "retainedForegroundPixels": 68904,
+          "retainedForegroundFraction": 0.2990625,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 90
+        }
+      }
+    },
+    {
+      "fixtureId": "occluded-plane",
+      "category": "badly_occluded",
+      "providerMaskExpectation": "reject",
+      "sourceKind": "approved-remove-bg-mask",
+      "sourcePath": "docs/phase-1h/remove-bg-live-masks/occluded-plane.png",
+      "sourceMaskSha256": "b481f26cdcbc1d11c88d97c7813b429f65580a6c84c8ae629798d2628a35db3c",
+      "result": {
+        "status": "rejected",
+        "silhouette": null,
+        "findings": [
+          {
+            "code": "outside_prototype_envelope",
+            "message": "The contour extends beyond the Phase 1H-B1 prototype envelope."
+          }
+        ],
+        "cleanup": {
+          "sourceWidth": 480,
+          "sourceHeight": 480,
+          "binaryThreshold": 128,
+          "removedIslandCount": 0,
+          "removedIslandPixels": 0,
+          "significantComponentCount": 1,
+          "retainedForegroundPixels": 50649,
+          "retainedForegroundFraction": 0.21983072916666666,
+          "enclosedHoleCount": 0,
+          "maximumCoreRadiusPixels": 73
+        }
+      }
+    }
+  ]
+}

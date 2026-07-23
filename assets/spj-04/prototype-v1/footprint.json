@@ -1,0 +1,40 @@
+{
+  "configuration_id": "spj-04-prototype-v1",
+  "configuration_hash": "a16e5d4c7b04bafbdd463b230827351de071ada9700ec67413cf2446143830f7",
+  "evidence_status": "inferred",
+  "units": "mm",
+  "width": 5100,
+  "depth": 800,
+  "anchor": {
+    "x": 0,
+    "y": 0,
+    "definition": "midpoint_of_primary_pole_centerline"
+  },
+  "polygon": [
+    [
+      -2550,
+      -400
+    ],
+    [
+      2550,
+      -400
+    ],
+    [
+      2550,
+      400
+    ],
+    [
+      -2550,
+      400
+    ],
+    [
+      -2550,
+      -400
+    ]
+  ],
+  "rotation_origin": [
+    0,
+    0
+  ],
+  "not_for_survey_or_fabrication": true
+}

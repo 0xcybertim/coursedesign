@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-authorization",
+  "status": "pending-explicit-user-approval",
+  "approvedBy": null,
+  "approvedAt": null,
+  "approvalText": null,
+  "approvalTextSha256": null,
+  "provider": "photoroom",
+  "fixtureCounts": {
+    "clean": 20,
+    "empty": 3,
+    "multiSubject": 3,
+    "badlyOccluded": 3,
+    "total": 29
+  },
+  "maximumExternalCalls": 29,
+  "maxRetries": 0,
+  "maximumCostUsd": 0.58,
+  "expectedLatency": "30-90 seconds",
+  "dataLeavingMachine": "Only the 29 repository-generated 480 x 480 PNG fixture inputs",
+  "privacyAccepted": false,
+  "note": "Template only. This is not authorization and the live harness rejects it. Create live-benchmark-authorization.json only after Tim supplies the exact approval sentence."
+}

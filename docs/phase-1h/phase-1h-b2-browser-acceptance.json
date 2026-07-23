@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0-phase1h-b2-browser",
+  "baseUrl": "http://127.0.0.1:3000",
+  "externalProviderCalls": 0,
+  "productGeometryCreated": 0,
+  "manualVisualInspection": "required-after-script",
+  "checks": [
+    {
+      "name": "route exposes the exact 29-fixture read-only B1 review corpus",
+      "detail": "passed"
+    },
+    {
+      "name": "mask route is allowlisted, no-store, and returns the approved SHA-256",
+      "detail": "passed"
+    },
+    {
+      "name": "boundary copy excludes products, revisions, quantities, quotes, and supplier approval",
+      "detail": "passed"
+    },
+    {
+      "name": "valid B1 polygon can be explicitly accepted for future prototyping only",
+      "detail": "passed"
+    },
+    {
+      "name": "changing a decision appends history and preserves the prior hash-pinned event",
+      "detail": "passed"
+    },
+    {
+      "name": "hole-bearing rejected evidence cannot be accepted and can only be retained",
+      "detail": "passed"
+    },
+    {
+      "name": "three decisions persist as hash-only review metadata with no product fields",
+      "detail": "passed"
+    },
+    {
+      "name": "SPJ-04, concept, and course browser-local state remain unchanged",
+      "detail": "passed"
+    },
+    {
+      "name": "reload restores the exact current decision and immutable history",
+      "detail": "passed"
+    },
+    {
+      "name": "1440 × 1000 has no overflow and 44px targets",
+      "detail": "passed"
+    },
+    {
+      "name": "768 × 1024 has no overflow and 44px targets",
+      "detail": "passed"
+    },
+    {
+      "name": "375 × 812 has no overflow and 44px targets",
+      "detail": "passed"
+    },
+    {
+      "name": "keyboard focus is visible and decisions announce through a polite live region",
+      "detail": "passed"
+    },
+    {
+      "name": "tampered evidence identity fails visibly and starts a fresh review record",
+      "detail": "passed"
+    },
+    {
+      "name": "zero POST requests, external requests, console problems, or failed requests",
+      "detail": "passed"
+    }
+  ],
+  "screenshots": [
+    "docs/phase-1h/b2-screenshots/desktop-rejected-bicycle.png",
+    "docs/phase-1h/b2-screenshots/desktop-review-overview.png",
+    "docs/phase-1h/b2-screenshots/desktop-accepted-dog.png",
+    "docs/phase-1h/b2-screenshots/tablet-review.png",
+    "docs/phase-1h/b2-screenshots/mobile-review.png"
+  ],
+  "consoleProblems": [],
+  "failedRequests": [],
+  "nonGetRequests": [],
+  "externalRequests": []
+}

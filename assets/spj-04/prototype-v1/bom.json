@@ -1,0 +1,74 @@
+{
+  "configuration_id": "spj-04-prototype-v1",
+  "configuration_hash": "a16e5d4c7b04bafbdd463b230827351de071ada9700ec67413cf2446143830f7",
+  "evidence_status": "inferred",
+  "components": [
+    {
+      "component_key": "printed_wing_assembly",
+      "quantity": 2,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "aluminum_jump_pole",
+      "quantity": 4,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "cup_or_release_adapter",
+      "quantity": 8,
+      "rule": "two_per_pole",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "keyhole_track_assembly",
+      "quantity": 2,
+      "rule": "one_per_wing",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "foot_or_ballast_assembly",
+      "quantity": 2,
+      "rule": "one_per_wing",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "flag",
+      "quantity": 2,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "pole_end_cap",
+      "quantity": 8,
+      "rule": "two_per_pole",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "lower_element",
+      "quantity": 0,
+      "allowed_values": [
+        "none",
+        "decorative_panel",
+        "gate",
+        "filler"
+      ],
+      "maximum_quantity": 1,
+      "evidence_status": "inferred"
+    }
+  ],
+  "prototype_selected_lower_element": "none",
+  "price_display": {
+    "amount": 9000,
+    "currency": "CNY",
+    "classification": "supplier_cost_example",
+    "ui_label": "Prototype supplier example · CNY 9,000 · excludes tax, freight and retail markup",
+    "customer_retail_price": null,
+    "evidence_status": "confirmed_current",
+    "prototype_label_evidence_status": "inferred",
+    "source_refs": [
+      "CUR-006",
+      "CUR-008",
+      "CUR-013"
+    ]
+  },
+  "not_for_ordering": true
+}

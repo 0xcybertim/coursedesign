@@ -1,0 +1,302 @@
+{
+  "schemaVersion": "1.0.0-phase1h-c1-evidence",
+  "executionBoundary": {
+    "externalCallsMade": 0,
+    "retriesMade": 0,
+    "networkRequired": false,
+    "decisionKind": "repository-deterministic-test-decision",
+    "userDecisionClaimed": false
+  },
+  "checks": {
+    "exactRepeatMatch": true,
+    "oneAcceptedB2DecisionRequired": true,
+    "exactSharedTwoDThreeDGeometry": true,
+    "fixedSupportGeometryOnly": true,
+    "genericCountsOnly": true,
+    "pricePresent": false,
+    "revisionPresent": false,
+    "courseIntegrationPresent": false,
+    "supplierApproved": false,
+    "notForProduction": true,
+    "notForOrdering": true
+  },
+  "prototype": {
+    "schemaVersion": "1.0.0-phase1h-c1",
+    "prototypeSha256": "dacb8bbc2c888173085f981edfca5c1ad09a5d104fe5038ac233c32ab386e5c4",
+    "familyId": "profile-wing-vertical-v1",
+    "displayName": "Profile Wing Vertical",
+    "purpose": "non_sellable_generated_prototype_only",
+    "evidenceStatus": "inferred_not_supplier_confirmed",
+    "source": {
+      "fixtureId": "clean-dog-side",
+      "sourceMaskSha256": "f8ce9d740ae39e7b799eab27d5dea788ed504da5323b36a6b2b8b9892fc9a928",
+      "sourcePolygonSha256": "3d554a5d0aae69b6120c35ac91b08b74b3f66c272ac750803a49d45a4cecf23d",
+      "resultIdentitySha256": "76fe46a7b1d348ed600caef06eb83163c8a141ba1cbba9918c30f089f5b74763",
+      "decisionHash": "7e9f7edebec05e770628380dbd8a631bf4a6825ab22cf51b2aec5129ffd4b8fc",
+      "decisionId": "phase1h-c1-deterministic-evidence-decision"
+    },
+    "decision": {
+      "schemaVersion": "1.0.0-phase1h-b2",
+      "decisionId": "phase1h-c1-deterministic-evidence-decision",
+      "fixtureId": "clean-dog-side",
+      "action": "accepted_for_future_prototyping",
+      "evidenceSha256": "854190d20de5a956699e1e153df2030f996a4ffc067530b9f28418e26e05200b",
+      "resultIdentitySha256": "76fe46a7b1d348ed600caef06eb83163c8a141ba1cbba9918c30f089f5b74763",
+      "sourceMaskSha256": "f8ce9d740ae39e7b799eab27d5dea788ed504da5323b36a6b2b8b9892fc9a928",
+      "createdAt": "2026-07-22T20:00:00.000Z",
+      "decisionHash": "7e9f7edebec05e770628380dbd8a631bf4a6825ab22cf51b2aec5129ffd4b8fc"
+    },
+    "envelopeMm": { "width": 5900, "depth": 800, "height": 1800 },
+    "footprint": {
+      "units": "mm",
+      "anchor": "midpoint_of_primary_pole_centerline",
+      "polygon": [
+        [-2950, -400],
+        [2950, -400],
+        [2950, 400],
+        [-2950, 400],
+        [-2950, -400]
+      ],
+      "notForSurveyOrFabrication": true
+    },
+    "genericQuantities": [
+      {
+        "componentKey": "silhouette_wing_plate",
+        "label": "Silhouette wing plate",
+        "quantity": 2,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "prototype_pole",
+        "label": "Prototype pole",
+        "quantity": 4,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "cup_or_release_adapter",
+        "label": "Cup or release adapter",
+        "quantity": 8,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "prototype_track",
+        "label": "Prototype track",
+        "quantity": 2,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "foot_or_ballast",
+        "label": "Foot or ballast",
+        "quantity": 2,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "flag",
+        "label": "Flag",
+        "quantity": 2,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      },
+      {
+        "componentKey": "pole_end_cap",
+        "label": "Pole end cap",
+        "quantity": 8,
+        "evidenceStatus": "inferred_not_supplier_confirmed"
+      }
+    ],
+    "renderManifest": {
+      "schemaVersion": "1.0.0-phase1h-c1",
+      "rendererContract": "profile-wing-render-manifest-v1",
+      "geometrySha256": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+      "sharedProfileGeometry": {
+        "schemaVersion": "1.0.0-phase1h-c1-shared-profile-geometry",
+        "coordinateSystem": {
+          "units": "mm",
+          "origin": "profile_horizontal_center_at_lower_clearance",
+          "xAxis": "right",
+          "yAxis": "up",
+          "winding": "counterclockwise_cartesian"
+        },
+        "fittedPolygonMm": [
+          { "x": 341, "y": 1152 },
+          { "x": 318, "y": 958 },
+          { "x": 280, "y": 935 },
+          { "x": 246, "y": 897 },
+          { "x": 227, "y": 859 },
+          { "x": 219, "y": 820 },
+          { "x": 101, "y": 847 },
+          { "x": 25, "y": 851 },
+          { "x": -78, "y": 843 },
+          { "x": -215, "y": 805 },
+          { "x": -280, "y": 771 },
+          { "x": -307, "y": 744 },
+          { "x": -322, "y": 744 },
+          { "x": -531, "y": 923 },
+          { "x": -558, "y": 931 },
+          { "x": -592, "y": 912 },
+          { "x": -600, "y": 885 },
+          { "x": -592, "y": 862 },
+          { "x": -364, "y": 676 },
+          { "x": -371, "y": 630 },
+          { "x": -368, "y": 596 },
+          { "x": -341, "y": 542 },
+          { "x": -280, "y": 485 },
+          { "x": -238, "y": 466 },
+          { "x": -238, "y": 150 },
+          { "x": -124, "y": 150 },
+          { "x": -124, "y": 424 },
+          { "x": -116, "y": 424 },
+          { "x": -78, "y": 413 },
+          { "x": 25, "y": 405 },
+          { "x": 101, "y": 409 },
+          { "x": 158, "y": 420 },
+          { "x": 158, "y": 150 },
+          { "x": 272, "y": 150 },
+          { "x": 272, "y": 455 },
+          { "x": 333, "y": 485 },
+          { "x": 379, "y": 523 },
+          { "x": 417, "y": 584 },
+          { "x": 421, "y": 615 },
+          { "x": 448, "y": 615 },
+          { "x": 493, "y": 630 },
+          { "x": 558, "y": 680 },
+          { "x": 588, "y": 733 },
+          { "x": 600, "y": 794 },
+          { "x": 588, "y": 847 },
+          { "x": 588, "y": 1095 },
+          { "x": 493, "y": 961 },
+          { "x": 482, "y": 961 },
+          { "x": 463, "y": 973 },
+          { "x": 432, "y": 977 }
+        ],
+        "inferredExtrusionDepthMm": 40,
+        "sourceNormalizedPolygon": [
+          { "x": 6625, "y": 2771 },
+          { "x": 7125, "y": 3729 },
+          { "x": 7292, "y": 3750 },
+          { "x": 7396, "y": 3813 },
+          { "x": 7458, "y": 3813 },
+          { "x": 7979, "y": 3083 },
+          { "x": 7979, "y": 4438 },
+          { "x": 8042, "y": 4729 },
+          { "x": 7979, "y": 5063 },
+          { "x": 7813, "y": 5354 },
+          { "x": 7458, "y": 5625 },
+          { "x": 7208, "y": 5708 },
+          { "x": 7063, "y": 5708 },
+          { "x": 7042, "y": 5875 },
+          { "x": 6833, "y": 6208 },
+          { "x": 6583, "y": 6417 },
+          { "x": 6250, "y": 6583 },
+          { "x": 6250, "y": 8250 },
+          { "x": 5625, "y": 8250 },
+          { "x": 5625, "y": 6771 },
+          { "x": 5313, "y": 6833 },
+          { "x": 4896, "y": 6854 },
+          { "x": 4333, "y": 6813 },
+          { "x": 4125, "y": 6750 },
+          { "x": 4083, "y": 6750 },
+          { "x": 4083, "y": 8250 },
+          { "x": 3458, "y": 8250 },
+          { "x": 3458, "y": 6521 },
+          { "x": 3229, "y": 6417 },
+          { "x": 2896, "y": 6104 },
+          { "x": 2750, "y": 5813 },
+          { "x": 2729, "y": 5625 },
+          { "x": 2771, "y": 5375 },
+          { "x": 1521, "y": 4354 },
+          { "x": 1479, "y": 4229 },
+          { "x": 1521, "y": 4083 },
+          { "x": 1708, "y": 3979 },
+          { "x": 1854, "y": 4021 },
+          { "x": 3000, "y": 5000 },
+          { "x": 3083, "y": 5000 },
+          { "x": 3229, "y": 4854 },
+          { "x": 3583, "y": 4667 },
+          { "x": 4333, "y": 4458 },
+          { "x": 4896, "y": 4417 },
+          { "x": 5313, "y": 4438 },
+          { "x": 5958, "y": 4583 },
+          { "x": 6000, "y": 4375 },
+          { "x": 6104, "y": 4167 },
+          { "x": 6292, "y": 3958 },
+          { "x": 6500, "y": 3833 }
+        ],
+        "fittedBoundsMm": {
+          "minX": -600,
+          "maxX": 600,
+          "minY": 150,
+          "maxY": 1152,
+          "width": 1200,
+          "height": 1002
+        },
+        "geometrySha256": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2"
+      },
+      "wingInstances": [
+        {
+          "id": "left-wing",
+          "side": "left",
+          "translateMm": [-2350, 0, 0],
+          "mirrorX": false
+        },
+        {
+          "id": "right-wing",
+          "side": "right",
+          "translateMm": [2350, 0, 0],
+          "mirrorX": true
+        }
+      ],
+      "poles": [
+        {
+          "id": "pole-1",
+          "centerHeightMm": 650,
+          "lengthMm": 3500,
+          "diameterMm": 100
+        },
+        {
+          "id": "pole-2",
+          "centerHeightMm": 950,
+          "lengthMm": 3500,
+          "diameterMm": 100
+        },
+        {
+          "id": "pole-3",
+          "centerHeightMm": 1250,
+          "lengthMm": 3500,
+          "diameterMm": 100
+        },
+        {
+          "id": "pole-4",
+          "centerHeightMm": 1550,
+          "lengthMm": 3500,
+          "diameterMm": 100
+        }
+      ],
+      "fixedSupports": {
+        "tracks": [
+          { "xMm": -1750, "heightMm": 1800 },
+          { "xMm": 1750, "heightMm": 1800 }
+        ],
+        "feet": [
+          { "xMm": -2350, "depthMm": 800 },
+          { "xMm": 2350, "depthMm": 800 }
+        ],
+        "flags": [
+          { "xMm": -1750, "yMm": 1800 },
+          { "xMm": 1750, "yMm": 1800 }
+        ]
+      },
+      "projectionParity": {
+        "twoDProfileGeometrySha256": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+        "threeDExtrusionSourceGeometrySha256": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+        "exactSharedGeometry": true
+      }
+    },
+    "warnings": [
+      "All dimensions and support positions are deterministic prototype assumptions, not supplier geometry.",
+      "The silhouette plate has not been structurally, materially, or aerodynamically validated.",
+      "Generic component counts are workflow evidence only and are not production material quantities."
+    ],
+    "notForProduction": true,
+    "notForOrdering": true
+  }
+}

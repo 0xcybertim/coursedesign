@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0-phase1g-live",
+  "baseUrl": "http://127.0.0.1:3000",
+  "provider": "openai",
+  "expectedConfiguredModel": "gpt-image-2-2026-04-21",
+  "maxRetries": 0,
+  "inputEvidencePolicy": "No prompt text, image bytes, base64, filenames, credentials, or revised prompts are recorded.",
+  "calls": {
+    "generation": {
+      "attempted": true,
+      "attemptedAt": "2026-07-16T04:26:31.659Z",
+      "httpStatus": 200,
+      "outcome": "completed",
+      "count": 4,
+      "mediaTypes": ["image/jpeg"],
+      "byteLengths": [133559, 137792, 151628, 178289],
+      "contentHashes": [
+        "45379f07e6b9ba799a20f7e1db816d48f4e6c1fb28d691ae2b298751d8eb8ce0",
+        "d34f93d14f7f1fbfbc8db617d888b647f4d3c08a42d5f98c1fbd3c416cfe1ba5",
+        "c1600ab9a67f8fd68e8714a094392e023ca3e7d4a4fd91be7a3a26c44abd8401",
+        "b5df45220c527da709d6c86b5d404ae1a224c0a7630242e2e8ab5d20cca53a81"
+      ],
+      "provenance": {
+        "provider": "openai",
+        "configuredModel": "gpt-image-2-2026-04-21",
+        "adapterVersion": "1.0.0-phase1g",
+        "providerRequestId": "req_96b28e1ade434744bdfd889f723b4e79",
+        "seed": null
+      }
+    },
+    "refinement": {
+      "attempted": true,
+      "attemptedAt": "2026-07-16T04:26:56.375Z",
+      "sourceContentHash": "45379f07e6b9ba799a20f7e1db816d48f4e6c1fb28d691ae2b298751d8eb8ce0",
+      "httpStatus": 429,
+      "outcome": "failed",
+      "failureKind": "rate_limit"
+    }
+  },
+  "passed": false
+}

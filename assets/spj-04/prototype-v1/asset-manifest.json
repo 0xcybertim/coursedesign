@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "benchmark_id": "spj-04-prototype-v1",
+  "generated_by": "tools/generate_spj04_benchmark.py",
+  "configuration_hash": "a16e5d4c7b04bafbdd463b230827351de071ada9700ec67413cf2446143830f7",
+  "purpose": "non_sellable_prototype_only",
+  "evidence_status": "inferred",
+  "metrics": {
+    "triangles": 2676,
+    "vertices": 3032,
+    "meshes": 66,
+    "glb_bytes": 207740,
+    "texture_max_dimension_px": 2048
+  },
+  "budgets": {
+    "glb_max_bytes": 3145728,
+    "triangle_count_max": 150000,
+    "texture_max_dimension_px": 2048
+  },
+  "results": {
+    "glb_size": "pass",
+    "triangle_count": "pass",
+    "texture_dimension": "pass",
+    "configuration_parity": "pass",
+    "supplier_truth_boundary": "pass"
+  },
+  "glb_validation": {
+    "asset_version": "2.0",
+    "mesh_count": 66,
+    "material_count": 7,
+    "node_count": 66,
+    "configuration_hash": "a16e5d4c7b04bafbdd463b230827351de071ada9700ec67413cf2446143830f7"
+  },
+  "files": [
+    {
+      "path": "panel-artwork.png",
+      "bytes": 43671,
+      "sha256": "64c0c0f233c52967cdea119b907efb22f66c362fd6629973d5181db7068153c1"
+    },
+    {
+      "path": "prototype-config-v1.json",
+      "bytes": 4031,
+      "sha256": "7786a616ce8f068f57b758c8e28a580990c366de15df532c38e8b9b1dca69d3d"
+    },
+    {
+      "path": "spj-04-prototype-v1.glb",
+      "bytes": 207740,
+      "sha256": "fa31287db80db46a88b0c606d4da20e052de33213b675d91441825457ee2e777"
+    },
+    {
+      "path": "bom.json",
+      "bytes": 1867,
+      "sha256": "a65f7c571badc0ac9e03f769d064bb6a9bfa34b0c36e3131ce8d011450782146"
+    },
+    {
+      "path": "footprint.json",
+      "bytes": 604,
+      "sha256": "5071820f04cc6cab9441899a790accf50fd6e2ad0a910a5b527a9fd5646f5205"
+    },
+    {
+      "path": "benchmark-board.png",
+      "bytes": 396004,
+      "sha256": "51da010067703e23c8cedd8e1121c2cc19071c42d124a3dba06283f606b90c5d"
+    },
+    {
+      "path": "renders/front.png",
+      "bytes": 16278,
+      "sha256": "2a91a4d7d5d8d7467a995a61281156b26eb807c11b58150b83e235586cd0571b"
+    },
+    {
+      "path": "renders/angle-left-30.png",
+      "bytes": 48600,
+      "sha256": "6aa8bc387437dfb70b63016bfca7ebd7067de7d939d6cc6240089c19640ed57e"
+    },
+    {
+      "path": "renders/angle-right-30.png",
+      "bytes": 51751,
+      "sha256": "b0e2192969468107fd692dc8c71f07fd8c7451ff12f918af7b32351c8da28cd2"
+    },
+    {
+      "path": "renders/artwork-detail.png",
+      "bytes": 22130,
+      "sha256": "811ba31e4b07228ceece90c42c98966a8113b46f38a852846f55546c3af23735"
+    },
+    {
+      "path": "renders/hardware-detail.png",
+      "bytes": 38646,
+      "sha256": "f49f222ce0f75c71f7262c19edf5ba404dc7def98b405b0655e8793d17e16305"
+    },
+    {
+      "path": "renders/top.png",
+      "bytes": 16613,
+      "sha256": "4d785280e6ba655429bafe81a4edb05fcc5f3c8e5aba52322a24ce89cabb868d"
+    }
+  ]
+}

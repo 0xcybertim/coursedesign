@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0-profile-wing-creation-browser-acceptance",
+  "baseUrl": "http://127.0.0.1:3110",
+  "sourceFixture": "tests/fixtures/phase-1h/input/clean-dog-side.png",
+  "executionBoundary": {
+    "configuredProvider": "deterministic-test",
+    "maskPostRequests": 1,
+    "automaticRetries": 0,
+    "externalBrowserRequests": 0,
+    "liveRemoveBgCalls": 0
+  },
+  "checks": [
+    {
+      "name": "opening the creator makes no provider request",
+      "detail": "passed"
+    },
+    {
+      "name": "choosing a PNG prepares and stores a local derivative only",
+      "detail": "passed"
+    },
+    {
+      "name": "one explicit action creates exactly one mask request",
+      "detail": "passed"
+    },
+    {
+      "name": "returned alpha is vectorized before any product geometry",
+      "detail": "passed"
+    },
+    {
+      "name": "visual acceptance unlocks exact shared 2.5D and 3D geometry",
+      "detail": "passed"
+    },
+    {
+      "name": "accepted user geometry saves one immutable v2 revision",
+      "detail": "passed"
+    },
+    {
+      "name": "saved user profile places through the existing course flow",
+      "detail": "passed"
+    },
+    {
+      "name": "course review keeps generated inferred provenance visible",
+      "detail": "passed"
+    },
+    {
+      "name": "creator passes desktop, tablet, and mobile layout gates",
+      "detail": "passed"
+    },
+    {
+      "name": "QA uses one local deterministic POST, zero retries, zero external calls, and clean browser diagnostics",
+      "detail": "passed"
+    }
+  ],
+  "screenshots": [
+    "docs/profile-wing-creation/screenshots/user-mask-review-desktop.png",
+    "docs/profile-wing-creation/screenshots/user-profile-result-desktop.png",
+    "docs/profile-wing-creation/screenshots/user-profile-course-desktop.png",
+    "docs/profile-wing-creation/screenshots/user-profile-review-desktop.png",
+    "docs/profile-wing-creation/screenshots/user-profile-creator-1440x1000.png",
+    "docs/profile-wing-creation/screenshots/user-profile-creator-768x1024.png",
+    "docs/profile-wing-creation/screenshots/user-profile-creator-375x812.png"
+  ],
+  "viewports": [
+    {
+      "label": "profile-wing-creator",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "label": "profile-wing-creator",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "label": "profile-wing-creator",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    }
+  ],
+  "consoleProblems": [],
+  "failedRequests": [],
+  "externalRequests": []
+}

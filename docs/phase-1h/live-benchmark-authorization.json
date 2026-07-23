@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-authorization",
+  "status": "approved",
+  "approvedBy": "Tim",
+  "approvedAt": "2026-07-22T09:12:20Z",
+  "approvalText": "I approve the Phase 1H-A Photoroom benchmark: 20 clean + 3 empty + 3 multi-subject + 3 badly occluded synthetic fixtures, exactly 29 maximum external calls, zero retries, maximum cost $0.58, expected 30–90 seconds, and upload of only those repository-generated PNG fixtures. I accept that Photoroom excludes API images from training but does not publish an exact transient API-image deletion interval.",
+  "approvalTextSha256": "4c3d1ad2d9b45c41d42ec02a1e82e509dacf6729eacb412e9f245bf0d6f0f670",
+  "provider": "photoroom",
+  "fixtureCounts": {
+    "clean": 20,
+    "empty": 3,
+    "multiSubject": 3,
+    "badlyOccluded": 3,
+    "total": 29
+  },
+  "maximumExternalCalls": 29,
+  "maxRetries": 0,
+  "maximumCostUsd": 0.58,
+  "expectedLatency": "30-90 seconds",
+  "dataLeavingMachine": "Only the 29 repository-generated 480 x 480 PNG fixture inputs",
+  "privacyAccepted": true
+}

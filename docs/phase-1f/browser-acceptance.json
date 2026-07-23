@@ -1,0 +1,136 @@
+{
+  "baseUrl": "http://127.0.0.1:3000",
+  "checks": [
+    {
+      "name": "built-in Club Classic hash remains stable",
+      "detail": "passed"
+    },
+    {
+      "name": "normal interactive 3D reaches ready state",
+      "detail": "passed"
+    },
+    {
+      "name": "PDF rejected with visible typed failure",
+      "detail": "passed"
+    },
+    {
+      "name": "unsafe SVG script rejected before rasterization",
+      "detail": "passed"
+    },
+    {
+      "name": "valid transparent PNG processed to canonical PNG",
+      "detail": "passed"
+    },
+    {
+      "name": "valid JPEG processed and transparent-background confirmation blocked",
+      "detail": "passed"
+    },
+    {
+      "name": "SVG sanitized/rasterized with contain, integer placement, and guides",
+      "detail": "passed"
+    },
+    {
+      "name": "independent left/right hashes and placement match exact 2.5D/3D manifest evidence",
+      "detail": "passed"
+    },
+    {
+      "name": "immutable Revision 01 pins both content hashes and placements",
+      "detail": "passed"
+    },
+    {
+      "name": "reload restores exact artwork and read-only revision identity",
+      "detail": "passed"
+    },
+    {
+      "name": "replacement creates Revision 02 without mutating Revision 01",
+      "detail": "passed"
+    },
+    {
+      "name": "repeated replacements revoke stale object URLs",
+      "detail": "{\"active\":2,\"created\":13,\"revoked\":11}"
+    },
+    {
+      "name": "course pins Revision 01 and Revision 02 IDs unchanged across reload",
+      "detail": "passed"
+    },
+    {
+      "name": "Course Review Sheet preserves distinct pinned hashes and exact quantity 2",
+      "detail": "passed"
+    },
+    {
+      "name": "forced WebGL failure preserves exact current 2.5D artwork",
+      "detail": "passed"
+    },
+    {
+      "name": "375x812 artwork editor has no overflow and no visible target below 44px",
+      "detail": "passed"
+    },
+    {
+      "name": "keyboard focus remains visibly represented",
+      "detail": "passed"
+    },
+    {
+      "name": "768x1024 artwork editor has no overflow and no visible target below 44px",
+      "detail": "passed"
+    },
+    {
+      "name": "1440x1000 final reload restores custom artwork and normal 3D",
+      "detail": "passed"
+    },
+    {
+      "name": "no failed requests or browser warning/error console output",
+      "detail": "passed"
+    }
+  ],
+  "hashes": {
+    "independentLeft": "2a70ccf4d0f9b194ad2745a40f249573e4072058cb84e8f072b2478281378635",
+    "independentRight": "9bb557231c0b3b6f7df08a5fc9139606433a5e71639c5c55d30aa307d2813151",
+    "revisionOne": "485e8024ee47e0c6ac7869c4a05242ea220f16f60d85a9f6bc4233aba9a2f42d",
+    "revisionTwo": "d468659f5eb4f6b8182016d26f88377fe00e05aee6aed85c64b20822622a25e4",
+    "review": "741a04fc1b3b563495001536fcf9a62255a96d534d475b700223799590ec6dcf"
+  },
+  "screenshots": [
+    "docs/phase-1f/screenshots/independent-wing-editor-desktop.png",
+    "docs/phase-1f/screenshots/desktop-artwork-3d.png",
+    "docs/phase-1f/screenshots/reload-read-only-revision.png",
+    "docs/phase-1f/screenshots/course-revision-pinning.png",
+    "docs/phase-1f/screenshots/course-review-artwork-pinning.png",
+    "docs/phase-1f/screenshots/forced-2-5d-fallback.png",
+    "docs/phase-1f/screenshots/mobile-artwork-editor.png",
+    "docs/phase-1f/screenshots/tablet-artwork-editor.png",
+    "docs/phase-1f/screenshots/desktop-reload-final.png"
+  ],
+  "consoleProblems": [],
+  "environmentConsoleNotices": [
+    "warning: [.WebGL-0x12c00560e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "warning: [.WebGL-0x12c00560e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "warning: [.WebGL-0x12c00560e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "warning: [.WebGL-0x12c00560e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "failedRequests": [],
+  "expectedAbortedRequests": [
+    "GET http://127.0.0.1:3000/studio/obstacles/spj-04?_rsc=PPmbR0-wf6h3n3Yu net::ERR_ABORTED",
+    "GET http://127.0.0.1:3000/studio/obstacles/spj-04?_rsc=0-fy5JkvafdDnFD- net::ERR_ABORTED",
+    "GET http://127.0.0.1:3000/studio/obstacles/spj-04?_rsc=PPmbR0-wf6h3n3Yu net::ERR_ABORTED"
+  ],
+  "objectUrlAudit": {
+    "active": 2,
+    "created": 13,
+    "revoked": 11
+  },
+  "mobileAudit": {
+    "viewport": [375, 812],
+    "overflowX": 0,
+    "tooSmall": []
+  },
+  "tabletAudit": {
+    "viewport": [768, 1024],
+    "overflowX": 0,
+    "tooSmall": []
+  },
+  "desktopAudit": {
+    "overflowX": 0,
+    "customizeVisible": true
+  },
+  "completedAt": "2026-07-15T14:18:49.461Z"
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.0.0-phase1h-end-to-end-browser-acceptance",
+  "baseUrl": "http://127.0.0.1:3110",
+  "fixtureId": "clean-dog-side",
+  "executionBoundary": {
+    "externalProviderCallsMade": 0,
+    "retriesMade": 0,
+    "productApiPostCallsMade": 0
+  },
+  "checks": [
+    {
+      "name": "accepted silhouette renders matching 2.5D and 3D",
+      "detail": "passed"
+    },
+    {
+      "name": "v1 imported once with legacy ID and hash preserved",
+      "detail": "passed"
+    },
+    {
+      "name": "legacy key remains byte-for-byte untouched",
+      "detail": "passed"
+    },
+    {
+      "name": "generated prototype revision saved immutably in v2",
+      "detail": "passed"
+    },
+    {
+      "name": "mixed-family course placement aggregates exact pinned quantities",
+      "detail": "passed"
+    },
+    {
+      "name": "course review exposes generated inferred non-supplier provenance",
+      "detail": "passed"
+    },
+    {
+      "name": "newer generated revision does not repin an existing placement",
+      "detail": "passed"
+    },
+    {
+      "name": "forced 3D failure preserves saveable exact 2.5D geometry",
+      "detail": "passed"
+    },
+    {
+      "name": "course and review pass desktop, tablet, and mobile layout gates",
+      "detail": "passed"
+    },
+    {
+      "name": "zero POST, provider, external, failed-request, and console-error activity",
+      "detail": "passed"
+    }
+  ],
+  "hashes": {
+    "legacySpj04Configuration": "721cfa28f279bc077a811d94a4b3b42b204e8f84331a82d0d69a4f44ce4a0c80"
+  },
+  "revisionIds": {
+    "legacySpj04": "revision-84eb5cc8-e0aa-4e70-8b39-e3dde6b360ce",
+    "firstGeneratedProfile": "revision-0901dbc2-4c5b-48b0-b6f2-bb1b159fc499",
+    "secondGeneratedProfile": "revision-3a9240fb-fc03-4e64-84dc-4c25d2fd2cc5"
+  },
+  "viewports": [
+    {
+      "route": "/studio/courses/local-course-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "route": "/studio/courses/local-course-1/review",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "route": "/studio/courses/local-course-1",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "route": "/studio/courses/local-course-1/review",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "route": "/studio/courses/local-course-1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "route": "/studio/courses/local-course-1/review",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflowX": 0,
+      "tooSmall": []
+    }
+  ],
+  "screenshots": [
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/course-1440x1000.png",
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/review-1440x1000.png",
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/course-768x1024.png",
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/review-768x1024.png",
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/course-375x812.png",
+    "docs/phase-1h/phase-1h-end-to-end-screenshots/review-375x812.png"
+  ],
+  "consoleProblems": [],
+  "failedRequests": [],
+  "externalRequests": []
+}

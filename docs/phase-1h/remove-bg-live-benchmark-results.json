@@ -1,0 +1,1220 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-remove-bg-live-benchmark",
+  "mode": "live-provider",
+  "provider": "remove-bg",
+  "adapterVersion": "1.0.0-phase1h-a-remove-bg",
+  "evaluationVersion": "1.1.0-phase1h-a",
+  "manifestSchemaVersion": "1.0.0-phase1h-a-fixtures",
+  "providerCallsMade": 29,
+  "maxRetries": 0,
+  "sandboxMode": false,
+  "cost": {
+    "billingMode": "free-preview",
+    "perRequestUsd": 0,
+    "regularPricePerRequestUsd": 0,
+    "maximumAuthorizedUsd": 0,
+    "estimatedActualMaximumUsd": 0
+  },
+  "dataSent": "Exactly 29 repository-generated 480 x 480 PNG fixtures; no user images, prompts, concept images, credentials, or source filenames are stored in this evidence.",
+  "privacyApproval": "Tim explicitly accepted synthetic-only uploads, immediate deletion after API processing, missing provider uncertainty, and mandatory visual inspection before this run.",
+  "providerUncertaintyRequired": false,
+  "sandboxLimitation": null,
+  "thresholds": {
+    "binaryThreshold": 128,
+    "minimumForegroundFraction": 0.01,
+    "maximumForegroundFraction": 0.8,
+    "minimumGroundTruthCoverage": 0.9,
+    "maximumBackgroundLeakage": 0.05,
+    "minimumIntersectionOverUnion": 0.85,
+    "significantComponentFraction": 0.002,
+    "maximumSignificantComponents": 1,
+    "maximumBorderForegroundPixels": 0,
+    "maximumProviderUncertainty": 0.6
+  },
+  "summary": {
+    "cleanUsable": 20,
+    "cleanTotal": 20,
+    "negativeCasesRejected": 9,
+    "negativeCasesTotal": 9,
+    "emptyRejected": 3,
+    "multiSubjectRejected": 3,
+    "badlyOccludedRejected": 3,
+    "latencyMs": {
+      "median": 521,
+      "p90": 1201,
+      "maximum": 3114
+    }
+  },
+  "automatedMetricGatePassed": true,
+  "visualInspection": {
+    "inspectedAt": "2026-07-22T16:24:25Z",
+    "returnedMasksInspected": 26,
+    "cleanMasksInspected": 20,
+    "cleanMasksWithoutVisibleWatermarksHalosHolesClippingOrExtraSubjects": 20,
+    "multiSubjectMasksVisiblyRejected": 3,
+    "badlyOccludedMasksVisiblyRejected": 3,
+    "emptyCasesExplicitlyRejectedWithoutInventedMasks": 3,
+    "hashMismatches": 0,
+    "passed": true
+  },
+  "finalDecision": {
+    "cleanMasksEligibleForVectorization": 20,
+    "providerQualityProven": true,
+    "reason": "All automated thresholds passed and mandatory visual inspection found every clean mask crisp and watermark-free while all nine unsafe cases were explicitly rejected."
+  },
+  "technicalGatePassed": true,
+  "results": [
+    {
+      "fixtureId": "clean-dog-side",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 1453,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 32598,
+          "foregroundFraction": 0.141484375,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 32598,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4316,
+        "sha256": "f8ce9d740ae39e7b799eab27d5dea788ed504da5323b36a6b2b8b9892fc9a928"
+      }
+    },
+    {
+      "fixtureId": "clean-horse-profile",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 515,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 35590,
+          "foregroundFraction": 0.1544704861111111,
+          "connectedComponents": 2,
+          "significantComponents": 1,
+          "largestComponentPixels": 35589,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5274,
+        "sha256": "873d28c3b79c2ff65709976094b1317ef98194b7d6db3506a13dd9293d0aa095"
+      }
+    },
+    {
+      "fixtureId": "clean-cat-seated",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 556,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 42749,
+          "foregroundFraction": 0.18554253472222224,
+          "connectedComponents": 2,
+          "significantComponents": 1,
+          "largestComponentPixels": 42748,
+          "subjectCoverage": 0.9997895130735769,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9997895130735769,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 6038,
+        "sha256": "732dae84dc04aba5b50670348b3d1bad6d3199d31d715451c1daa47225ca5877"
+      }
+    },
+    {
+      "fixtureId": "clean-rabbit",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 517,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 44566,
+          "foregroundFraction": 0.19342881944444446,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 44566,
+          "subjectCoverage": 0.998409355677032,
+          "backgroundLeakage": 0.00002243863034600368,
+          "intersectionOverUnion": 0.9983869883728745,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5959,
+        "sha256": "9cc123f54819723873e23f5cc389feb16953aaf4753b3a4212105594585f2360"
+      }
+    },
+    {
+      "fixtureId": "clean-bird",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 523,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 33650,
+          "foregroundFraction": 0.1460503472222222,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 33650,
+          "subjectCoverage": 0.9997920194907449,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9997920194907449,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5383,
+        "sha256": "39ac0b566ef1c351f198b9b086688c221ea83a4ac78fc6cd2262e7e3b58deb0e"
+      }
+    },
+    {
+      "fixtureId": "clean-fish",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 1201,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 32535,
+          "foregroundFraction": 0.1412109375,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 32535,
+          "subjectCoverage": 0.9998463429625076,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9998463429625076,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4895,
+        "sha256": "0e938a035c9521f0c068f523d7e9606aa345ec13ec41328e8b5606c01fb42735"
+      }
+    },
+    {
+      "fixtureId": "clean-butterfly",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 475,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 68161,
+          "foregroundFraction": 0.29583767361111113,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 68161,
+          "subjectCoverage": 0.9995747177005426,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9995747177005426,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 6291,
+        "sha256": "33a6104e794f6f777353c2b3df1b856c8ce90c8e2f4625370454bc8dbfbca75f"
+      }
+    },
+    {
+      "fixtureId": "clean-turtle",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 464,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 46480,
+          "foregroundFraction": 0.20173611111111112,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 46480,
+          "subjectCoverage": 0.9997418910780349,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9997418910780349,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5587,
+        "sha256": "f0bd4ad7a39ae4192219a87c6fae68e60bc6a57d3241877df5b452f19c197cc6"
+      }
+    },
+    {
+      "fixtureId": "clean-fox",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 458,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 36854,
+          "foregroundFraction": 0.15995659722222222,
+          "connectedComponents": 2,
+          "significantComponents": 1,
+          "largestComponentPixels": 36853,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5427,
+        "sha256": "75b3fae9df65c9d4176f2c268b97dd89208077c87b80d1c8e5772ff71fc445f5"
+      }
+    },
+    {
+      "fixtureId": "clean-elephant",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 552,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 49770,
+          "foregroundFraction": 0.216015625,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 49770,
+          "subjectCoverage": 0.9999598167644459,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9999598167644459,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 6141,
+        "sha256": "acd00e51079c8b552f49aa0122052ca1509f5ecf900cd7c719b7eaeb81530b39"
+      }
+    },
+    {
+      "fixtureId": "clean-ball",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 482,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 44697,
+          "foregroundFraction": 0.19399739583333334,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 44697,
+          "subjectCoverage": 0.9995527428047498,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9995527428047498,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5056,
+        "sha256": "bb961b7d558d398e3e82e18d3a0aa7f3142872faaebeecccd1a57d82b2dfc43e"
+      }
+    },
+    {
+      "fixtureId": "clean-chair",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 890,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 42816,
+          "foregroundFraction": 0.18583333333333332,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 42816,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 3818,
+        "sha256": "853f9fd3dacbcfaa72c51b6fc6c69546de900ba250bece9d19206d0c50179a4a"
+      }
+    },
+    {
+      "fixtureId": "clean-boot",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 439,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 47375,
+          "foregroundFraction": 0.2056206597222222,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 47375,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 3794,
+        "sha256": "50fef2a126552feb3487b7b6b531d294998c2f7791ab9c335f798ddf9172ef34"
+      }
+    },
+    {
+      "fixtureId": "clean-watering-can",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 509,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 40619,
+          "foregroundFraction": 0.17629774305555557,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 40619,
+          "subjectCoverage": 0.999827696549008,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.999827696549008,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5840,
+        "sha256": "422ea0870d368d53ac4a48bd91634b6d70182fabd26c903fa45941c8762c7f8f"
+      }
+    },
+    {
+      "fixtureId": "clean-umbrella",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 521,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 54004,
+          "foregroundFraction": 0.2343923611111111,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 54004,
+          "subjectCoverage": 0.9999444516451571,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9999444516451571,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5756,
+        "sha256": "de78241be2c0d04446c6a37156f4b01e1c10b51c5340a77e53df876a4603276b"
+      }
+    },
+    {
+      "fixtureId": "clean-guitar",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 3114,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 36228,
+          "foregroundFraction": 0.15723958333333332,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 36228,
+          "subjectCoverage": 0.9999171979796307,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9999171979796307,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4562,
+        "sha256": "c563ddf07cb2d6072c8888cdfd82fa93c9256137c25fd0bc352d810ff9cb8704"
+      }
+    },
+    {
+      "fixtureId": "clean-bicycle",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 510,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 31941,
+          "foregroundFraction": 0.1386328125,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 31941,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 6661,
+        "sha256": "4c0e409cf07cdfe1e8255c60b2c10059b3e40f26550d8961857dbf324e93e499"
+      }
+    },
+    {
+      "fixtureId": "clean-teapot",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 788,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 43911,
+          "foregroundFraction": 0.1905859375,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 43911,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 6041,
+        "sha256": "3a0d8507eb70c0f2e4c21038a4a3b78d142eff0857369eaeb61a804b10f2713c"
+      }
+    },
+    {
+      "fixtureId": "clean-lamp",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 570,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 36351,
+          "foregroundFraction": 0.1577734375,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 36351,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4911,
+        "sha256": "b42386d30ad40a6cbfe45827f67a54189abdfaeb56b25c98056b46bcc0163d19"
+      }
+    },
+    {
+      "fixtureId": "clean-toy-plane",
+      "category": "clean",
+      "expectedOutcome": "accept",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 505,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": true,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": true,
+        "reasons": [],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 31862,
+          "foregroundFraction": 0.13828993055555555,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 31862,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4285,
+        "sha256": "64c1310de43f6c8677c1fb2af07045627b9db5ce99eca6402ef59321289853e7"
+      }
+    },
+    {
+      "fixtureId": "empty-soft-gradient",
+      "category": "empty",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "failed",
+      "providerFailure": {
+        "status": 400,
+        "durationMs": 407
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": null,
+      "output": null
+    },
+    {
+      "fixtureId": "empty-speckled-wall",
+      "category": "empty",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "failed",
+      "providerFailure": {
+        "status": 400,
+        "durationMs": 406
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": null,
+      "output": null
+    },
+    {
+      "fixtureId": "empty-floor-horizon",
+      "category": "empty",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "failed",
+      "providerFailure": {
+        "status": 400,
+        "durationMs": 523
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": null,
+      "output": null
+    },
+    {
+      "fixtureId": "multi-dog-and-ball",
+      "category": "multi_subject",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 527,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": ["not_exactly_one_significant_component"],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 30179,
+          "foregroundFraction": 0.13098524305555556,
+          "connectedComponents": 2,
+          "significantComponents": 2,
+          "largestComponentPixels": 15133,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5897,
+        "sha256": "6340af1d843690482aa290e81ebd671bb9c1275e2eccb4851dd67c067713d6f5"
+      }
+    },
+    {
+      "fixtureId": "multi-chair-and-lamp",
+      "category": "multi_subject",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 793,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": ["not_exactly_one_significant_component"],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 31439,
+          "foregroundFraction": 0.13645399305555556,
+          "connectedComponents": 2,
+          "significantComponents": 2,
+          "largestComponentPixels": 18428,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 1,
+          "borderForegroundPixels": 0,
+          "obviousClipping": false,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5863,
+        "sha256": "c4f1baf8417fe73a13b1e21cfd10f87f3f1ca7ffbc3599501864d5d65ef8b41e"
+      }
+    },
+    {
+      "fixtureId": "multi-bird-and-fish",
+      "category": "multi_subject",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 516,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": [
+          "not_exactly_one_significant_component",
+          "mask_touches_canvas_border"
+        ],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 25595,
+          "foregroundFraction": 0.11108940972222223,
+          "connectedComponents": 2,
+          "significantComponents": 2,
+          "largestComponentPixels": 14636,
+          "subjectCoverage": 0.9996484924230589,
+          "backgroundLeakage": 0,
+          "intersectionOverUnion": 0.9996484924230589,
+          "borderForegroundPixels": 10,
+          "obviousClipping": true,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5965,
+        "sha256": "54092d9cf1b519b72cce04adbfb7d4c78ef2bfee46522b559271593d897ff67e"
+      }
+    },
+    {
+      "fixtureId": "occluded-dog",
+      "category": "badly_occluded",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 531,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": [
+          "background_leakage_above_threshold",
+          "intersection_over_union_below_threshold",
+          "mask_touches_canvas_border"
+        ],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 56288,
+          "foregroundFraction": 0.24430555555555555,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 56288,
+          "subjectCoverage": 0.9999333866240341,
+          "backgroundLeakage": 0.7333179363274588,
+          "intersectionOverUnion": 0.26667732594290183,
+          "borderForegroundPixels": 172,
+          "obviousClipping": true,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5152,
+        "sha256": "ad4534326cf854cb243671550af5efb8d49cfca437fcf13266f1280a3e4c2d80"
+      }
+    },
+    {
+      "fixtureId": "occluded-chair",
+      "category": "badly_occluded",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 972,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": [
+          "background_leakage_above_threshold",
+          "intersection_over_union_below_threshold",
+          "mask_touches_canvas_border"
+        ],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 68904,
+          "foregroundFraction": 0.2990625,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 68904,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0.640891675374434,
+          "intersectionOverUnion": 0.359108324625566,
+          "borderForegroundPixels": 184,
+          "obviousClipping": true,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 5449,
+        "sha256": "0c8a45ac799a20b6ea7355a9227ea7a8ae00371a49ab09c27bda667b7082375a"
+      }
+    },
+    {
+      "fixtureId": "occluded-plane",
+      "category": "badly_occluded",
+      "expectedOutcome": "reject",
+      "attempt": 1,
+      "providerOutcome": "completed",
+      "providerFailure": null,
+      "provider": {
+        "httpStatus": 200,
+        "requestId": null,
+        "uncertainty": null,
+        "durationMs": 501,
+        "creditsCharged": 0,
+        "freeCallsRemaining": null
+      },
+      "expectationMet": true,
+      "safeToPassIntoDeterministicVectorization": false,
+      "evaluation": {
+        "acceptedForDeterministicVectorization": false,
+        "reasons": [
+          "background_leakage_above_threshold",
+          "intersection_over_union_below_threshold",
+          "mask_touches_canvas_border"
+        ],
+        "metrics": {
+          "width": 480,
+          "height": 480,
+          "foregroundPixels": 50649,
+          "foregroundFraction": 0.21983072916666666,
+          "connectedComponents": 1,
+          "significantComponents": 1,
+          "largestComponentPixels": 50649,
+          "subjectCoverage": 1,
+          "backgroundLeakage": 0.7581590949475804,
+          "intersectionOverUnion": 0.2418409050524196,
+          "borderForegroundPixels": 160,
+          "obviousClipping": true,
+          "providerUncertainty": null
+        }
+      },
+      "output": {
+        "mediaType": "image/png",
+        "byteLength": 4626,
+        "sha256": "b481f26cdcbc1d11c88d97c7813b429f65580a6c84c8ae629798d2628a35db3c"
+      }
+    }
+  ]
+}

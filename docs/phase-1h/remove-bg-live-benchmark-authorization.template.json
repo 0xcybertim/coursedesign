@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-remove-bg-authorization",
+  "status": "pending-explicit-user-approval",
+  "approvedBy": null,
+  "approvedAt": null,
+  "approvalText": null,
+  "approvalTextSha256": null,
+  "provider": "remove-bg",
+  "fixtureCounts": {
+    "clean": 20,
+    "empty": 3,
+    "multiSubject": 3,
+    "badlyOccluded": 3,
+    "total": 29
+  },
+  "maximumExternalCalls": 29,
+  "maxRetries": 0,
+  "maximumCostUsd": 0,
+  "expectedLatency": "30-90 seconds",
+  "dataLeavingMachine": "Only the 29 repository-generated 480 x 480 PNG fixture inputs",
+  "privacyAccepted": false,
+  "providerUncertaintyRequired": false,
+  "mandatoryVisualInspection": true,
+  "note": "Template only. The live harness rejects it. Create remove-bg-live-benchmark-authorization.json only after Tim supplies the exact approval sentence."
+}

@@ -1,0 +1,953 @@
+{
+  "schema_version": "0.2.0-phase0-prototype",
+  "generated_at": "2026-07-13T00:00:00+02:00",
+  "document_status": "prototype_locked_with_separate_unconfirmed_supplier_truth",
+  "evidence_status_vocabulary": [
+    "confirmed_current",
+    "confirmed_but_historical",
+    "conflicting",
+    "inferred",
+    "missing_supplier_confirmation"
+  ],
+  "candidate_identity": {
+    "supplier_product_id": {
+      "value": "SPJ-04",
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-013",
+        "CAT-006"
+      ]
+    },
+    "supplier_family_id": {
+      "value": "SPJ",
+      "evidence_status": "inferred",
+      "source_refs": [
+        "CAT-005",
+        "CUR-011"
+      ]
+    },
+    "working_name": {
+      "value": "SPJ-04 printed-panel vertical",
+      "evidence_status": "inferred",
+      "source_refs": [
+        "CAT-006"
+      ]
+    },
+    "supplier_product_name": {
+      "value": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": []
+    },
+    "recommendation_confidence": {
+      "value": 0.64,
+      "scale": "0_to_1",
+      "evidence_status": "inferred",
+      "source_refs": [
+        "CAT-006",
+        "CUR-010",
+        "CUR-013",
+        "CUR-014"
+      ]
+    },
+    "fallback_candidate": {
+      "supplier_product_id": "JWS-11",
+      "evidence_status": "inferred",
+      "source_refs": [
+        "CAT-010",
+        "CUR-018",
+        "CUR-019",
+        "CUR-020"
+      ]
+    }
+  },
+  "prototype_profile": {
+    "purpose": "non_sellable_prototype_only",
+    "decision_date": "2026-07-13",
+    "decision": "lock_best_guess",
+    "supplier_product_id": "SPJ-04",
+    "preset_name": "Club Classic",
+    "prototype_decision_confidence": {
+      "value": 0.85,
+      "scale": "0_to_1",
+      "evidence_status": "inferred"
+    },
+    "warning": "Every value in this profile is a replaceable prototype assumption unless separately present in the supplier-truth fields. It is not approved for quoting, checkout, fabrication, safety claims, or factory production.",
+    "evidence_status": "inferred",
+    "source_refs": [
+      "CAT-006",
+      "CUR-010",
+      "CUR-013",
+      "OLD-018",
+      "OLD-020"
+    ],
+    "geometry_mm": {
+      "interpretation": "Treat the quoted 180x80 cm as the approximate height and face width of each wing assembly.",
+      "wing_count": 2,
+      "wing_face_width": 800,
+      "wing_face_height": 1800,
+      "pole_length": 3500,
+      "pole_diameter": 100,
+      "overall_width": 5100,
+      "overall_depth": 800,
+      "overall_height": 1800,
+      "footprint_width": 5100,
+      "footprint_depth": 800,
+      "anchor": "midpoint_of_primary_pole_centerline",
+      "evidence_status": "inferred"
+    },
+    "bill_of_materials": [
+      {
+        "component_key": "printed_wing_assembly",
+        "quantity": 2,
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "aluminum_jump_pole",
+        "quantity": 4,
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "cup_or_release_adapter",
+        "quantity": 8,
+        "rule": "two_per_pole",
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "keyhole_track_assembly",
+        "quantity": 2,
+        "rule": "one_per_wing",
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "foot_or_ballast_assembly",
+        "quantity": 2,
+        "rule": "one_per_wing",
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "flag",
+        "quantity": 2,
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "pole_end_cap",
+        "quantity": 8,
+        "rule": "two_per_pole",
+        "evidence_status": "inferred"
+      },
+      {
+        "component_key": "lower_element",
+        "quantity": 0,
+        "allowed_values": [
+          "none",
+          "decorative_panel",
+          "gate",
+          "filler"
+        ],
+        "maximum_quantity": 1,
+        "evidence_status": "inferred"
+      }
+    ],
+    "artwork": {
+      "placement": "fixed_slot_on_each_wing_panel",
+      "printable_width_mm": 700,
+      "printable_height_mm": 1500,
+      "bleed_mm": 20,
+      "safe_margin_mm": 50,
+      "accepted_prototype_formats": [
+        "PNG",
+        "JPEG",
+        "SVG",
+        "PDF"
+      ],
+      "default_mapping": "same_artwork_on_both_wings",
+      "arbitrary_placement_allowed": false,
+      "evidence_status": "inferred"
+    },
+    "options": {
+      "default_frame_color": "white",
+      "prototype_frame_colors": [
+        "white",
+        "blue",
+        "red",
+        "yellow"
+      ],
+      "default_panel_color": "navy",
+      "navy_note": "Prototype design token, not a supplier-confirmed finish.",
+      "pole_pattern": "two_color_alternating_segments",
+      "lower_element_values": [
+        "none",
+        "decorative_panel",
+        "gate",
+        "filler"
+      ],
+      "lower_element_selection_mode": "mutually_exclusive",
+      "artwork_values": [
+        "none",
+        "fixed_panel_upload"
+      ],
+      "evidence_status": "inferred"
+    },
+    "compatibility_rules": [
+      "Exactly two wing assemblies and four poles.",
+      "Each pole requires two cups or adapters, for eight total.",
+      "At most one lower element may be selected.",
+      "A decorative panel, gate, or filler replaces only the lower-element slot and does not replace a pole in the prototype.",
+      "Artwork attaches only to the two fixed wing-panel slots."
+    ],
+    "price_display": {
+      "amount": 9000,
+      "currency": "CNY",
+      "classification": "supplier_cost_example",
+      "ui_label": "Prototype supplier example · CNY 9,000 · excludes tax, freight and retail markup",
+      "customer_retail_price": null,
+      "evidence_status": "confirmed_current",
+      "prototype_label_evidence_status": "inferred",
+      "source_refs": [
+        "CUR-006",
+        "CUR-008",
+        "CUR-013"
+      ]
+    }
+  },
+  "supplier": {
+    "current_legal_name_original": {
+      "value": "宁波睿姿机械有限公司",
+      "translation_en": "Ningbo Ruizi Machinery Co., Ltd.",
+      "translation_evidence_status": "inferred",
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-001"
+      ]
+    },
+    "older_legal_name": {
+      "value": "Ningbo Reeds Mechanical Manufacturing Co., Ltd.",
+      "evidence_status": "confirmed_but_historical",
+      "source_refs": [
+        "OLD-002",
+        "CAT-002"
+      ]
+    },
+    "legal_entity_relationship_confirmed": {
+      "value": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": [
+        "CUR-001",
+        "OLD-002"
+      ]
+    },
+    "brands": [
+      {
+        "value": "REEDS",
+        "evidence_status": "confirmed_current",
+        "source_refs": [
+          "CUR-003"
+        ]
+      },
+      {
+        "value": "CHINAJUMPS",
+        "evidence_status": "confirmed_but_historical",
+        "source_refs": [
+          "CAT-002"
+        ]
+      }
+    ],
+    "contact": {
+      "name": "NIKO",
+      "role_original": "销售经理",
+      "role_translation_en": "sales manager",
+      "phone": "+86 17757465686",
+      "website": "www.chinajumps.com",
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-003"
+      ]
+    }
+  },
+  "source_references": [
+    {
+      "ref": "catalogue_pdf",
+      "filename": "chinajumps 2026 9M(2026-04-03 16_56_49)(2026-05-19 21_12_10).pdf",
+      "pages": [
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "date_visible": null,
+      "file_metadata_date": "2024-11-06",
+      "evidence_status": "conflicting"
+    },
+    {
+      "ref": "older_export_quotation",
+      "filename": "quotation  2026for export.pdf",
+      "pages": [
+        1,
+        2,
+        3,
+        5,
+        7
+      ],
+      "date_visible": "2018 1107",
+      "file_metadata_date": "2026-01-05",
+      "evidence_status": "confirmed_but_historical"
+    },
+    {
+      "ref": "current_workbook",
+      "filename": "宁波睿姿机械报价单 20260711 荷兰障碍架.xls",
+      "sheet": "OFFER",
+      "cells": [
+        "A1",
+        "B2",
+        "B5",
+        "B6",
+        "A8:H9",
+        "C10",
+        "A13",
+        "D13",
+        "E13",
+        "F13",
+        "H13",
+        "G51",
+        "H67"
+      ],
+      "date_visible": "2026  0711",
+      "file_last_saved_date": "2026-07-11",
+      "evidence_status": "confirmed_current"
+    }
+  ],
+  "components": [
+    {
+      "component_key": "complete_set",
+      "supplier_component_id": null,
+      "original_text": "套",
+      "translation_en": "set",
+      "quantity": 1,
+      "included": true,
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-008",
+        "CUR-013"
+      ]
+    },
+    {
+      "component_key": "aluminum_alloy_frame",
+      "supplier_component_id": null,
+      "original_text": "铝合金框架马术障碍架",
+      "translation_en": "aluminum-alloy-frame equestrian obstacle",
+      "quantity": null,
+      "included": true,
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "component_key": "jump_pole",
+      "supplier_component_id": null,
+      "original_text": "配套 4 根障碍杆",
+      "translation_en": "supplied with four jump poles",
+      "quantity": 4,
+      "included": true,
+      "evidence_status": "confirmed_current",
+      "applicability_note": "Shared SPJ-group description; supplier must confirm it applies exactly to SPJ-04.",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "component_key": "decorative_baffle_panel",
+      "supplier_component_id": null,
+      "original_text": "装饰挡板",
+      "translation_en": "decorative baffle panel",
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "ambiguity": "A slash joins the four-pole and decorative-panel wording, so AND versus OR and the panel count are unknown.",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "component_key": "left_printed_wing_assembly",
+      "supplier_component_id": null,
+      "original_text": null,
+      "translation_en": null,
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "visual_evidence": "The catalogue image visibly shows a left rectangular printed wing/panel.",
+      "source_refs": [
+        "CAT-006"
+      ]
+    },
+    {
+      "component_key": "right_printed_wing_assembly",
+      "supplier_component_id": null,
+      "original_text": null,
+      "translation_en": null,
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "visual_evidence": "The catalogue image visibly shows a right rectangular printed wing/panel.",
+      "source_refs": [
+        "CAT-006"
+      ]
+    },
+    {
+      "component_key": "cups_or_release_adapters",
+      "supplier_component_id": null,
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "historical_candidates": [
+        "C1",
+        "C2"
+      ],
+      "source_refs": [
+        "OLD-015",
+        "OLD-016"
+      ]
+    },
+    {
+      "component_key": "keyhole_tracks",
+      "supplier_component_id": null,
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "historical_candidates": [
+        "KTA-01",
+        "KTM-01"
+      ],
+      "source_refs": [
+        "OLD-017"
+      ]
+    },
+    {
+      "component_key": "flags_caps_feet_ballast_hardware",
+      "supplier_component_id": null,
+      "quantity": null,
+      "included": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": [
+        "CAT-003",
+        "OLD-020"
+      ]
+    }
+  ],
+  "options": [
+    {
+      "option_key": "shaped_gate",
+      "supplier_component_id": null,
+      "original_text": "亦可搭配障碍门",
+      "translation_en": "may also be paired with an obstacle gate",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "confirmed_current",
+      "orderable_status": "blocked_until_supplier_matrix",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "option_key": "decorative_filler",
+      "supplier_component_id": null,
+      "original_text": "亦可搭配装饰填充板",
+      "translation_en": "may also be paired with a decorative filler panel",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "confirmed_current",
+      "orderable_status": "blocked_until_supplier_matrix",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "option_key": "pole_color_pattern",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "confirmed_but_historical",
+      "historical_note": "Two colors per pole were available; more colors required customization.",
+      "source_refs": [
+        "OLD-018",
+        "OLD-019"
+      ]
+    },
+    {
+      "option_key": "frame_or_panel_color",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": [
+        "CAT-003",
+        "OLD-006"
+      ]
+    },
+    {
+      "option_key": "fixed_panel_artwork",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "visual_and_process_evidence_status": "confirmed_but_historical",
+      "source_refs": [
+        "CAT-004",
+        "CAT-006"
+      ]
+    },
+    {
+      "option_key": "custom_shape",
+      "allowed_values": null,
+      "price_surcharge": null,
+      "evidence_status": "confirmed_but_historical",
+      "phase_1_scope": "excluded",
+      "source_refs": [
+        "CAT-003"
+      ]
+    }
+  ],
+  "compatibility_rules": [
+    {
+      "rule_id": "compat-001",
+      "if": "gate_or_filler_selected",
+      "then": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "question": "Does the gate/filler replace one or more poles, the decorative board, or another component?",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "rule_id": "compat-002",
+      "if": "cup_or_track_selected",
+      "then": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "question": "Which current cup/adapter and track identifiers are compatible with SPJ-04?",
+      "source_refs": [
+        "OLD-015",
+        "OLD-016",
+        "OLD-017"
+      ]
+    },
+    {
+      "rule_id": "compat-003",
+      "if": "pole_selected",
+      "then": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "question": "Which pole material, length, diameter, color pattern, and end-cap combination is approved for SPJ-04?",
+      "source_refs": [
+        "OLD-018",
+        "OLD-019",
+        "OLD-020"
+      ]
+    }
+  ],
+  "dimensions": {
+    "quoted_row_dimension": {
+      "width_mm": 1800,
+      "depth_mm": 800,
+      "height_mm": null,
+      "measured_object": null,
+      "original_text": "180x80厘米",
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-013"
+      ]
+    },
+    "shared_description_dimension": {
+      "width_mm": 1700,
+      "depth_mm": 600,
+      "height_mm": null,
+      "measured_object": null,
+      "original_text": "尺寸 170×60厘米",
+      "evidence_status": "conflicting",
+      "source_refs": [
+        "CUR-010",
+        "CUR-014"
+      ]
+    },
+    "overall_obstacle": {
+      "width_mm": null,
+      "depth_mm": null,
+      "height_mm": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": []
+    },
+    "pole": {
+      "length_mm": null,
+      "diameter_mm": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "historical_unmapped_lengths_mm": [
+        3000,
+        3500
+      ],
+      "source_refs": [
+        "OLD-018",
+        "OLD-019"
+      ]
+    },
+    "weights": {
+      "net_weight_kg": null,
+      "gross_weight_kg": null,
+      "component_weights": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": []
+    }
+  },
+  "footprint": {
+    "overall_width_mm": null,
+    "overall_depth_mm": null,
+    "anchor": "midpoint_of_primary_pole_centerline",
+    "rotation_origin": "anchor",
+    "width_definition": "full_outer_foot_to_foot_envelope",
+    "depth_definition": "maximum_forward_backward_foot_or_panel_envelope",
+    "left_wing_bbox_mm": null,
+    "right_wing_bbox_mm": null,
+    "pole_centerline_offset_mm": null,
+    "foot_projection_mm": null,
+    "evidence_status": "missing_supplier_confirmation",
+    "source_refs": [
+      "CUR-014"
+    ]
+  },
+  "materials": [
+    {
+      "component_key": "frame",
+      "material": "aluminum alloy",
+      "grade": null,
+      "thickness_mm": null,
+      "finish": null,
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-010"
+      ]
+    },
+    {
+      "component_key": "printed_panel",
+      "material": null,
+      "grade": null,
+      "thickness_mm": null,
+      "finish": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "historical_family_claim": "HDPE is described broadly for show jumps but not tied to SPJ-04.",
+      "source_refs": [
+        "CAT-003"
+      ]
+    },
+    {
+      "component_key": "pole",
+      "material": null,
+      "grade": null,
+      "thickness_mm": null,
+      "finish": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "historical_options": [
+        "aluminum",
+        "pine wood"
+      ],
+      "source_refs": [
+        "OLD-018",
+        "OLD-019"
+      ]
+    }
+  ],
+  "colors": {
+    "allowed_named_colors": null,
+    "ral_or_other_codes": null,
+    "pole_patterns": null,
+    "finish_gloss": null,
+    "evidence_status": "missing_supplier_confirmation",
+    "historical_unmapped_colors": [
+      "red",
+      "yellow",
+      "blue",
+      "white",
+      "natural aluminum"
+    ],
+    "source_refs": [
+      "OLD-005",
+      "OLD-006"
+    ]
+  },
+  "artwork_area": {
+    "component_key": "fixed_printed_wing_panel",
+    "panel_supplier_id": null,
+    "printable_width_mm": null,
+    "printable_height_mm": null,
+    "bleed_mm": null,
+    "safe_area_mm": null,
+    "edge_and_fastener_clearance_mm": null,
+    "minimum_resolution_dpi": null,
+    "accepted_file_formats": null,
+    "color_profile": null,
+    "print_method": null,
+    "replaceable": null,
+    "evidence_status": "missing_supplier_confirmation",
+    "visual_suitability_status": "inferred",
+    "source_refs": [
+      "CAT-004",
+      "CAT-006"
+    ]
+  },
+  "supplier_price_evidence": [
+    {
+      "product_id": "SPJ-04",
+      "amount": 9000,
+      "currency": "CNY",
+      "currency_original": "人民币",
+      "unit": "set",
+      "unit_original": "套",
+      "quoted_quantity": 1,
+      "price_basis": null,
+      "freight_included": false,
+      "freight_note_original": "物流托运，由需方承担",
+      "freight_note_translation_en": "Logistics consignment; borne by the buyer.",
+      "vat_mode": null,
+      "vat_note": "The adjacent total column is labelled RMB excluding tax, but line totals are blank and the unit-price column does not explicitly state tax treatment.",
+      "minimum_order_quantity": null,
+      "quote_date": "2026-07-11",
+      "price_valid_until": null,
+      "customer_retail_price": null,
+      "delivered_price": null,
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-002",
+        "CUR-006",
+        "CUR-008",
+        "CUR-013"
+      ]
+    },
+    {
+      "product_id": null,
+      "description": "Unidentified historical complete obstacle package",
+      "amount": 1080,
+      "currency": "USD",
+      "unit": "piece",
+      "quoted_quantity": null,
+      "price_basis": "FOB Ningbo",
+      "minimum_order_quantity": 4,
+      "quote_date": "2018-11-07",
+      "mapped_to_spj_04": false,
+      "evidence_status": "confirmed_but_historical",
+      "source_refs": [
+        "OLD-001",
+        "OLD-004",
+        "OLD-009"
+      ]
+    }
+  ],
+  "packaging": {
+    "method_original": "气泡塑料膜",
+    "method_translation_en": "bubble plastic film",
+    "package_count": null,
+    "packages": null,
+    "package_dimensions_mm": null,
+    "gross_weight_kg": null,
+    "stackable": null,
+    "evidence_status": "confirmed_current",
+    "missing_fields_status": "missing_supplier_confirmation",
+    "source_refs": [
+      "CUR-013"
+    ]
+  },
+  "production_terms": {
+    "payment_current": {
+      "deposit_percent": 50,
+      "balance_percent": 50,
+      "balance_due": "before_shipment",
+      "original_text": "50%定金，100% 付清发货前",
+      "translation_en": "50% deposit; 100% paid in full before shipment.",
+      "evidence_status": "confirmed_current",
+      "source_refs": [
+        "CUR-005"
+      ]
+    },
+    "lead_time_current_days": {
+      "value": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": [
+        "CUR-007"
+      ]
+    },
+    "lead_time_historical_days": {
+      "value": 30,
+      "starts_after": "order_confirmed",
+      "evidence_status": "confirmed_but_historical",
+      "source_refs": [
+        "OLD-021"
+      ]
+    },
+    "historical_payment_deposit_percent": {
+      "value": 40,
+      "evidence_status": "confirmed_but_historical",
+      "source_refs": [
+        "OLD-003",
+        "OLD-022"
+      ]
+    },
+    "current_trade_term": {
+      "value": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": [
+        "CUR-006"
+      ]
+    },
+    "production_sheet_format": {
+      "value": null,
+      "evidence_status": "missing_supplier_confirmation",
+      "source_refs": []
+    }
+  },
+  "asset_requirements": {
+    "required_source_geometry": [
+      "supplier CAD assembly or STEP",
+      "dimensioned front view",
+      "dimensioned rear view",
+      "dimensioned side views",
+      "dimensioned top view",
+      "separate component geometry",
+      "cup and track interfaces",
+      "feet and ballast geometry",
+      "panel vector outline"
+    ],
+    "required_reference_photos": [
+      "front",
+      "rear",
+      "left",
+      "right",
+      "left three-quarter",
+      "right three-quarter",
+      "feet and ballast",
+      "tracks and cups",
+      "pole ends",
+      "panel edges and fasteners",
+      "packaging"
+    ],
+    "required_2_5d_views": [
+      "front",
+      "angle_left_30",
+      "angle_right_30",
+      "detail_artwork",
+      "detail_hardware",
+      "top",
+      "rear"
+    ],
+    "required_layer_keys": [
+      "left_wing_frame",
+      "left_fixed_print_panel",
+      "right_wing_frame",
+      "right_fixed_print_panel",
+      "tracks_and_cups",
+      "pole_1",
+      "pole_2",
+      "pole_3",
+      "pole_4",
+      "optional_board_or_gate_or_filler",
+      "flags_and_caps_if_confirmed",
+      "floor_shadow"
+    ],
+    "phase_0_web_asset_budgets": {
+      "initial_glb_max_bytes_target": 3145728,
+      "triangle_count_max_target": 150000,
+      "texture_max_dimension_px": 2048,
+      "evidence_status": "inferred",
+      "provenance": "approved_engineering_plan"
+    },
+    "supplier_assets_available": null,
+    "evidence_status": "missing_supplier_confirmation"
+  },
+  "field_level_evidence_status": {
+    "/candidate_identity/supplier_product_id": "confirmed_current",
+    "/candidate_identity/working_name": "inferred",
+    "/supplier/current_legal_name_original": "confirmed_current",
+    "/supplier/legal_entity_relationship_confirmed": "missing_supplier_confirmation",
+    "/components/complete_set": "confirmed_current",
+    "/components/jump_pole/quantity": "confirmed_current",
+    "/components/decorative_baffle_panel/quantity": "missing_supplier_confirmation",
+    "/dimensions/quoted_row_dimension": "confirmed_current",
+    "/dimensions/shared_description_dimension": "conflicting",
+    "/dimensions/overall_obstacle": "missing_supplier_confirmation",
+    "/footprint": "missing_supplier_confirmation",
+    "/materials/frame": "confirmed_current",
+    "/materials/printed_panel": "missing_supplier_confirmation",
+    "/colors": "missing_supplier_confirmation",
+    "/artwork_area": "missing_supplier_confirmation",
+    "/supplier_price_evidence/0/amount": "confirmed_current",
+    "/supplier_price_evidence/0/currency": "confirmed_current",
+    "/supplier_price_evidence/0/price_basis": "missing_supplier_confirmation",
+    "/supplier_price_evidence/0/vat_mode": "missing_supplier_confirmation",
+    "/supplier_price_evidence/0/minimum_order_quantity": "missing_supplier_confirmation",
+    "/packaging/method_original": "confirmed_current",
+    "/packaging/package_dimensions_mm": "missing_supplier_confirmation",
+    "/production_terms/payment_current": "confirmed_current",
+    "/production_terms/lead_time_current_days": "missing_supplier_confirmation",
+    "/production_terms/production_sheet_format": "missing_supplier_confirmation",
+    "/asset_requirements/supplier_assets_available": "missing_supplier_confirmation",
+    "/prototype_profile": "inferred",
+    "/prototype_profile/geometry_mm": "inferred",
+    "/prototype_profile/bill_of_materials": "inferred",
+    "/prototype_profile/artwork": "inferred",
+    "/prototype_profile/options": "inferred"
+  },
+  "unresolved_questions": [
+    {
+      "id": "Q-001",
+      "priority": "blocker",
+      "question": "Is SPJ-04 one complete obstacle set, and what exact factory identifier and quantity applies to every included component?"
+    },
+    {
+      "id": "Q-002",
+      "priority": "blocker",
+      "question": "Does the slash in the four-pole/decorative-panel description mean AND or OR, and how many panels are included?"
+    },
+    {
+      "id": "Q-003",
+      "priority": "blocker",
+      "question": "Which is correct for SPJ-04: 170x60 cm or 180x80 cm, what object does it measure, and what are the complete overall dimensions?"
+    },
+    {
+      "id": "Q-004",
+      "priority": "blocker",
+      "question": "What are the exact pole length/diameter, cup/track system, feet, ballast parts, flags, caps, and hardware?"
+    },
+    {
+      "id": "Q-005",
+      "priority": "blocker",
+      "question": "What are the current allowed colors, pole patterns, panels, gates, fillers, logos, surcharges, and incompatibilities?"
+    },
+    {
+      "id": "Q-006",
+      "priority": "blocker",
+      "question": "What is the fixed print area's size, bleed, safe area, resolution, color profile, accepted formats, material, finish, and print method?"
+    },
+    {
+      "id": "Q-007",
+      "priority": "blocker",
+      "question": "What are current 2026 MOQ, unit-price basis, VAT treatment, quote validity, lead time, payment term, and freight/trade term?"
+    },
+    {
+      "id": "Q-008",
+      "priority": "blocker",
+      "question": "What are the component/net/gross weights and every package's dimensions, weight, contents, and stackability?"
+    },
+    {
+      "id": "Q-009",
+      "priority": "blocker",
+      "question": "Can the supplier provide CAD/STEP or dimensioned drawings and a production sheet it will accept without interpretation?"
+    },
+    {
+      "id": "Q-010",
+      "priority": "high",
+      "question": "What is the official current English legal name for 宁波睿姿机械有限公司, is it the legal entity for REEDS/CHINAJUMPS, and how does it relate to the older Ningbo Reeds Mechanical Manufacturing Co., Ltd.?"
+    }
+  ],
+  "phase_0_assessment": {
+    "provisional_canonical_selection": "pass_with_conditions",
+    "prototype_canonical_lock": "pass",
+    "start_prototype_asset_benchmark": "pass_with_inferred_geometry",
+    "complete_product_truth": "fail",
+    "start_production_grade_asset_or_factory_handoff": "fail",
+    "start_customer_pricing_or_checkout": "fail",
+    "full_phase_0_exit": "fail"
+  }
+}

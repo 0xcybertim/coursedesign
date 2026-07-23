@@ -1,0 +1,7 @@
+.next
+coverage
+pnpm-lock.yaml
+public/prototype-assets
+assets
+product-truth
+tmp

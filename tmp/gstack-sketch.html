@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obstacle Studio - rough interaction sketch</title>
+  <style>
+    /* Intentionally rough: this validates hierarchy and flow, not brand styling. */
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #ededeb; color: #171717; font: 14px/1.35 system-ui, sans-serif; }
+    .page { width: 1440px; margin: 0 auto; padding: 28px; }
+    .label { margin: 24px 0 8px; color: #555; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .screen { overflow: hidden; min-height: 820px; background: #fafaf8; border: 1px solid #777; }
+    header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 70px; padding: 0 24px; border-bottom: 1px solid #aaa; }
+    .brand { font-weight: 700; letter-spacing: .02em; }
+    .steps { display: flex; gap: 8px; color: #666; }
+    .step { padding: 8px 12px; border: 1px solid transparent; border-radius: 20px; }
+    .step.active { color: #111; border-color: #555; background: white; }
+    .actions { justify-self: end; display: flex; align-items: center; gap: 12px; }
+    button { padding: 10px 16px; background: white; border: 1px solid #555; border-radius: 24px; font: inherit; }
+    button.primary { color: white; background: #222; }
+    .config { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(390px, .8fr); min-height: 750px; }
+    .preview { position: relative; display: grid; place-items: center; min-height: 750px; background: #f2f2ef; border-right: 1px solid #aaa; }
+    .preview-title { position: absolute; top: 26px; left: 30px; }
+    .preview-title h1 { margin: 0 0 4px; font-size: 26px; }
+    .preview-title p { margin: 0; color: #666; }
+    .view-tools { position: absolute; right: 26px; top: 26px; display: flex; gap: 8px; }
+    .tool { display: grid; place-items: center; width: 40px; height: 40px; background: #fff; border: 1px solid #999; border-radius: 50%; }
+    .jump { width: 760px; max-width: 88%; filter: drop-shadow(0 20px 14px rgba(0,0,0,.12)); }
+    .hint { position: absolute; bottom: 24px; color: #666; }
+    .panel { display: flex; flex-direction: column; background: #fff; }
+    .panel-head { padding: 24px 24px 18px; border-bottom: 1px solid #aaa; }
+    .progress { display: flex; justify-content: space-between; color: #666; font-size: 12px; }
+    .panel-head h2 { margin: 10px 0 2px; font-size: 22px; }
+    .panel-head p { margin: 0; color: #666; }
+    .options { flex: 1; padding: 24px; overflow: hidden; }
+    .group { margin-bottom: 28px; }
+    .group-title { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 650; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .card { min-height: 86px; padding: 10px; border: 1px solid #aaa; background: #f8f8f6; }
+    .card.selected { border: 2px solid #222; background: #fff; }
+    .card small { display: block; margin-top: 5px; color: #666; }
+    .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+    .swatch { width: 42px; height: 42px; border: 1px solid #888; border-radius: 50%; }
+    .swatch.selected { outline: 2px solid #222; outline-offset: 3px; }
+    .upload { padding: 15px; border: 1px dashed #777; background: #f7f7f5; }
+    .panel-foot { padding: 18px 24px; border-top: 1px solid #aaa; background: #fafaf8; }
+    .price { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+    .price strong { font-size: 24px; }
+    .price small { color: #666; }
+    .panel-foot button { width: 100%; }
+    .course { display: grid; grid-template-columns: 270px minmax(0, 1fr) 330px; height: 750px; }
+    .library, .summary { padding: 20px; background: #fff; }
+    .library { border-right: 1px solid #aaa; }
+    .summary { border-left: 1px solid #aaa; }
+    .library h2, .summary h2 { margin: 0 0 6px; font-size: 19px; }
+    .library > p, .summary > p { margin: 0 0 18px; color: #666; }
+    .library-card { display: grid; grid-template-columns: 68px 1fr; gap: 10px; margin-bottom: 12px; padding: 9px; border: 1px solid #aaa; background: #fafaf8; }
+    .thumb { display: grid; place-items: center; min-height: 56px; background: #e8e8e4; font-size: 24px; }
+    .library-card strong, .library-card small { display: block; }
+    .library-card small { color: #666; }
+    .arena-wrap { padding: 18px; background: #e4e4df; }
+    .arena-toolbar { display: flex; justify-content: space-between; align-items: center; height: 44px; margin-bottom: 12px; }
+    .arena { position: relative; height: 655px; overflow: hidden; border: 2px solid #777; background-color: #e9e2d2; background-image: linear-gradient(#c9c2b5 1px, transparent 1px), linear-gradient(90deg, #c9c2b5 1px, transparent 1px); background-size: 40px 40px; }
+    .arena:before { content: "60 m"; position: absolute; left: 50%; top: 8px; color: #777; transform: translateX(-50%); }
+    .arena:after { content: "40 m"; position: absolute; left: 8px; top: 50%; color: #777; transform: translateY(-50%) rotate(-90deg); }
+    .placed { position: absolute; display: grid; place-items: center; width: 96px; height: 38px; border: 2px solid #333; background: #fff; box-shadow: 0 3px 6px rgba(0,0,0,.12); font-size: 12px; transform-origin: center; }
+    .placed:before, .placed:after { content: ""; position: absolute; width: 9px; height: 45px; background: #333; }
+    .placed:before { left: -6px; } .placed:after { right: -6px; }
+    .j1 { left: 19%; top: 24%; transform: rotate(18deg); }
+    .j2 { left: 45%; top: 17%; transform: rotate(-14deg); }
+    .j3 { left: 63%; top: 43%; transform: rotate(8deg); }
+    .j4 { left: 34%; top: 62%; transform: rotate(-26deg); }
+    .route { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .line-item { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #ccc; }
+    .line-item span:last-child { white-space: nowrap; }
+    .total { display: flex; justify-content: space-between; margin-top: 18px; font-size: 20px; font-weight: 700; }
+    .notice { margin: 18px 0; padding: 12px; background: #f1f1ee; border: 1px solid #bbb; color: #444; }
+    .summary button { width: 100%; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="label">Screen 1 - design an obstacle</div>
+    <section class="screen">
+      <header>
+        <div class="brand">OBSTACLE STUDIO</div>
+        <nav class="steps"><span class="step active">1 Design</span><span class="step">2 Course</span><span class="step">3 Review</span></nav>
+        <div class="actions"><span>Saved automatically</span><button>My designs · 2</button></div>
+      </header>
+      <div class="config">
+        <section class="preview">
+          <div class="preview-title"><h1>Harbor Vertical</h1><p>Competition obstacle · live prototype view</p></div>
+          <div class="view-tools"><div class="tool">↻</div><div class="tool">＋</div></div>
+          <!-- The real product would be a WebGL model; SVG keeps this sketch portable. -->
+          <svg class="jump" viewBox="0 0 800 430" role="img" aria-label="Customized blue and white show-jumping obstacle">
+            <ellipse cx="400" cy="385" rx="330" ry="24" fill="#c9c9c5"/>
+            <g stroke="#222" stroke-width="7" fill="#d6d6d1">
+              <path d="M62 340 L78 95 Q82 52 125 65 L198 83 L197 340 Z"/>
+              <path d="M738 340 L722 95 Q718 52 675 65 L602 83 L603 340 Z"/>
+            </g>
+            <g fill="#274b75">
+              <path d="M82 322 L92 105 L176 119 L177 322 Z"/><path d="M718 322 L708 105 L624 119 L623 322 Z"/>
+            </g>
+            <g stroke="#222" stroke-width="5">
+              <line x1="171" y1="155" x2="629" y2="155"/><line x1="171" y1="218" x2="629" y2="218"/><line x1="171" y1="281" x2="629" y2="281"/>
+            </g>
+            <g stroke-width="28">
+              <line x1="185" y1="155" x2="615" y2="155" stroke="#f7f7f1"/><line x1="185" y1="218" x2="615" y2="218" stroke="#274b75"/><line x1="185" y1="281" x2="615" y2="281" stroke="#f7f7f1"/>
+            </g>
+            <g stroke="#274b75" stroke-width="28">
+              <line x1="250" y1="155" x2="315" y2="155"/><line x1="485" y1="155" x2="550" y2="155"/><line x1="340" y1="281" x2="460" y2="281"/>
+            </g>
+            <rect x="287" y="306" width="226" height="55" fill="#fff" stroke="#222" stroke-width="5"/>
+            <text x="400" y="341" text-anchor="middle" font-family="system-ui" font-size="18" fill="#222">YOUR LOGO</text>
+            <g fill="#222"><circle cx="102" cy="81" r="9"/><circle cx="698" cy="81" r="9"/></g>
+          </svg>
+          <div class="hint">Drag to rotate · click a component on the obstacle to edit it</div>
+        </section>
+        <aside class="panel">
+          <div class="panel-head"><div class="progress"><span>Appearance</span><span>Step 3 of 6</span></div><h2>Wings</h2><p>Choose a shape, then adjust its color.</p></div>
+          <div class="options">
+            <div class="group"><div class="group-title"><span>Shape</span><span>Required · pair</span></div><div class="cards"><div class="card selected">Arch 170<small>Included</small></div><div class="card">Classic 170<small>€0</small></div><div class="card">Custom cut<small>+ €240</small></div></div></div>
+            <div class="group"><div class="group-title"><span>Main color</span><span>Navy</span></div><div class="swatches"><div class="swatch" style="background:#111"></div><div class="swatch selected" style="background:#274b75"></div><div class="swatch" style="background:#8b2532"></div><div class="swatch" style="background:#d8b43d"></div><div class="swatch" style="background:#e8e8e2"></div><div class="swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 5px,#bbb 5px,#bbb 7px)"></div></div></div>
+            <div class="group"><div class="group-title"><span>Sponsor panel</span><span>Optional</span></div><div class="upload">＋ Upload a logo or graphic<br><small>We check print quality before production.</small></div></div>
+          </div>
+          <div class="panel-foot"><div class="price"><div><small>Example price, incl. VAT</small><br><strong>€1,495</strong></div><small>Estimated 6–8 weeks</small></div><button class="primary">Save design and add to course →</button></div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="label">Screen 2 - use saved designs to plan a purchase</div>
+    <section class="screen">
+      <header>
+        <div class="brand">OBSTACLE STUDIO</div>
+        <nav class="steps"><span class="step">1 Design</span><span class="step active">2 Course</span><span class="step">3 Review</span></nav>
+        <div class="actions"><button>Undo</button><button>Save course</button></div>
+      </header>
+      <div class="course">
+        <aside class="library"><h2>My designs</h2><p>Drag an obstacle into the arena.</p><div class="library-card"><div class="thumb">≡</div><div><strong>Harbor Vertical</strong><small>€1,495 · ready</small></div></div><div class="library-card"><div class="thumb">╳</div><div><strong>Cross Oxer</strong><small>€1,840 · ready</small></div></div><div class="library-card"><div class="thumb">▥</div><div><strong>Club Gate</strong><small>€1,120 · needs logo</small></div></div><button>＋ Design another obstacle</button></aside>
+        <section class="arena-wrap"><div class="arena-toolbar"><strong>Outdoor arena · 60 × 40 m</strong><span>Grid 5 m · Top view · − 100% ＋</span></div><div class="arena"><svg class="route" viewBox="0 0 800 650" preserveAspectRatio="none"><path d="M105 500 C180 410,155 250,250 185 S430 95,505 225 S670 340,545 470 S310 580,255 420" fill="none" stroke="#777" stroke-width="3" stroke-dasharray="8 8"/><path d="M541 463 l-12 -12 m12 12 l-15 7" fill="none" stroke="#777" stroke-width="3"/></svg><div class="placed j1">1 · Harbor</div><div class="placed j2">2 · Cross</div><div class="placed j3">3 · Harbor</div><div class="placed j4">4 · Club Gate</div></div></section>
+        <aside class="summary"><h2>Course purchase</h2><p>4 placed obstacles · 3 unique designs</p><div class="line-item"><span>Harbor Vertical × 2</span><span>€2,990</span></div><div class="line-item"><span>Cross Oxer × 1</span><span>€1,840</span></div><div class="line-item"><span>Club Gate × 1</span><span>€1,120</span></div><div class="line-item"><span>Course numbers 1–15</span><span>€219</span></div><div class="notice"><strong>One action needed</strong><br>Upload or remove the logo on Club Gate before checkout.</div><div class="total"><span>Example total</span><span>€6,169</span></div><p>VAT included. Delivery calculated from arena postcode.</p><button class="primary">Review equipment and delivery →</button><button>Download draft plan</button></aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

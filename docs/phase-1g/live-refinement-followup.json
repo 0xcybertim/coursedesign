@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0-phase1g-live-refinement-followup",
+  "provider": "openai",
+  "expectedConfiguredModel": "gpt-image-2-2026-04-21",
+  "maxRetries": 0,
+  "paidRequestsAuthorized": 1,
+  "inputEvidencePolicy": "No prompt text, image bytes, base64, filenames, credentials, or revised prompts are recorded in this evidence file.",
+  "source": {
+    "contentHash": "cfd85b1d643415a19d3d8b8cca1cab6663759992c8cdec8e3502b72efea34cb9",
+    "byteLength": 27472,
+    "mediaType": "image/png",
+    "kind": "local-deterministic-dog-fixture"
+  },
+  "calls": {
+    "generation": {
+      "attempted": false
+    },
+    "refinement": {
+      "attempted": true,
+      "attemptedAt": "2026-07-21T08:13:50.796Z",
+      "outcome": "completed",
+      "count": 4,
+      "mediaTypes": ["image/jpeg"],
+      "byteLengths": [87115, 88774, 89565, 96967],
+      "contentHashes": [
+        "d1a6d6bec00df427919e3fdfb7bfde651819f4bb85ce86f14263a211dfaf66e4",
+        "ebac67d1278ab8fdcc8f8d504479b470da962d91ba7cb6fb30cbda0dcbe0bf5e",
+        "72cb69d8c046962b115a78ef4828c0223d5c9134346f4edbb0e490e163f94add",
+        "817816aa242d4ab7c9d51682acaa5adeaddcf068d3057c57338f9fc7e78ba29f"
+      ],
+      "provenance": {
+        "provider": "openai",
+        "configuredModel": "gpt-image-2-2026-04-21",
+        "providerRequestId": "req_6c67416854324657bb6aadd243dd567c"
+      }
+    }
+  },
+  "technicalRequestPassed": true,
+  "creativeQualityPassed": false,
+  "creativeQualityEvaluation": {
+    "status": "failed_structural_constraint",
+    "dogSilhouetteVisiblyChanged": true,
+    "earsVisiblyClearer": true,
+    "palettePreserved": true,
+    "gatePresent": true,
+    "sponsorAreasPresent": true,
+    "exactlyFourHorizontalPoles": false,
+    "observedHorizontalPoleCounts": [3, 3, 3, 3]
+  },
+  "passed": false,
+  "completedAt": "2026-07-21T08:14:36.060Z"
+}

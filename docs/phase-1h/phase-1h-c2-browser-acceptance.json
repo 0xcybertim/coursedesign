@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0-phase1h-c2-browser-acceptance",
+  "baseUrl": "http://127.0.0.1:3000",
+  "fixtureId": "clean-dog-side",
+  "executionBoundary": {
+    "externalProviderCallsMade": 0,
+    "retriesMade": 0,
+    "productApiPostCallsMade": 0
+  },
+  "checks": [
+    {
+      "name": "2.5D and Three.js consume the exact same geometry hash",
+      "detail": "passed"
+    },
+    {
+      "name": "3D reaches ready state and can be selected",
+      "detail": "passed"
+    },
+    {
+      "name": "responsive layouts have no horizontal overflow",
+      "detail": "passed"
+    },
+    {
+      "name": "visible links and buttons meet the 44 px target",
+      "detail": "passed"
+    },
+    {
+      "name": "forced 3D failure preserves the exact 2.5D silhouette",
+      "detail": "passed"
+    },
+    {
+      "name": "missing current acceptance blocks derivation without placeholder geometry",
+      "detail": "passed"
+    },
+    {
+      "name": "zero POST, external, failed-request, and console-error activity",
+      "detail": "passed"
+    }
+  ],
+  "viewports": [
+    {
+      "viewport": [1440, 1000],
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "viewport": [768, 1024],
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "viewport": [375, 812],
+      "overflowX": 0,
+      "tooSmall": []
+    }
+  ],
+  "hashes": {
+    "stage": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+    "twoD": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+    "three": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+    "canvas": "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+    "parity": "exact",
+    "wingSources": [
+      "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2",
+      "f1611dd49ffcc3f306600c741a86674b6af0a205f78951696652353e9995c8d2"
+    ]
+  },
+  "screenshots": [
+    "docs/phase-1h/phase-1h-c2-screenshots/profile-wing-1440x1000.png",
+    "docs/phase-1h/phase-1h-c2-screenshots/profile-wing-768x1024.png",
+    "docs/phase-1h/phase-1h-c2-screenshots/profile-wing-375x812.png",
+    "docs/phase-1h/phase-1h-c2-screenshots/profile-wing-forced-fallback.png"
+  ],
+  "consoleProblems": [],
+  "failedRequests": [],
+  "externalRequests": []
+}

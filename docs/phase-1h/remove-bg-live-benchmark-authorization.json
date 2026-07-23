@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0-phase1h-a-remove-bg-authorization",
+  "status": "approved",
+  "approvedBy": "Tim",
+  "approvedAt": "2026-07-22T16:22:21Z",
+  "approvalText": "I approve the Phase 1H-A remove.bg free-preview benchmark: 20 clean + 3 empty + 3 multi-subject + 3 badly occluded synthetic fixtures, exactly 29 maximum external calls, zero retries, maximum cost $0, expected 30–90 seconds, and upload of only those repository-generated PNG fixtures. I accept that remove.bg deletes API images immediately after processing and does not provide a comparable uncertainty score, so deterministic metrics plus mandatory visual inspection will decide the gate.",
+  "approvalTextSha256": "bb118ce7f1f71a8993bc9a1512cd5bd33ca5a531d802f373b3d24bf899c812ee",
+  "provider": "remove-bg",
+  "fixtureCounts": {
+    "clean": 20,
+    "empty": 3,
+    "multiSubject": 3,
+    "badlyOccluded": 3,
+    "total": 29
+  },
+  "maximumExternalCalls": 29,
+  "maxRetries": 0,
+  "maximumCostUsd": 0,
+  "expectedLatency": "30-90 seconds",
+  "dataLeavingMachine": "Only the 29 repository-generated 480 x 480 PNG fixture inputs",
+  "privacyAccepted": true,
+  "providerUncertaintyRequired": false,
+  "mandatoryVisualInspection": true
+}

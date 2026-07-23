@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0-prototype",
+  "configuration_id": "spj-04-prototype-v1",
+  "purpose": "non_sellable_prototype_only",
+  "evidence_status": "inferred",
+  "source": {
+    "path": "product-truth/canonical-obstacle.json",
+    "sha256": "2e6ae609977d47b8da34be5b7b7ccda66467bba9c8cf9cf65fde2004e9dbb4f4",
+    "prototype_profile_decision_date": "2026-07-13"
+  },
+  "identity": {
+    "supplier_product_id": "SPJ-04",
+    "working_name": "SPJ-04 printed-panel vertical",
+    "preset_name": "Club Classic",
+    "revision": "prototype-v1"
+  },
+  "geometry_mm": {
+    "interpretation": "Treat the quoted 180x80 cm as the approximate height and face width of each wing assembly.",
+    "wing_count": 2,
+    "wing_face_width": 800,
+    "wing_face_height": 1800,
+    "pole_length": 3500,
+    "pole_diameter": 100,
+    "overall_width": 5100,
+    "overall_depth": 800,
+    "overall_height": 1800,
+    "footprint_width": 5100,
+    "footprint_depth": 800,
+    "anchor": "midpoint_of_primary_pole_centerline",
+    "evidence_status": "inferred"
+  },
+  "selection": {
+    "frame_color": "white",
+    "panel_color": "navy",
+    "pole_pattern": "two_color_alternating_segments",
+    "lower_element": "none",
+    "artwork": "panel-artwork.png",
+    "artwork_mapping": "same_artwork_on_both_wings"
+  },
+  "bill_of_materials": [
+    {
+      "component_key": "printed_wing_assembly",
+      "quantity": 2,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "aluminum_jump_pole",
+      "quantity": 4,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "cup_or_release_adapter",
+      "quantity": 8,
+      "rule": "two_per_pole",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "keyhole_track_assembly",
+      "quantity": 2,
+      "rule": "one_per_wing",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "foot_or_ballast_assembly",
+      "quantity": 2,
+      "rule": "one_per_wing",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "flag",
+      "quantity": 2,
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "pole_end_cap",
+      "quantity": 8,
+      "rule": "two_per_pole",
+      "evidence_status": "inferred"
+    },
+    {
+      "component_key": "lower_element",
+      "quantity": 0,
+      "allowed_values": [
+        "none",
+        "decorative_panel",
+        "gate",
+        "filler"
+      ],
+      "maximum_quantity": 1,
+      "evidence_status": "inferred"
+    }
+  ],
+  "artwork": {
+    "placement": "fixed_slot_on_each_wing_panel",
+    "printable_width_mm": 700,
+    "printable_height_mm": 1500,
+    "bleed_mm": 20,
+    "safe_margin_mm": 50,
+    "accepted_prototype_formats": [
+      "PNG",
+      "JPEG",
+      "SVG",
+      "PDF"
+    ],
+    "default_mapping": "same_artwork_on_both_wings",
+    "arbitrary_placement_allowed": false,
+    "evidence_status": "inferred"
+  },
+  "compatibility_rules": [
+    "Exactly two wing assemblies and four poles.",
+    "Each pole requires two cups or adapters, for eight total.",
+    "At most one lower element may be selected.",
+    "A decorative panel, gate, or filler replaces only the lower-element slot and does not replace a pole in the prototype.",
+    "Artwork attaches only to the two fixed wing-panel slots."
+  ],
+  "price_display": {
+    "amount": 9000,
+    "currency": "CNY",
+    "classification": "supplier_cost_example",
+    "ui_label": "Prototype supplier example · CNY 9,000 · excludes tax, freight and retail markup",
+    "customer_retail_price": null,
+    "evidence_status": "confirmed_current",
+    "prototype_label_evidence_status": "inferred",
+    "source_refs": [
+      "CUR-006",
+      "CUR-008",
+      "CUR-013"
+    ]
+  },
+  "warning": "Every value in this profile is a replaceable prototype assumption unless separately present in the supplier-truth fields. It is not approved for quoting, checkout, fabrication, safety claims, or factory production.",
+  "configuration_hash": "a16e5d4c7b04bafbdd463b230827351de071ada9700ec67413cf2446143830f7"
+}
