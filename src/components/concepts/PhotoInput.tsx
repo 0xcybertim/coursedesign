@@ -285,7 +285,7 @@ export function PhotoInput(props: {
               onChange={(event) => updateCheck("logo", event.target.checked)}
             />
             It is not a logo. Logos belong in the{" "}
-            <Link href="/studio/obstacles/spj-04">
+            <Link href="/designs/local-spj-04/edit">
               exact SPJ-04 artwork workflow
             </Link>
             .

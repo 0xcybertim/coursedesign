@@ -80,7 +80,7 @@ export function ProfileWingStudioClient({
             decision. Historical acceptance is not enough if a later decision
             retained the fixture without conversion.
           </p>
-          <Link href="/studio/silhouettes/review">Open silhouette review</Link>
+          <Link href="/lab/silhouettes">Open silhouette review</Link>
           <small>{local.persistenceStatus}</small>
         </div>
       </main>
@@ -105,15 +105,12 @@ export function ProfileWingStudioClient({
   return (
     <main className="profile-wing-shell">
       <header className="profile-wing-header">
-        <div className="working-brand">
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
+        <strong className="lab-context-label">Developer Lab</strong>
         <div className="profile-wing-identity">
           <strong>Profile Wing Vertical · Phase 1H-C2</strong>
           <span>Read-only renderer parity proof</span>
         </div>
-        <Link href="/studio/silhouettes/review">Silhouette review</Link>
+        <Link href="/lab/silhouettes">Silhouette benchmark</Link>
       </header>
 
       <section className="profile-wing-hero">
@@ -214,7 +211,7 @@ export function ProfileWingStudioClient({
           </button>
           <Link
             className="profile-wing-course-link"
-            href="/studio/courses/local-course-1"
+            href="/courses/local-course-1"
           >
             Open course studio
           </Link>

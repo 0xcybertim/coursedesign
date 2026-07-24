@@ -158,26 +158,17 @@ export function CourseReviewClient() {
   return (
     <main className="review-sheet-shell">
       <header className="review-header review-navigation">
-        <div
-          className="working-brand"
-          aria-label="JUMPFORM working mockup wordmark"
-        >
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
         <div className="review-header-identity">
-          <strong>Course Review Sheet</strong>
-          <span>Local course 01 · Phase 1E</span>
+          <strong>Course Review</strong>
+          <span>Local Course 01 · exact pinned revisions</span>
         </div>
-        <Link href="/studio/courses/local-course-1">
-          Return to editable course
-        </Link>
+        <Link href="/courses/local-course-1">Return to editable course</Link>
       </header>
 
       <section className="review-intro" aria-labelledby="review-title">
         <div>
           <p className="eyebrow">Browser-local inspection artifact</p>
-          <h1 id="review-title">Course Review Sheet</h1>
+          <h1 id="review-title">Course Review</h1>
           <p>
             Exact pinned revisions, arena placements, planning warnings, and
             prototype equipment quantities for Local course 01.

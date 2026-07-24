@@ -70,22 +70,14 @@ export function SilhouetteReviewClient() {
   return (
     <main className="silhouette-review-shell">
       <header className="silhouette-review-header">
-        <div
-          className="working-brand"
-          aria-label="JUMPFORM working mockup wordmark"
-        >
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
+        <strong className="lab-context-label">Developer Lab</strong>
         <div className="silhouette-review-identity">
           <strong>Silhouette review · Phase 1H-B2</strong>
           <span>Browser-local decisions · immutable B1 evidence</span>
         </div>
         <div className="silhouette-review-header-actions">
-          <Link href="/studio/obstacles/profile-wing/new">
-            Create Profile Wing
-          </Link>
-          <Link href="/">Prototype index</Link>
+          <Link href="/lab/profile-wing-renderer">Renderer proof</Link>
+          <Link href="/lab">Lab index</Link>
         </div>
       </header>
 

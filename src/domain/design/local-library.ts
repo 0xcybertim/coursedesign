@@ -97,6 +97,7 @@ function profileIdentity(prototype: DerivedProfileWingPrototype) {
     ...(prototype.source.provider
       ? { provider: prototype.source.provider }
       : {}),
+    ...(prototype.appearance ? { appearance: prototype.appearance } : {}),
     geometrySha256: prototype.renderManifest.geometrySha256,
     envelopeMm: prototype.envelopeMm,
     genericQuantities: prototype.genericQuantities,
@@ -156,6 +157,11 @@ function profileProductionSpec(
     evidenceStatus: "inferred_not_supplier_confirmed",
     humanReadable: [
       `${prototype.displayName} generated from ${prototype.source.fixtureId}.`,
+      ...(prototype.appearance
+        ? [
+            `Prototype appearance uses the ${prototype.appearance.frameColor} frame and wing color.`,
+          ]
+        : []),
       "The silhouette, dimensions, supports, and quantities are deterministic prototype assumptions.",
       "No supplier geometry, structural validation, production material, safety status, or ordering readiness is claimed.",
     ],

@@ -2,9 +2,12 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
+import { recognizedFixtureSubject } from "@/domain/generation";
+import { deterministicConceptCutout } from "@/server/profile-wing/deterministic-concept-cutout";
 import {
   createDeterministicProfileMaskProvider,
   createRemoveBgProfileMaskProvider,
+  createSourceAwareProfileMaskProvider,
   type ProfileWingMaskProvider,
 } from "@/server/profile-wing/mask-provider";
 import {
@@ -66,7 +69,7 @@ function publicMessage(kind: MaskFailureKind) {
     invalid_request:
       "The Profile Wing source image or request metadata is invalid.",
     policy_failure:
-      "Image rights, remove.bg disclosure, no-person, and single-subject confirmations are required.",
+      "The required source-specific processing confirmation is missing.",
     active_request:
       "This browser session already has one active background-removal request.",
     provider_rejection:
@@ -137,6 +140,35 @@ function statusFor(kind: MaskFailureKind) {
   return 502;
 }
 
+function generatedConceptCutout(input: {
+  readonly bytes: Uint8Array;
+  readonly mediaType: "image/png" | "image/jpeg";
+  readonly generatedConceptSubject: string | null;
+}) {
+  if (input.mediaType === "image/png") {
+    try {
+      const decoded = decodePng(input.bytes);
+      let hasTransparentPixel = false;
+      let hasSolidPixel = false;
+      for (
+        let pixel = 0;
+        pixel < decoded.width * decoded.height;
+        pixel += 1
+      ) {
+        const value = decoded.rgba[pixel * 4 + 3] ?? 255;
+        if (value <= 8) hasTransparentPixel = true;
+        if (value >= 247) hasSolidPixel = true;
+        if (hasTransparentPixel && hasSolidPixel) return input.bytes;
+      }
+    } catch {
+      // Old or malformed concept art falls back to the bounded fixture shapes.
+    }
+  }
+  return deterministicConceptCutout(
+    recognizedFixtureSubject(input.generatedConceptSubject ?? "") ?? "generic",
+  );
+}
+
 export async function handleProfileWingMaskRequest(
   request: Request,
   options: {
@@ -174,6 +206,9 @@ export async function handleProfileWingMaskRequest(
   const sessionId = String(form.get("sessionId") ?? "");
   const sourceId = String(form.get("sourceId") ?? "");
   const sourceKind = String(form.get("sourceKind") ?? "");
+  const generatedConceptSubject = String(
+    form.get("generatedConceptSubject") ?? "",
+  );
   const expectedHash = String(form.get("sourceContentHash") ?? "");
   if (
     !isFileLike(image) ||
@@ -189,12 +224,16 @@ export async function handleProfileWingMaskRequest(
       publicMessage("invalid_request"),
       400,
     );
-  if (
-    form.get("rightsConfirmed") !== "true" ||
-    form.get("providerDisclosureConfirmed") !== "true" ||
-    form.get("noIdentifiablePeopleConfirmed") !== "true" ||
-    form.get("singleSubjectConfirmed") !== "true"
-  )
+  const uploadConfirmationsComplete =
+    sourceKind === "user_upload" &&
+    form.get("rightsConfirmed") === "true" &&
+    form.get("providerDisclosureConfirmed") === "true" &&
+    form.get("noIdentifiablePeopleConfirmed") === "true" &&
+    form.get("singleSubjectConfirmed") === "true";
+  const generatedConceptConversionConfirmed =
+    sourceKind === "generated_concept" &&
+    form.get("generatedConceptConversionConfirmed") === "true";
+  if (!uploadConfirmationsComplete && !generatedConceptConversionConfirmed)
     return responseError(
       "policy_failure",
       publicMessage("policy_failure"),
@@ -237,6 +276,9 @@ export async function handleProfileWingMaskRequest(
         typeof image.name === "string" && image.name
           ? image.name.slice(0, 160)
           : `${sourceId}.${mediaType === "image/png" ? "png" : "jpg"}`,
+      sourceKind,
+      generatedConceptSubject:
+        sourceKind === "generated_concept" ? generatedConceptSubject : null,
       signal: abort.signal,
     });
     if (abort.signal.aborted || request.signal.aborted) {
@@ -272,6 +314,9 @@ export async function handleProfileWingMaskRequest(
 
 async function providerFor(availability: ProfileWingMaskRouteAvailability) {
   if (!availability.enabled) return null;
+  const generatedConceptProvider = createDeterministicProfileMaskProvider(
+    generatedConceptCutout,
+  );
   if (availability.provider === "deterministic") {
     const maskPng = await readFile(
       path.join(
@@ -297,12 +342,19 @@ async function providerFor(availability: ProfileWingMaskRouteAvailability) {
       height: decodedMask.height,
       rgba,
     });
-    return createDeterministicProfileMaskProvider(
-      new Uint8Array(transparentCutout),
+    const uploadFixture = new Uint8Array(transparentCutout);
+    return createDeterministicProfileMaskProvider((input) =>
+      input.sourceKind === "generated_concept"
+        ? generatedConceptCutout(input)
+        : uploadFixture,
     );
   }
-  return createRemoveBgProfileMaskProvider({
+  const uploadProvider = createRemoveBgProfileMaskProvider({
     apiKey: process.env.REMOVE_BG_API_KEY!,
+  });
+  return createSourceAwareProfileMaskProvider({
+    uploadProvider,
+    generatedConceptProvider,
   });
 }
 
@@ -324,6 +376,9 @@ export async function GET(request: Request) {
           : availability.provider === "deterministic"
             ? "deterministic-test"
             : null,
+      generatedConceptProvider: availability.enabled
+        ? "deterministic-test"
+        : null,
       reason: availability.reason,
       automaticRetries: 0,
       externalCallOccursOnlyOnPost: true,

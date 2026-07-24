@@ -10,6 +10,8 @@ import {
   serializeLocalDesignLibrary,
   type DerivedProfileWingPrototype,
   type LocalDesignLibrary,
+  type LocalDesignLibraryResult,
+  type ProfileWingDesignRevision,
 } from "@/domain/design";
 
 function localId(prefix: "draft" | "revision") {
@@ -17,6 +19,14 @@ function localId(prefix: "draft" | "revision") {
     ? `${prefix}-${crypto.randomUUID()}`
     : `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
+
+export type SaveGeneratedProfileResult =
+  | {
+      readonly ok: true;
+      readonly library: LocalDesignLibrary;
+      readonly revision: ProfileWingDesignRevision;
+    }
+  | Extract<LocalDesignLibraryResult<never>, { readonly ok: false }>;
 
 export function useLocalDesignLibrary() {
   const [library, setLibrary] = useState<LocalDesignLibrary | null>(null);
@@ -84,7 +94,9 @@ export function useLocalDesignLibrary() {
     };
   }, []);
 
-  function saveGeneratedProfile(prototype: DerivedProfileWingPrototype) {
+  function saveGeneratedProfile(
+    prototype: DerivedProfileWingPrototype,
+  ): SaveGeneratedProfileResult {
     const current = libraryRef.current;
     if (!current)
       return {
@@ -94,9 +106,10 @@ export function useLocalDesignLibrary() {
           message: "The trusted local design library is unavailable.",
         },
       };
+    const revisionId = localId("revision");
     const saved = saveProfileWingRevision(current, {
       prototype,
-      revisionId: localId("revision"),
+      revisionId,
       now: new Date().toISOString(),
     });
     if (!saved.ok) return saved;
@@ -117,7 +130,19 @@ export function useLocalDesignLibrary() {
         "Browser storage unavailable · generated revision lasts for this tab only",
       );
     }
-    return saved;
+    const revision = saved.value.profileWingRevisions.find(
+      (item) => item.revisionId === revisionId,
+    );
+    if (!revision)
+      return {
+        ok: false,
+        error: {
+          kind: "invalid_profile_revision",
+          message:
+            "The exact generated revision could not be recovered after the immutable append.",
+        },
+      };
+    return { ok: true, library: saved.value, revision };
   }
 
   return {

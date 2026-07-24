@@ -92,6 +92,8 @@ function requestConsent(now: string, hasPhoto: boolean) {
 
 export function ConceptStudioClient(props: {
   readonly providerMode: "openai" | "deterministic";
+  readonly embedded?: boolean;
+  readonly onUseSelectedConcept?: (contentHash: string) => void;
 }) {
   const local = useLocalConceptWorkspace();
   const [creativeDirection, setCreativeDirection] = useState(
@@ -418,41 +420,55 @@ export function ConceptStudioClient(props: {
     requestAnimationFrame(() => generateTriggerRef.current?.focus());
   }
 
-  function buildSelected() {
-    if (!selectedConcept) return;
+  function acceptSelectedConcept(): boolean {
+    if (!selectedConcept) return false;
+    /*
+    selected concept
+      → append acceptance event
+      → navigate with content hash
+      → re-read authoritative accepted concept
+      → hash match
+      → prepare local derivative
+      → STOP before provider request
+    */
     const accepted = local.acceptConcept(selectedConcept.conceptId);
-    if (accepted.ok)
+    if (accepted.ok) {
       setBoundaryMessage(
-        "Selection recorded. The Phase 1H-B2 review uses only its approved benchmark fixtures; this concept was not uploaded, masked, vectorized, or connected to that evidence. No obstacle geometry, product revision, course quantity, quote, or supplier-approved design was created.",
+        "Accepted concept recorded. The next step prepares only a browser-local derivative; no provider request, geometry, or design revision is created yet.",
       );
+      return true;
+    } else {
+      setBoundaryMessage(accepted.error.message);
+      return false;
+    }
   }
 
+  const Root = props.embedded ? "section" : "main";
+
   return (
-    <main className="concept-studio-shell">
-      <header className="concept-studio-header">
-        <div
-          className="working-brand"
-          aria-label="JUMPFORM working mockup wordmark"
-        >
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
-        <div className="studio-identity">
-          <strong>Concept studio · Phase 1G</strong>
-          <span>Developer-only · browser-local history</span>
-        </div>
-        <span className="prototype-status">Concepts · not production</span>
-      </header>
+    <Root
+      className={`concept-studio-shell${props.embedded ? " is-embedded" : ""}`}
+      aria-label={props.embedded ? "Describe custom wings" : undefined}
+    >
+      {!props.embedded ? (
+        <header className="concept-studio-header">
+          <div className="studio-identity">
+            <strong>Customize a jump · Describe wings</strong>
+            <span>Browser-local immutable concept history</span>
+          </div>
+          <span className="prototype-status">Concepts · not production</span>
+        </header>
+      ) : null}
 
       <section className="concept-hero" aria-labelledby="concept-title">
         <div>
-          <p className="eyebrow">Imagine first · validate later</p>
-          <h1 id="concept-title">Create a jump concept.</h1>
+          <p className="eyebrow">Wing design · description</p>
+          <h1 id="concept-title">Describe custom wings.</h1>
           <p>
-            Generate visual jump concepts, then build an accepted concept as a
-            controlled, non-sellable prototype obstacle. Generated images are
-            not geometry, specifications, quotes, or supplier-approved designs.
-            Simulator fixtures only prove workflow behavior.
+            Describe the wings inside your jump, choose one visual direction,
+            then validate its silhouette before customizing and saving the
+            complete jump. Generated images are not geometry, specifications,
+            quotes, or supplier-approved designs.
           </p>
         </div>
         <div className="concept-boundary-panel">
@@ -817,22 +833,39 @@ export function ConceptStudioClient(props: {
           <div className="concept-build-boundary">
             <div>
               <p className="eyebrow">03 / Explicit boundary</p>
-              <h2>Build this concept</h2>
+              <h2>Use this wing design</h2>
               <p>
-                Records the selected concept for a future selected-concept
-                silhouette run only. The current Phase 1H-B2 review contains
-                benchmark fixtures, not this concept. This action cannot create
-                or mutate SPJ-04, an obstacle revision, course quantities, or
-                production truth.
+                Records the exact selected concept and prepares it as the wing
+                source inside the jump customizer. The simulator extracts its
+                silhouette locally and opens shape inspection automatically.
               </p>
             </div>
-            <button
-              type="button"
-              disabled={!selectedConcept || active}
-              onClick={buildSelected}
-            >
-              Build this concept
-            </button>
+            {selectedConcept && !active && props.onUseSelectedConcept ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (acceptSelectedConcept())
+                    props.onUseSelectedConcept?.(selectedConcept.contentHash);
+                }}
+              >
+                Use this wing design
+              </button>
+            ) : selectedConcept && !active ? (
+              <Link
+                href={`/designs/local-spj-04/edit?wing=description&source=accepted-concept&concept=${encodeURIComponent(
+                  selectedConcept.contentHash,
+                )}`}
+                onClick={(event) => {
+                  if (!acceptSelectedConcept()) event.preventDefault();
+                }}
+              >
+                Use this wing design
+              </Link>
+            ) : (
+              <button type="button" disabled>
+                Use this wing design
+              </button>
+            )}
           </div>
           {boundaryMessage ? (
             <p className="concept-boundary-message" role="status">
@@ -842,19 +875,20 @@ export function ConceptStudioClient(props: {
         </section>
       </div>
 
-      <footer className="concept-footer">
-        <span>
-          Developer-only · same-browser persistence · no public endpoint
-        </span>
-        <div>
-          <Link href="/studio/silhouettes/review">
-            Review Phase 1H benchmark silhouettes
-          </Link>
-          <Link href="/studio/obstacles/spj-04">
-            Open exact SPJ-04 artwork workflow
-          </Link>
-        </div>
-      </footer>
-    </main>
+      {!props.embedded ? (
+        <footer className="concept-footer">
+          <span>
+            Local concept workflow · same-browser persistence · no public
+            endpoint
+          </span>
+          <div>
+            <Link href="/designs/local-spj-04/edit">
+              Back to Customize a jump
+            </Link>
+            <Link href="/designs/local-spj-04/edit">Use standard wings</Link>
+          </div>
+        </footer>
+      ) : null}
+    </Root>
   );
 }

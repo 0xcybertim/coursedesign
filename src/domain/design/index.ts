@@ -2,6 +2,7 @@ export { deriveConfiguration } from "./derive-configuration";
 export {
   deriveProfileWingPrototype,
   deriveProfileWingPrototypeFromCreation,
+  profileWingAppearance,
 } from "./derive-profile-wing";
 export {
   PROFILE_WING_C1_DEFINITION,

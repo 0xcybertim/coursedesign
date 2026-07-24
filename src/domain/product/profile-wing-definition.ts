@@ -1,5 +1,5 @@
 import type { SilhouettePoint } from "../silhouette";
-import type { BillOfMaterials, CourseFootprint } from "./types";
+import type { BillOfMaterials, CourseFootprint, FrameColor } from "./types";
 
 export const PROFILE_WING_C1_SCHEMA_VERSION = "1.0.0-phase1h-c1" as const;
 
@@ -30,6 +30,17 @@ export const PROFILE_WING_C1_DEFINITION = {
 export interface ProfileWingPointMm {
   readonly x: number;
   readonly y: number;
+}
+
+export interface ProfileWingAppearance {
+  readonly frameColor: FrameColor;
+  readonly palette: {
+    readonly wing: string;
+    readonly supports: string;
+    readonly polePrimary: "#0D43C7";
+    readonly poleSecondary: "#F7F6F1";
+    readonly hardware: "#252624";
+  };
 }
 
 export interface ProfileWingInstance {
@@ -79,6 +90,7 @@ export interface ProfileWingRenderManifest {
   readonly schemaVersion: typeof PROFILE_WING_C1_SCHEMA_VERSION;
   readonly rendererContract: "profile-wing-render-manifest-v1";
   readonly geometrySha256: string;
+  readonly appearance?: ProfileWingAppearance;
   readonly sharedProfileGeometry: ProfileWingSharedGeometry;
   readonly wingInstances: readonly [ProfileWingInstance, ProfileWingInstance];
   readonly poles: readonly {
@@ -125,6 +137,7 @@ export interface DerivedProfileWingPrototype {
   readonly displayName: "Profile Wing Vertical";
   readonly purpose: "non_sellable_generated_prototype_only";
   readonly evidenceStatus: "inferred_not_supplier_confirmed";
+  readonly appearance?: ProfileWingAppearance;
   readonly source: {
     readonly fixtureId: string;
     readonly sourceMaskSha256: string;

@@ -1,12 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { hashArtworkBytes } from "@/domain/artwork";
 import {
   deriveProfileWingPrototypeFromCreation,
+  FRAME_COLORS,
+  profileWingAppearance,
   type DerivedProfileWingPrototype,
+  type ProfileWingDesignRevision,
 } from "@/domain/design";
+import type { FrameColor } from "@/domain/product/types";
 import {
   SILHOUETTE_PROTOTYPE_FIT_VERSION,
   silhouetteFindingsAllowPrototypeFit,
@@ -30,10 +41,49 @@ import { useLocalProfileWingCreation } from "./useLocalProfileWingCreation";
 type ProviderAvailability = {
   readonly enabled: boolean;
   readonly provider: "remove-bg" | "deterministic-test" | null;
+  readonly generatedConceptProvider:
+    | "deterministic-test"
+    | null;
   readonly reason: string;
   readonly automaticRetries: 0;
   readonly externalCallOccursOnlyOnPost: true;
 };
+
+const FRAME_LABELS: Record<FrameColor, string> = {
+  white: "White",
+  blue: "Blue",
+  red: "Red",
+  yellow: "Yellow",
+};
+
+const DETERMINISTIC_CONCEPT_MASK_ADAPTER_VERSION =
+  "1.1.0-profile-wing-deterministic-concept-aware";
+
+function frameColorFromDescription(colors: string | undefined): FrameColor {
+  const normalized = colors?.toLowerCase() ?? "";
+  const matches = [
+    {
+      color: "blue" as const,
+      index: Math.min(
+        ...["blue", "navy"]
+          .map((value) => normalized.indexOf(value))
+          .filter((index) => index >= 0),
+      ),
+    },
+    { color: "red" as const, index: normalized.indexOf("red") },
+    {
+      color: "yellow" as const,
+      index: Math.min(
+        ...["yellow", "gold"]
+          .map((value) => normalized.indexOf(value))
+          .filter((index) => index >= 0),
+      ),
+    },
+    { color: "white" as const, index: normalized.indexOf("white") },
+  ].filter((match) => Number.isFinite(match.index) && match.index >= 0);
+  matches.sort((left, right) => left.index - right.index);
+  return matches[0]?.color ?? "blue";
+}
 
 function localSessionId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -69,12 +119,27 @@ function providerSetupMessage(reason: string) {
 
 export function ProfileWingCreatorClient({
   forceThreeFailure = false,
+  acceptedConceptHash,
+  embedded = false,
+  sourceMode = "all",
+  hideResultPreview = false,
+  onPrototypeChange,
 }: {
   readonly forceThreeFailure?: boolean;
+  readonly acceptedConceptHash?: string;
+  readonly embedded?: boolean;
+  readonly sourceMode?: "all" | "upload" | "accepted-concept";
+  readonly hideResultPreview?: boolean;
+  readonly onPrototypeChange?: (
+    prototype: DerivedProfileWingPrototype | null,
+  ) => void;
 }) {
   const fileInputId = useId();
   const sessionId = useRef(localSessionId());
   const abortRef = useRef<AbortController | null>(null);
+  const handoffAttemptedRef = useRef<string | null>(null);
+  const generatedAutoProcessAttemptedRef = useRef<string | null>(null);
+  const candidateRestoreAttemptedRef = useRef(false);
   const concepts = useLocalConceptWorkspace();
   const creation = useLocalProfileWingCreation();
   const designLibrary = useLocalDesignLibrary();
@@ -88,6 +153,9 @@ export function ProfileWingCreatorClient({
   const [maskBlob, setMaskBlob] = useState<Blob | null>(null);
   const [prototype, setPrototype] =
     useState<DerivedProfileWingPrototype | null>(null);
+  const [savedRevision, setSavedRevision] =
+    useState<ProfileWingDesignRevision | null>(null);
+  const [frameColor, setFrameColor] = useState<FrameColor>("blue");
   const [processing, setProcessing] = useState(false);
   const [fitting, setFitting] = useState(false);
   const [preparing, setPreparing] = useState(false);
@@ -106,9 +174,16 @@ export function ProfileWingCreatorClient({
   const reviewCandidate =
     currentCandidate &&
     prepared &&
-    currentCandidate.source.contentHash === prepared.metadata.contentHash
+    currentCandidate.source.contentHash === prepared.metadata.contentHash &&
+    currentCandidate.source.sourceKind === prepared.metadata.sourceKind &&
+    !(
+      currentCandidate.provenance.provider === "deterministic-test" &&
+      currentCandidate.provenance.adapterVersion !==
+        DETERMINISTIC_CONCEPT_MASK_ADAPTER_VERSION
+    )
       ? currentCandidate
       : null;
+  const reviewReady = reviewCandidate !== null && maskBlob !== null;
   const acceptedConcept = concepts.workspace.concepts.find(
     (concept) => concept.conceptId === concepts.workspace.acceptedConceptId,
   );
@@ -117,15 +192,31 @@ export function ProfileWingCreatorClient({
         (batch) => batch.batchId === acceptedConcept.batchId,
       )
     : null;
-  const consentReady = Object.values(consent).every(Boolean);
+  const acceptedConceptRequest = acceptedConcept
+    ? concepts.workspace.requests.find(
+        (request) => request.requestId === acceptedConcept.requestId,
+      )
+    : null;
+  const generatedConceptSource =
+    prepared?.metadata.sourceKind === "generated_concept";
+  const generatedConceptUsesLocalProvider =
+    generatedConceptSource &&
+    (availability?.generatedConceptProvider === "deterministic-test" ||
+      availability?.provider === "deterministic-test");
+  const uploadConsentReady = Object.values(consent).every(Boolean);
+  const consentReady = generatedConceptSource || uploadConsentReady;
   const providerReady = availability?.enabled === true;
   const providerActionStatus =
     availability === null
       ? "Checking the local remove.bg route…"
       : providerReady
-        ? consentReady
-          ? "Confirmations complete"
-          : "All four confirmations are required"
+        ? generatedConceptSource
+          ? generatedConceptUsesLocalProvider
+            ? "Local extraction runs automatically · no upload"
+            : "One disclosed extraction request · zero automatic retries"
+          : consentReady
+            ? "Confirmations complete"
+            : "All four confirmations are required"
         : providerSetupMessage(availability.reason);
   const vectorization = reviewCandidate?.vectorization ?? null;
   const needsAutoFitRefresh =
@@ -147,6 +238,10 @@ export function ProfileWingCreatorClient({
     : [];
 
   useEffect(() => {
+    onPrototypeChange?.(prototype);
+  }, [onPrototypeChange, prototype]);
+
+  useEffect(() => {
     let cancelled = false;
     void fetch("/api/profile-wings/mask", { cache: "no-store" })
       .then(async (response) => {
@@ -158,6 +253,7 @@ export function ProfileWingCreatorClient({
           setAvailability({
             enabled: false,
             provider: null,
+            generatedConceptProvider: null,
             reason: "route_unavailable",
             automaticRetries: 0,
             externalCallOccursOnlyOnPost: true,
@@ -170,7 +266,15 @@ export function ProfileWingCreatorClient({
 
   useEffect(() => {
     let cancelled = false;
-    if (!creation.hydrated || !currentCandidate) return;
+    if (candidateRestoreAttemptedRef.current || !creation.hydrated) return;
+    candidateRestoreAttemptedRef.current = true;
+    if (
+      !currentCandidate ||
+      (currentCandidate.provenance.provider === "deterministic-test" &&
+        currentCandidate.provenance.adapterVersion !==
+          DETERMINISTIC_CONCEPT_MASK_ADAPTER_VERSION)
+    )
+      return;
     void Promise.all([
       getArtworkBlob(currentCandidate.source.contentHash),
       getArtworkBlob(currentCandidate.maskContentHash),
@@ -192,6 +296,7 @@ export function ProfileWingCreatorClient({
         const derived = deriveProfileWingPrototypeFromCreation({
           candidate: currentCandidate,
           decision: currentDecision,
+          appearance: profileWingAppearance(frameColor),
         });
         if (derived.ok) setPrototype(derived.value);
       }
@@ -199,7 +304,7 @@ export function ProfileWingCreatorClient({
     return () => {
       cancelled = true;
     };
-  }, [creation.hydrated, currentCandidate, currentDecision]);
+  }, [creation.hydrated, currentCandidate, currentDecision, frameColor]);
 
   function resetConsent() {
     setConsent({
@@ -227,6 +332,8 @@ export function ProfileWingCreatorClient({
       setSourceBlob(next.blob);
       setMaskBlob(null);
       setPrototype(null);
+      setSavedRevision(null);
+      setFrameColor("blue");
       resetConsent();
       setStatus(
         "Local metadata-stripped derivative ready. Nothing has been uploaded.",
@@ -244,46 +351,100 @@ export function ProfileWingCreatorClient({
     }
   }
 
-  async function chooseAcceptedConcept() {
-    if (!acceptedConcept) return;
-    setPreparing(true);
-    setError(null);
-    setStatus("");
-    try {
-      const stored = await getArtworkBlob(acceptedConcept.contentHash);
-      if (!stored.ok) throw new Error(stored.error.message);
-      const next = await prepareProfileWingSource({
-        blob: stored.value,
-        filename: `concept-${acceptedConcept.ordinal}.${acceptedConcept.mediaType === "image/svg+xml" ? "svg" : acceptedConcept.mediaType.split("/")[1]}`,
-        declaredMediaType: acceptedConcept.mediaType,
-        sourceKind: "generated_concept",
-        sourceLabel: `Accepted concept ${acceptedConcept.ordinal}`,
-      });
-      setPrepared(next);
-      setSourceBlob(next.blob);
-      setMaskBlob(null);
-      setPrototype(null);
-      resetConsent();
-      setStatus(
-        "Accepted concept prepared locally. Nothing has been uploaded.",
-      );
-    } catch (caught) {
-      setError(
-        caught instanceof Error
-          ? caught.message
-          : "The accepted concept could not be prepared.",
-      );
-    } finally {
-      setPreparing(false);
-    }
-  }
+  const chooseAcceptedConcept = useCallback(
+    async (expectedHash?: string) => {
+      if (!acceptedConcept) {
+        if (expectedHash)
+          setError(
+            "The accepted concept changed in another tab. Choose the current accepted concept or return to Concept Studio.",
+          );
+        return false;
+      }
+      if (
+        expectedHash &&
+        (!/^[a-f0-9]{64}$/.test(expectedHash) ||
+          acceptedConcept.contentHash !== expectedHash)
+      ) {
+        setError(
+          "The accepted concept changed in another tab. Choose the current accepted concept or return to Concept Studio.",
+        );
+        return false;
+      }
+      setPreparing(true);
+      setError(null);
+      setStatus("");
+      try {
+        const stored = await getArtworkBlob(acceptedConcept.contentHash);
+        if (!stored.ok) throw new Error(stored.error.message);
+        const next = await prepareProfileWingSource({
+          blob: stored.value,
+          filename: `concept-${acceptedConcept.ordinal}.${acceptedConcept.mediaType === "image/svg+xml" ? "svg" : acceptedConcept.mediaType.split("/")[1]}`,
+          declaredMediaType: acceptedConcept.mediaType,
+          sourceKind: "generated_concept",
+          sourceLabel: `Accepted concept ${acceptedConcept.ordinal}`,
+        });
+        const storedMask =
+          currentCandidate?.source.contentHash === next.metadata.contentHash &&
+          currentCandidate.source.sourceKind === next.metadata.sourceKind &&
+          !(
+            currentCandidate.provenance.provider === "deterministic-test" &&
+            currentCandidate.provenance.adapterVersion !==
+              DETERMINISTIC_CONCEPT_MASK_ADAPTER_VERSION
+          )
+            ? await getArtworkBlob(currentCandidate.maskContentHash)
+            : null;
+        setPrepared(next);
+        setSourceBlob(next.blob);
+        setMaskBlob(storedMask?.ok ? storedMask.value : null);
+        setPrototype(null);
+        setSavedRevision(null);
+        setFrameColor(
+          frameColorFromDescription(acceptedConceptRequest?.constraints.colors),
+        );
+        resetConsent();
+        setStatus(
+          "Accepted concept prepared locally. Nothing has been uploaded.",
+        );
+        return true;
+      } catch (caught) {
+        setError(
+          caught instanceof Error
+            ? caught.message
+            : "The accepted concept could not be prepared.",
+        );
+        return false;
+      } finally {
+        setPreparing(false);
+      }
+    },
+    [acceptedConcept, acceptedConceptRequest, currentCandidate],
+  );
 
-  async function processSource() {
+  useEffect(() => {
+    if (
+      !acceptedConceptHash ||
+      !concepts.hydrated ||
+      handoffAttemptedRef.current === acceptedConceptHash
+    )
+      return;
+    handoffAttemptedRef.current = acceptedConceptHash;
+    void chooseAcceptedConcept(acceptedConceptHash).then((preparedLocally) => {
+      if (preparedLocally)
+        window.history.replaceState(
+          {},
+          "",
+          `${window.location.pathname}${window.location.search.includes("force3d=fail") ? "?force3d=fail" : ""}`,
+        );
+    });
+  }, [acceptedConceptHash, chooseAcceptedConcept, concepts.hydrated]);
+
+  const processSource = useCallback(async () => {
     if (!prepared || !consentReady || !availability?.enabled) return;
     setProcessing(true);
     setError(null);
     setStatus(
-      availability.provider === "remove-bg"
+      availability.provider === "remove-bg" &&
+        !generatedConceptUsesLocalProvider
         ? "One remove.bg request is in progress · zero automatic retries"
         : "Local deterministic mask simulation is in progress",
     );
@@ -301,10 +462,32 @@ export function ProfileWingCreatorClient({
       form.append("sourceId", prepared.metadata.sourceId);
       form.append("sourceKind", prepared.metadata.sourceKind);
       form.append("sourceContentHash", prepared.metadata.contentHash);
-      form.append("rightsConfirmed", String(consent.rights));
-      form.append("providerDisclosureConfirmed", String(consent.provider));
-      form.append("noIdentifiablePeopleConfirmed", String(consent.people));
-      form.append("singleSubjectConfirmed", String(consent.subject));
+      form.append(
+        "generatedConceptSubject",
+        generatedConceptSource
+          ? (acceptedConceptRequest?.constraints.silhouetteSubject ?? "generic")
+          : "",
+      );
+      form.append(
+        "generatedConceptConversionConfirmed",
+        String(generatedConceptSource),
+      );
+      form.append(
+        "rightsConfirmed",
+        String(!generatedConceptSource && consent.rights),
+      );
+      form.append(
+        "providerDisclosureConfirmed",
+        String(!generatedConceptSource && consent.provider),
+      );
+      form.append(
+        "noIdentifiablePeopleConfirmed",
+        String(!generatedConceptSource && consent.people),
+      );
+      form.append(
+        "singleSubjectConfirmed",
+        String(!generatedConceptSource && consent.subject),
+      );
       const requestedAt = new Date().toISOString();
       const response = await fetch("/api/profile-wings/mask", {
         method: "POST",
@@ -369,6 +552,7 @@ export function ProfileWingCreatorClient({
       if (!added.ok) throw new Error(added.error.message);
       setMaskBlob(returned);
       setPrototype(null);
+      setSavedRevision(null);
       setStatus(
         result.status === "accepted"
           ? "Mask returned and deterministic polygon passed. Visual acceptance is still required."
@@ -389,7 +573,40 @@ export function ProfileWingCreatorClient({
       if (abortRef.current === controller) abortRef.current = null;
       setProcessing(false);
     }
-  }
+  }, [
+    acceptedConceptRequest,
+    availability,
+    consent.people,
+    consent.provider,
+    consent.rights,
+    consent.subject,
+    consentReady,
+    creation,
+    generatedConceptSource,
+    generatedConceptUsesLocalProvider,
+    prepared,
+  ]);
+
+  useEffect(() => {
+    if (
+      !prepared ||
+      prepared.metadata.sourceKind !== "generated_concept" ||
+      !generatedConceptUsesLocalProvider ||
+      reviewReady ||
+      processing ||
+      generatedAutoProcessAttemptedRef.current ===
+        prepared.metadata.contentHash
+    )
+      return;
+    generatedAutoProcessAttemptedRef.current = prepared.metadata.contentHash;
+    void processSource();
+  }, [
+    generatedConceptUsesLocalProvider,
+    prepared,
+    processSource,
+    processing,
+    reviewReady,
+  ]);
 
   async function autoFitSilhouette() {
     const fitEligible =
@@ -406,7 +623,9 @@ export function ProfileWingCreatorClient({
     setFitting(true);
     setError(null);
     setStatus(
-      "Fitting the existing mask inside the Profile Wing safe area · no provider request",
+      embedded
+        ? "Fitting the existing mask inside the custom-wing safe area · no provider request"
+        : "Fitting the existing mask inside the Profile Wing safe area · no provider request",
     );
     try {
       const raster = await rasterMaskFromCutout(
@@ -428,6 +647,7 @@ export function ProfileWingCreatorClient({
       });
       if (!added.ok) throw new Error(added.error.message);
       setPrototype(null);
+      setSavedRevision(null);
       setStatus(
         result.status === "accepted"
           ? "Silhouette auto-fit passed locally. No additional remove.bg request was made; visual acceptance is still required."
@@ -455,6 +675,7 @@ export function ProfileWingCreatorClient({
     }
     if (action === "retained_without_conversion") {
       setPrototype(null);
+      setSavedRevision(null);
       setStatus(
         "Source, returned mask, validation, and retain decision preserved locally. No product geometry was created.",
       );
@@ -463,14 +684,39 @@ export function ProfileWingCreatorClient({
     const derived = deriveProfileWingPrototypeFromCreation({
       candidate: result.value.candidate,
       decision: result.value.decision,
+      appearance: profileWingAppearance(frameColor),
     });
     if (!derived.ok) {
       setError(derived.error.message);
       return;
     }
     setPrototype(derived.value);
+    setSavedRevision(null);
     setStatus(
       "User silhouette accepted. Matching 2.5D and 3D prototype geometry is ready; no revision exists until you save.",
+    );
+  }
+
+  function selectFrameColor(nextColor: FrameColor) {
+    setFrameColor(nextColor);
+    if (
+      !reviewCandidate ||
+      currentDecision?.action !== "accepted_for_future_prototyping"
+    )
+      return;
+    const derived = deriveProfileWingPrototypeFromCreation({
+      candidate: reviewCandidate,
+      decision: currentDecision,
+      appearance: profileWingAppearance(nextColor),
+    });
+    if (!derived.ok) {
+      setError(derived.error.message);
+      return;
+    }
+    setPrototype(derived.value);
+    setSavedRevision(null);
+    setStatus(
+      `${FRAME_LABELS[nextColor]} applied to the complete jump preview. Save creates a new exact revision.`,
     );
   }
 
@@ -481,8 +727,11 @@ export function ProfileWingCreatorClient({
       setError(saved.error.message);
       return;
     }
+    setSavedRevision(saved.revision);
     setStatus(
-      "Immutable generated-prototype revision saved. Existing course placements were not changed.",
+      embedded
+        ? "Immutable custom-jump revision saved. Existing course placements were not changed."
+        : "Immutable generated-prototype revision saved. Existing course placements were not changed.",
     );
   }
 
@@ -491,58 +740,99 @@ export function ProfileWingCreatorClient({
     setSourceBlob(null);
     setMaskBlob(null);
     setPrototype(null);
+    setSavedRevision(null);
+    setFrameColor("blue");
     setError(null);
     setStatus("Choose another source. Previous evidence remains local.");
     resetConsent();
   }
 
-  return (
-    <main className="profile-creator-shell">
-      <header className="profile-creator-header">
-        <div
-          className="working-brand"
-          aria-label="JUMPFORM working mockup wordmark"
-        >
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
-        <div>
-          <strong>Create Profile Wing</strong>
-          <span>Local review · user-triggered provider call</span>
-        </div>
-        <Link href="/studio/silhouettes/review">
-          Benchmark silhouette review
-        </Link>
-      </header>
+  const Root = embedded ? "section" : "main";
 
-      <section className="profile-creator-hero">
-        <div>
-          <p className="eyebrow">One subject becomes one prototype profile</p>
-          <h1>Create your own Profile Wing.</h1>
-          <p>
-            Choose a PNG/JPEG or an accepted concept. Nothing leaves this
-            browser until you explicitly request background removal. Every
-            returned mask still requires deterministic validation and your
-            visual acceptance.
-          </p>
-        </div>
-        <aside>
-          <span className="prototype-status">Non-sellable prototype</span>
-          <strong>
-            {availability?.enabled
-              ? availability.provider === "remove-bg"
-                ? "remove.bg ready"
-                : "Local QA provider ready"
-              : "Provider setup required"}
-          </strong>
-          <p>One click · one request · zero automatic retries</p>
-          <small>
-            {availability?.enabled
-              ? "Server-only credential · no key in browser code"
-              : providerSetupMessage(availability?.reason ?? "checking")}
-          </small>
-        </aside>
-      </section>
+  return (
+    <Root
+      className={`profile-creator-shell${embedded ? " is-embedded" : ""}`}
+      aria-label={embedded ? "Build custom wings" : undefined}
+    >
+      {!embedded ? (
+        <header className="profile-creator-header">
+          <div>
+            <strong>Customize a jump</strong>
+            <span>Custom wings · image or accepted description</span>
+          </div>
+          <Link href="/designs/local-spj-04/edit">Change wing design</Link>
+        </header>
+      ) : null}
+
+      {!embedded ? (
+        <section className="profile-creator-hero">
+          <div>
+            <p className="eyebrow">Wing design · custom silhouette</p>
+            <h1>Create custom wings for your jump.</h1>
+            <p>
+              Start with an image or an accepted description, validate the
+              silhouette, then choose the jump color before saving the complete
+              jump. Nothing leaves this browser until you explicitly request
+              background removal.
+            </p>
+          </div>
+          <aside>
+            <span className="prototype-status">Non-sellable prototype</span>
+            <strong>
+              {availability?.enabled
+                ? availability.provider === "remove-bg"
+                  ? "remove.bg ready"
+                  : "Local QA provider ready"
+                : "Provider setup required"}
+            </strong>
+            <p>One click · one request · zero automatic retries</p>
+            <small>
+              {availability?.enabled
+                ? "Server-only credential · no key in browser code"
+                : providerSetupMessage(availability?.reason ?? "checking")}
+            </small>
+          </aside>
+        </section>
+      ) : null}
+
+      <ol className="profile-creator-stepper" aria-label="Creation progress">
+        {[
+          { label: "Source", complete: prepared !== null },
+          {
+            label: generatedConceptSource ? "Extract" : "Permission",
+            complete: generatedConceptSource
+              ? reviewReady
+              : uploadConsentReady,
+          },
+          {
+            label: "Inspect",
+            complete: reviewReady,
+          },
+          { label: "Customize", complete: prototype !== null },
+          { label: "Save", complete: savedRevision !== null },
+        ].map((step, index) => {
+          const active =
+            !step.complete &&
+            (index === 0 ||
+              (index === 1 && prepared !== null) ||
+              (index === 2 && reviewCandidate !== null) ||
+              (index === 3 && prototype !== null) ||
+              (index === 4 && prototype !== null));
+          return (
+            <li
+              key={step.label}
+              aria-current={active ? "step" : undefined}
+              data-complete={step.complete}
+            >
+              <span>{index + 1}</span>
+              <strong>{step.label}</strong>
+              <small>
+                {step.complete ? "Complete" : active ? "Current" : "Not ready"}
+              </small>
+            </li>
+          );
+        })}
+      </ol>
 
       {creation.integrityError ? (
         <div className="profile-creator-alert" role="alert">
@@ -552,7 +842,11 @@ export function ProfileWingCreatorClient({
       ) : null}
       {error ? (
         <div className="profile-creator-alert" role="alert">
-          <strong>Profile Wing creation stopped.</strong>
+          <strong>
+            {embedded
+              ? "Custom wing creation stopped."
+              : "Profile Wing creation stopped."}
+          </strong>
           <span>{error}</span>
         </div>
       ) : null}
@@ -576,59 +870,62 @@ export function ProfileWingCreatorClient({
             <h2 id="source-title">Start with one clear subject.</h2>
           </div>
         </div>
-        <div className="profile-creator-source-grid">
-          <article>
-            <p className="eyebrow">Upload</p>
-            <h3>PNG or JPEG</h3>
-            <p>
-              Up to 10 MiB. The browser creates a metadata-stripped derivative
-              up to 2,048 px and stores it locally by SHA-256.
-            </p>
-            <label
-              className="profile-creator-file-action"
-              htmlFor={fileInputId}
-            >
-              {preparing ? "Preparing source…" : "Choose image"}
-            </label>
-            <input
-              id={fileInputId}
-              className="visually-hidden-file"
-              type="file"
-              accept="image/png,image/jpeg"
-              disabled={preparing || processing}
-              onChange={(event) => void chooseUpload(event.target.files?.[0])}
-            />
-          </article>
-          <article>
-            <p className="eyebrow">Concept Studio</p>
-            <h3>Accepted generated concept</h3>
-            {acceptedConcept ? (
-              <>
+        <div
+          className={`profile-creator-source-grid${sourceMode !== "all" ? " is-single-source" : ""}`}
+        >
+          {sourceMode !== "accepted-concept" ? (
+            <article>
+              <p className="eyebrow">Upload</p>
+              <h3>PNG or JPEG</h3>
+              <p>
+                Up to 10 MiB. The browser creates a metadata-stripped derivative
+                up to 2,048 px and stores it locally by SHA-256.
+              </p>
+              <label
+                className="profile-creator-file-action"
+                htmlFor={fileInputId}
+              >
+                {preparing ? "Preparing source…" : "Choose image"}
+              </label>
+              <input
+                id={fileInputId}
+                className="visually-hidden-file"
+                type="file"
+                accept="image/png,image/jpeg"
+                disabled={preparing || processing}
+                onChange={(event) => void chooseUpload(event.target.files?.[0])}
+              />
+            </article>
+          ) : null}
+          {sourceMode !== "upload" ? (
+            <article>
+              <p className="eyebrow">Description result</p>
+              <h3>Accepted wing concept</h3>
+              {acceptedConcept ? (
+                <>
+                  <p>
+                    Concept {acceptedConcept.ordinal} ·{" "}
+                    {acceptedConceptBatch?.provenance.provider ===
+                    "deterministic-test"
+                      ? "simulator fixture"
+                      : "live generated image"}
+                  </p>
+                  <code>{shortHash(acceptedConcept.contentHash)}</code>
+                  <button
+                    type="button"
+                    onClick={() => void chooseAcceptedConcept()}
+                    disabled={preparing || processing}
+                  >
+                    Use accepted concept
+                  </button>
+                </>
+              ) : (
                 <p>
-                  Concept {acceptedConcept.ordinal} ·{" "}
-                  {acceptedConceptBatch?.provenance.provider ===
-                  "deterministic-test"
-                    ? "simulator fixture"
-                    : "live generated image"}
+                  No accepted description result is available in this browser.
                 </p>
-                <code>{shortHash(acceptedConcept.contentHash)}</code>
-                <button
-                  type="button"
-                  onClick={() => void chooseAcceptedConcept()}
-                  disabled={preparing || processing}
-                >
-                  Use accepted concept
-                </button>
-              </>
-            ) : (
-              <>
-                <p>
-                  No concept is currently accepted for the Profile Wing handoff.
-                </p>
-                <Link href="/studio/concepts/new">Open Concept Studio</Link>
-              </>
-            )}
-          </article>
+              )}
+            </article>
+          ) : null}
         </div>
         {prepared && sourceUrl ? (
           <div className="profile-creator-selected-source">
@@ -665,7 +962,7 @@ export function ProfileWingCreatorClient({
         ) : null}
       </section>
 
-      {prepared ? (
+      {prepared && (!generatedConceptSource || !reviewReady) ? (
         <section
           className="profile-creator-provider"
           aria-labelledby="provider-title"
@@ -673,86 +970,116 @@ export function ProfileWingCreatorClient({
           <div className="profile-creator-section-heading">
             <span>02</span>
             <div>
-              <p className="eyebrow">Explicit provider boundary</p>
-              <h2 id="provider-title">Confirm before upload.</h2>
+              <p className="eyebrow">
+                {generatedConceptSource
+                  ? "Concept to product shape"
+                  : "Explicit provider boundary"}
+              </p>
+              <h2 id="provider-title">
+                {generatedConceptSource
+                  ? "Extract the wing silhouette."
+                  : "Confirm before upload."}
+              </h2>
             </div>
           </div>
           <div className="profile-creator-consent">
-            <label>
-              <input
-                type="checkbox"
-                checked={consent.rights}
-                onChange={(event) =>
-                  setConsent((current) => ({
-                    ...current,
-                    rights: event.target.checked,
-                  }))
-                }
-              />
-              I own this image or have the right to use it.
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={consent.provider}
-                onChange={(event) =>
-                  setConsent((current) => ({
-                    ...current,
-                    provider: event.target.checked,
-                  }))
-                }
-              />
-              I understand this derivative is sent to remove.bg only when I
-              press the processing button. remove.bg documents immediate API
-              image deletion.
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={consent.people}
-                onChange={(event) =>
-                  setConsent((current) => ({
-                    ...current,
-                    people: event.target.checked,
-                  }))
-                }
-              />
-              The image contains no identifiable person.
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={consent.subject}
-                onChange={(event) =>
-                  setConsent((current) => ({
-                    ...current,
-                    subject: event.target.checked,
-                  }))
-                }
-              />
-              It contains one clear subject suitable for a solid outer
-              silhouette.
-            </label>
+            {generatedConceptSource ? (
+              <div>
+                <p>
+                  Concept art is not product geometry yet. We isolate and
+                  validate one wing silhouette before building the matching
+                  2.5D and 3D preview.
+                </p>
+                <p>
+                  {generatedConceptUsesLocalProvider
+                    ? "The simulator performs this extraction locally and automatically. Nothing is uploaded."
+                    : "This sends the app-generated concept to remove.bg once. Nothing is retried automatically."}
+                </p>
+              </div>
+            ) : (
+              <>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={consent.rights}
+                    onChange={(event) =>
+                      setConsent((current) => ({
+                        ...current,
+                        rights: event.target.checked,
+                      }))
+                    }
+                  />
+                  I own this image or have the right to use it.
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={consent.provider}
+                    onChange={(event) =>
+                      setConsent((current) => ({
+                        ...current,
+                        provider: event.target.checked,
+                      }))
+                    }
+                  />
+                  I understand this derivative is sent to remove.bg only when I
+                  press the processing button. remove.bg documents immediate API
+                  image deletion.
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={consent.people}
+                    onChange={(event) =>
+                      setConsent((current) => ({
+                        ...current,
+                        people: event.target.checked,
+                      }))
+                    }
+                  />
+                  The image contains no identifiable person.
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={consent.subject}
+                    onChange={(event) =>
+                      setConsent((current) => ({
+                        ...current,
+                        subject: event.target.checked,
+                      }))
+                    }
+                  />
+                  It contains one clear subject suitable for a solid outer
+                  silhouette.
+                </label>
+              </>
+            )}
             <div className="profile-creator-provider-actions">
-              <button
-                type="button"
-                onClick={() => void processSource()}
-                disabled={
-                  !consentReady || !providerReady || processing || fitting
-                }
-              >
-                {processing
-                  ? "Processing one request…"
-                  : !providerReady
-                    ? "remove.bg setup required"
-                    : reviewCandidate
-                      ? availability?.provider === "remove-bg"
-                        ? "Try remove.bg again"
-                        : "Run local mask simulation again"
-                      : availability?.provider === "remove-bg"
-                        ? "Remove background & inspect"
-                        : "Run local mask simulation"}
-              </button>
+              {!generatedConceptSource ||
+              !generatedConceptUsesLocalProvider ? (
+                <button
+                  type="button"
+                  onClick={() => void processSource()}
+                  disabled={
+                    !consentReady || !providerReady || processing || fitting
+                  }
+                >
+                  {processing
+                    ? "Processing one request…"
+                    : !providerReady
+                      ? "remove.bg setup required"
+                      : reviewCandidate
+                        ? availability?.provider === "remove-bg"
+                          ? "Try remove.bg again"
+                          : "Run local mask simulation again"
+                        : generatedConceptSource
+                          ? "Extract & inspect wing shape"
+                          : availability?.provider === "remove-bg"
+                            ? "Remove background & inspect"
+                            : "Run local mask simulation"}
+                </button>
+              ) : null}
               {processing ? (
                 <button
                   type="button"
@@ -890,7 +1217,9 @@ export function ProfileWingCreatorClient({
                 disabled={vectorization?.status !== "accepted"}
               >
                 {vectorization?.status === "accepted"
-                  ? "Accept & build Profile Wing"
+                  ? embedded
+                    ? "Accept custom wing shape"
+                    : "Accept & build Profile Wing"
                   : "Cannot accept rejected result"}
               </button>
             )}
@@ -919,17 +1248,56 @@ export function ProfileWingCreatorClient({
             <div className="profile-creator-section-heading">
               <span>04</span>
               <div>
-                <p className="eyebrow">Deterministic prototype</p>
-                <h2 id="result-title">One polygon. Two faithful views.</h2>
+                <p className="eyebrow">Customize the complete jump</p>
+                <h2 id="result-title">Shape approved. Choose the color.</h2>
               </div>
             </div>
-            <div className="profile-creator-result-stage">
-              <ProfileWingThreeStage
-                manifest={prototype.renderManifest}
-                reducedMotion={false}
-                forceFailure={forceThreeFailure}
-              />
+            <div className="profile-creator-appearance">
+              <div>
+                <p className="eyebrow">Shared jump appearance</p>
+                <h3>Frame and wing color</h3>
+                <p>
+                  The custom silhouette replaces the standard wing panels. The
+                  four-pole jump structure, supports, exact color, and profile
+                  are saved together as one revision.
+                </p>
+              </div>
+              <div
+                className="profile-creator-color-options"
+                role="radiogroup"
+                aria-label="Frame and wing color"
+              >
+                {FRAME_COLORS.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    role="radio"
+                    aria-checked={frameColor === color}
+                    aria-label={`${FRAME_LABELS[color]} frame and wings${frameColor === color ? ", selected" : ""}`}
+                    disabled={savedRevision !== null}
+                    onClick={() => selectFrameColor(color)}
+                  >
+                    <span
+                      className={`swatch swatch-${color}`}
+                      aria-hidden="true"
+                    />
+                    <strong>{FRAME_LABELS[color]}</strong>
+                    <small>
+                      {frameColor === color ? "Selected" : "Choose color"}
+                    </small>
+                  </button>
+                ))}
+              </div>
             </div>
+            {!hideResultPreview ? (
+              <div className="profile-creator-result-stage">
+                <ProfileWingThreeStage
+                  manifest={prototype.renderManifest}
+                  reducedMotion={false}
+                  forceFailure={forceThreeFailure}
+                />
+              </div>
+            ) : null}
             <div className="profile-creator-save">
               <div>
                 <strong>{prototype.source.sourceLabel}</strong>
@@ -937,21 +1305,45 @@ export function ProfileWingCreatorClient({
                   GEO {shortHash(prototype.renderManifest.geometrySha256)}
                 </code>
                 <p>
-                  Generated · inferred · not supplier-confirmed · not for
-                  production or ordering.
+                  {embedded ? "Custom geometry" : "Generated"} · inferred · not
+                  supplier-confirmed · not for production or ordering.
                 </p>
               </div>
               <div>
+                <span className="eyebrow">05 / Save complete jump</span>
                 <button
                   type="button"
                   onClick={savePrototype}
-                  disabled={!designLibrary.hydrated || !designLibrary.library}
+                  disabled={
+                    !designLibrary.hydrated ||
+                    !designLibrary.library ||
+                    savedRevision !== null
+                  }
                 >
-                  Save immutable generated revision
+                  {savedRevision
+                    ? `Revision ${String(savedRevision.ordinal).padStart(
+                        2,
+                        "0",
+                      )} saved`
+                    : "Save immutable generated revision"}
                 </button>
-                <Link href="/studio/courses/local-course-1">
-                  Open course studio
-                </Link>
+                {savedRevision ? (
+                  <>
+                    <Link href={`/designs/${savedRevision.designId}`}>
+                      View saved design
+                    </Link>
+                    <Link
+                      href={`/courses/local-course-1?revision=${encodeURIComponent(
+                        savedRevision.revisionId,
+                      )}`}
+                    >
+                      Add Revision{" "}
+                      {String(savedRevision.ordinal).padStart(2, "0")} to course
+                    </Link>
+                  </>
+                ) : (
+                  <span>Save a revision to add it to a course.</span>
+                )}
                 <button
                   type="button"
                   className="secondary"
@@ -978,6 +1370,6 @@ export function ProfileWingCreatorClient({
           truth.
         </p>
       </footer>
-    </main>
+    </Root>
   );
 }

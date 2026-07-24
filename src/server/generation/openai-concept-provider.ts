@@ -15,9 +15,9 @@ export function openAIClientOptions(apiKey: string) {
 function providerPrompt(request: ConceptProviderRequest) {
   const prefix =
     request.action === "refine"
-      ? "Refine the supplied concept image. Preserve the overall obstacle family and apply the requested change."
-      : "Create four distinct visual concept directions for a show-jumping obstacle.";
-  return `${prefix}\n\n${request.prompt}\n\nThese are unvalidated concept images only. Show exactly four horizontal poles and a two-wing Profile Wing Vertical composition. Do not add dimensions, prices, safety marks, manufacturing claims, people, logos, or supplier approval.`;
+      ? "Refine the supplied wing concept. Preserve its recognizable subject and apply the requested change."
+      : "Create one custom wing-plate concept for a show-jumping obstacle.";
+  return `${prefix}\n\n${request.prompt}\n\nOutput exactly one isolated Profile Wing Vertical plate in a flat orthographic view. The complete plate must be visible as one connected, solid outer silhouette on a transparent background. Do not render poles, a second mirrored wing, a complete obstacle, scenery, floor, shadows, people, horses, text, logos, dimensions, prices, safety marks, manufacturing claims, or supplier approval. The four locked poles from the brief belong to the downstream jump preview and must not appear in this image. Interior colors and markings may follow the brief, but the transparent alpha outline must remain clean enough to become the product shape.`;
 }
 
 function mediaTypeFor(format: "png" | "jpeg" | "webp" | undefined) {
@@ -70,9 +70,8 @@ export function createOpenAIConceptProvider(options: {
         n: 4,
         quality: "low" as const,
         size: "1024x1024" as const,
-        output_format: "jpeg" as const,
-        output_compression: 88,
-        background: "opaque" as const,
+        output_format: "png" as const,
+        background: "transparent" as const,
       };
       const source = request.sourceConcept ?? request.referencePhoto;
       const result = source

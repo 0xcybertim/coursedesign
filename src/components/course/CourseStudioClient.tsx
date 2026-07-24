@@ -16,6 +16,7 @@ import {
   deriveCourseWarnings,
   LARGE_MOVE_MM,
   NORMAL_MOVE_MM,
+  type CourseSceneryKind,
 } from "@/domain/course";
 import type { FrameColor, LowerElement } from "@/domain/product/types";
 import {
@@ -40,6 +41,12 @@ const LOWER_LABEL: Record<Exclude<LowerElement, "none">, string> = {
   decorative_panel: "Decorative panels",
   gate: "Gates",
   filler: "Fillers",
+};
+
+const SCENERY_LABEL: Record<CourseSceneryKind, string> = {
+  palm_tree: "Palm tree",
+  leafy_tree: "Leafy tree",
+  flower_box: "Flower box",
 };
 
 function metres(valueMm: number) {
@@ -73,10 +80,12 @@ const EMPTY_HORSE_POV_PROGRESS: HorsePovProgress = {
 
 export function CourseStudioClient({
   forceThreeFailure = false,
+  requestedRevisionId,
 }: {
   readonly forceThreeFailure?: boolean;
+  readonly requestedRevisionId?: string;
 }) {
-  const workspace = useLocalCourseWorkspace();
+  const workspace = useLocalCourseWorkspace(requestedRevisionId);
   const arenaRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
     pointerId: number;
@@ -130,6 +139,31 @@ export function CourseStudioClient({
     () => [...warningInstanceIds].sort(),
     [warningInstanceIds],
   );
+  const revisionGroups = useMemo(() => {
+    const groups = new Map<string, LocalDesignRevision[]>();
+    for (const revision of workspace.revisions) {
+      const group = groups.get(revision.designId) ?? [];
+      group.push(revision);
+      groups.set(revision.designId, group);
+    }
+    return [...groups.entries()];
+  }, [workspace.revisions]);
+  const selectedRevision = workspace.revisions.find(
+    (revision) => revision.revisionId === workspace.selectedRevisionId,
+  );
+
+  useEffect(() => {
+    if (!requestedRevisionId || workspace.requestedRevisionStatus !== "ready")
+      return;
+    const requestedOption = [
+      ...document.querySelectorAll<HTMLElement>("[data-revision-id]"),
+    ].find((element) => element.dataset.revisionId === requestedRevisionId);
+    requestedOption?.scrollIntoView?.({ block: "nearest" });
+  }, [
+    requestedRevisionId,
+    workspace.hydrated,
+    workspace.requestedRevisionStatus,
+  ]);
 
   const openThreeArena = useCallback(() => {
     setHorsePovPlaying(false);
@@ -270,26 +304,38 @@ export function CourseStudioClient({
     dragRef.current = null;
   }
 
+  function handleSceneryKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const targetSceneryId = event.currentTarget.dataset.sceneryId;
+    if (!targetSceneryId) return;
+    const step = event.shiftKey ? 5000 : 2000;
+    const movement: Record<string, { xMm: number; yMm: number }> = {
+      ArrowLeft: { xMm: -step, yMm: 0 },
+      ArrowRight: { xMm: step, yMm: 0 },
+      ArrowUp: { xMm: 0, yMm: -step },
+      ArrowDown: { xMm: 0, yMm: step },
+    };
+    if (movement[event.key]) {
+      event.preventDefault();
+      workspace.moveSelectedScenery(movement[event.key], targetSceneryId);
+    } else if (event.key === "Delete" || event.key === "Backspace") {
+      event.preventDefault();
+      workspace.removeSelectedScenery(targetSceneryId);
+    }
+  }
+
   const selectedNumber = workspace.selectedInstance?.displayNumber;
 
   return (
     <main className="course-studio-shell">
       <header className="course-header">
-        <div
-          className="working-brand"
-          aria-label="JUMPFORM working mockup wordmark"
-        >
-          <span>JUMPFORM</span>
-          <small>working wordmark</small>
-        </div>
         <div className="course-identity">
-          <strong>Local course 01</strong>
+          <strong>Local Course 01</strong>
           <span>60 × 40 m · prototype arena</span>
           <Link
             className="course-review-link"
-            href="/studio/courses/local-course-1/review"
+            href="/courses/local-course-1/review"
           >
-            Open Course Review Sheet
+            Review course
           </Link>
         </div>
         <div className="course-save-state">
@@ -314,6 +360,17 @@ export function CourseStudioClient({
             <h1 id="saved-designs-title">Place a revision</h1>
             <p>Each placement pins this exact immutable revision.</p>
           </div>
+          {workspace.requestedRevisionStatus === "ready" ? (
+            <p className="requested-revision-notice" role="status">
+              Requested revision selected and ready to place. Nothing was placed
+              automatically.
+            </p>
+          ) : workspace.requestedRevisionStatus === "invalid" ? (
+            <p className="requested-revision-notice is-error" role="alert">
+              The requested revision is not in this browser. The normal
+              selection remains available and nothing was placed.
+            </p>
+          ) : null}
           {!workspace.hydrated ? (
             <p>Loading saved revisions…</p>
           ) : workspace.revisions.length === 0 ? (
@@ -325,7 +382,7 @@ export function CourseStudioClient({
                 Your course starts with a saved obstacle revision.
               </strong>
               <p>No example or fake placement has been inserted.</p>
-              <Link href="/studio/obstacles/spj-04">
+              <Link href="/designs/local-spj-04/edit">
                 Create and save an obstacle
               </Link>
             </div>
@@ -336,47 +393,59 @@ export function CourseStudioClient({
                 role="radiogroup"
                 aria-label="Saved obstacle revisions"
               >
-                {workspace.revisions.map((revision) => {
-                  const selected =
-                    workspace.selectedRevisionId === revision.revisionId;
-                  const presentation = revisionPresentation(revision);
-                  return (
-                    <button
-                      type="button"
-                      role="radio"
-                      aria-checked={selected}
-                      className="saved-revision-option"
-                      key={revision.revisionId}
-                      onClick={() =>
-                        workspace.setSelectedRevisionId(revision.revisionId)
-                      }
-                    >
-                      <span
-                        className="revision-symbol"
-                        style={{ background: presentation.color }}
-                        data-family={presentation.family}
-                        aria-hidden="true"
-                      />
-                      <span>
-                        <strong>
-                          Revision {String(revision.ordinal).padStart(2, "0")}
-                        </strong>
-                        <small>{presentation.detail}</small>
-                        <code>
-                          CFG {revision.configurationHash.slice(0, 8)}
-                        </code>
-                        {workspace.unavailableArtworkRevisionIds.has(
-                          revision.revisionId,
-                        ) ? (
-                          <small className="revision-artwork-unavailable">
-                            Exact artwork unavailable on this device · revision
-                            identity remains pinned
-                          </small>
-                        ) : null}
-                      </span>
-                    </button>
-                  );
-                })}
+                {revisionGroups.map(([designId, revisions]) => (
+                  <section className="saved-design-group" key={designId}>
+                    <h2>
+                      {designId === "local-spj-04"
+                        ? "SPJ-04 · Club Classic"
+                        : revisions[0]?.name.split(" · Revision")[0] ||
+                          "Custom Profile Wing"}
+                    </h2>
+                    {revisions.map((revision) => {
+                      const selected =
+                        workspace.selectedRevisionId === revision.revisionId;
+                      const presentation = revisionPresentation(revision);
+                      return (
+                        <button
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          className="saved-revision-option"
+                          key={revision.revisionId}
+                          data-revision-id={revision.revisionId}
+                          onClick={() =>
+                            workspace.setSelectedRevisionId(revision.revisionId)
+                          }
+                        >
+                          <span
+                            className="revision-symbol"
+                            style={{ background: presentation.color }}
+                            data-family={presentation.family}
+                            aria-hidden="true"
+                          />
+                          <span>
+                            <strong>
+                              Revision{" "}
+                              {String(revision.ordinal).padStart(2, "0")}
+                            </strong>
+                            <small>{presentation.detail}</small>
+                            <code>
+                              CFG {revision.configurationHash.slice(0, 8)}
+                            </code>
+                            {workspace.unavailableArtworkRevisionIds.has(
+                              revision.revisionId,
+                            ) ? (
+                              <small className="revision-artwork-unavailable">
+                                Exact artwork unavailable on this device ·
+                                revision identity remains pinned
+                              </small>
+                            ) : null}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </section>
+                ))}
               </div>
               <button
                 type="button"
@@ -388,9 +457,19 @@ export function CourseStudioClient({
               </button>
               <Link
                 className="edit-obstacle-link"
-                href="/studio/obstacles/spj-04"
+                href={
+                  selectedRevision && isProfileWingRevision(selectedRevision)
+                    ? `/designs/${selectedRevision.designId}`
+                    : selectedRevision
+                      ? `/designs/local-spj-04/edit?revision=${encodeURIComponent(
+                          selectedRevision.revisionId,
+                        )}`
+                      : "/designs"
+                }
               >
-                Return to obstacle studio
+                {selectedRevision && isProfileWingRevision(selectedRevision)
+                  ? "View selected Profile Wing"
+                  : "Edit selected SPJ-04 revision"}
               </Link>
             </>
           )}
@@ -451,6 +530,60 @@ export function CourseStudioClient({
               </div>
             </div>
           </div>
+          <section
+            className="arena-environment-panel"
+            aria-labelledby="arena-environment-title"
+          >
+            <div className="arena-environment-heading">
+              <p className="eyebrow">Arena environment</p>
+              <h3 id="arena-environment-title">Surface and scenery</h3>
+              <p>
+                Visual planning layer · excluded from obstacle warnings and
+                equipment quantities.
+              </p>
+            </div>
+            <fieldset className="arena-surface-controls">
+              <legend>Ground</legend>
+              {(["sand", "grass"] as const).map((surface) => (
+                <button
+                  type="button"
+                  key={surface}
+                  aria-pressed={
+                    workspace.course.environment.surface === surface
+                  }
+                  onClick={() => workspace.updateSurface(surface)}
+                >
+                  <span
+                    className="arena-surface-swatch"
+                    data-surface={surface}
+                    aria-hidden="true"
+                  />
+                  {surface === "sand" ? "Sand" : "Grass"}
+                </button>
+              ))}
+            </fieldset>
+            <div className="arena-scenery-add-controls">
+              <strong>Place scenery</strong>
+              <div>
+                {(["palm_tree", "leafy_tree", "flower_box"] as const).map(
+                  (kind) => (
+                    <button
+                      type="button"
+                      key={kind}
+                      onClick={() => workspace.addScenery(kind)}
+                    >
+                      <span
+                        className="course-scenery-symbol"
+                        data-kind={kind}
+                        aria-hidden="true"
+                      />
+                      {`Add ${SCENERY_LABEL[kind].toLowerCase()}`}
+                    </button>
+                  ),
+                )}
+              </div>
+            </div>
+          </section>
           <div className="course-arena-visual-stage">
             <div
               className={`course-arena-view-layer ${
@@ -465,6 +598,7 @@ export function CourseStudioClient({
                   className="arena-canvas"
                   ref={arenaRef}
                   data-testid="arena-canvas"
+                  data-surface={workspace.course.environment.surface}
                 >
                   {workspace.course.instances.length === 0 ? (
                     <div className="arena-empty-prompt">
@@ -474,6 +608,35 @@ export function CourseStudioClient({
                       </span>
                     </div>
                   ) : null}
+                  {workspace.course.environment.scenery.map((item) => {
+                    const selected =
+                      workspace.selectedSceneryId === item.sceneryId;
+                    return (
+                      <button
+                        type="button"
+                        key={item.sceneryId}
+                        className={`course-scenery${selected ? " is-selected" : ""}`}
+                        style={{
+                          left: `${(item.xMm / workspace.course.arena.width) * 100}%`,
+                          top: `${(item.yMm / workspace.course.arena.height) * 100}%`,
+                        }}
+                        data-scenery-id={item.sceneryId}
+                        aria-label={`${SCENERY_LABEL[item.kind]} ${item.displayNumber}, visual scenery at ${metres(item.xMm)} by ${metres(item.yMm)}`}
+                        aria-pressed={selected}
+                        onClick={() => workspace.selectScenery(item.sceneryId)}
+                        onKeyDown={handleSceneryKeyDown}
+                      >
+                        <span
+                          className="course-scenery-symbol"
+                          data-kind={item.kind}
+                          aria-hidden="true"
+                        />
+                        <span className="scenery-number">
+                          {item.displayNumber}
+                        </span>
+                      </button>
+                    );
+                  })}
                   {workspace.course.instances.map((instance) => {
                     const revision = workspace.revisions.find(
                       (candidate) =>
@@ -644,6 +807,70 @@ export function CourseStudioClient({
               jump arc, and landing are illustrative—not rider guidance,
               training advice, safety validation, or course certification.
             </p>
+          ) : null}
+
+          {workspace.selectedScenery ? (
+            <div
+              className="scenery-placement-controls"
+              aria-label="Selected scenery controls"
+            >
+              <div>
+                <p className="eyebrow">Selected scenery</p>
+                <strong>
+                  {SCENERY_LABEL[workspace.selectedScenery.kind]}{" "}
+                  {workspace.selectedScenery.displayNumber}
+                </strong>
+                <span>
+                  {metres(workspace.selectedScenery.xMm)} ×{" "}
+                  {metres(workspace.selectedScenery.yMm)}
+                </span>
+              </div>
+              <div className="scenery-direction-controls">
+                <button
+                  type="button"
+                  aria-label="Move scenery left 2 m"
+                  onClick={() =>
+                    workspace.moveSelectedScenery({ xMm: -2000, yMm: 0 })
+                  }
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  aria-label="Move scenery up 2 m"
+                  onClick={() =>
+                    workspace.moveSelectedScenery({ xMm: 0, yMm: -2000 })
+                  }
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  aria-label="Move scenery down 2 m"
+                  onClick={() =>
+                    workspace.moveSelectedScenery({ xMm: 0, yMm: 2000 })
+                  }
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  aria-label="Move scenery right 2 m"
+                  onClick={() =>
+                    workspace.moveSelectedScenery({ xMm: 2000, yMm: 0 })
+                  }
+                >
+                  →
+                </button>
+              </div>
+              <button
+                type="button"
+                className="remove-scenery"
+                onClick={() => workspace.removeSelectedScenery()}
+              >
+                Remove scenery
+              </button>
+            </div>
           ) : null}
 
           <div

@@ -1,12 +1,14 @@
 export const REMOVE_BG_PROFILE_ENDPOINT = "https://api.remove.bg/v1.0/removebg";
 export const REMOVE_BG_PROFILE_ADAPTER_VERSION = "1.0.0-profile-wing-remove-bg";
 export const DETERMINISTIC_PROFILE_MASK_ADAPTER_VERSION =
-  "1.0.0-profile-wing-deterministic";
+  "1.1.0-profile-wing-deterministic-concept-aware";
 
 export interface ProfileWingMaskProviderInput {
   readonly bytes: Uint8Array;
   readonly mediaType: "image/png" | "image/jpeg";
   readonly filename: string;
+  readonly sourceKind: "user_upload" | "generated_concept";
+  readonly generatedConceptSubject: string | null;
   readonly signal: AbortSignal;
 }
 
@@ -22,6 +24,19 @@ export interface ProfileWingMaskProvider {
   removeBackground(
     input: ProfileWingMaskProviderInput,
   ): Promise<ProfileWingMaskProviderResult>;
+}
+
+export function createSourceAwareProfileMaskProvider(options: {
+  readonly uploadProvider: ProfileWingMaskProvider;
+  readonly generatedConceptProvider: ProfileWingMaskProvider;
+}): ProfileWingMaskProvider {
+  return {
+    providerName: options.uploadProvider.providerName,
+    removeBackground: (input) =>
+      input.sourceKind === "generated_concept"
+        ? options.generatedConceptProvider.removeBackground(input)
+        : options.uploadProvider.removeBackground(input),
+  };
 }
 
 function providerFailure(
@@ -101,14 +116,19 @@ export function createRemoveBgProfileMaskProvider(options: {
 }
 
 export function createDeterministicProfileMaskProvider(
-  bytes: Uint8Array,
+  source:
+    | Uint8Array
+    | ((input: ProfileWingMaskProviderInput) => Uint8Array),
 ): ProfileWingMaskProvider {
-  if (!isPng(bytes))
+  if (source instanceof Uint8Array && !isPng(source))
     throw new Error("Deterministic Profile Wing mask must be a PNG.");
   return {
     providerName: "deterministic-test",
     async removeBackground(input) {
       if (input.signal.aborted) throw input.signal.reason;
+      const bytes = typeof source === "function" ? source(input) : source;
+      if (!isPng(bytes))
+        throw new Error("Deterministic Profile Wing mask must be a PNG.");
       return {
         bytes,
         provider: "deterministic-test",

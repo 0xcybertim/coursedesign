@@ -14,6 +14,7 @@ import {
   updateLocalDraft,
   type LocalDesignLibrary,
   type LocalDesignWorkspace,
+  type LocalWorkspaceFailure,
   type ObstacleDesignRevision,
   type ObstacleIntent,
 } from "@/domain/design";
@@ -68,7 +69,11 @@ function statusLabel(state: LocalSaveState, revisionOrdinal?: number): string {
   }
 }
 
-export function useLocalDesignWorkspace() {
+export type SaveRevisionResult =
+  | { readonly ok: true; readonly revision: ObstacleDesignRevision }
+  | { readonly ok: false; readonly error: LocalWorkspaceFailure["error"] };
+
+export function useLocalDesignWorkspace(requestedRevisionId?: string) {
   const [workspace, setWorkspace] =
     useState<LocalDesignWorkspace>(INITIAL_WORKSPACE);
   const [library, setLibrary] = useState<LocalDesignLibrary>(INITIAL_LIBRARY);
@@ -128,6 +133,13 @@ export function useLocalDesignWorkspace() {
       }
 
       setWorkspace(nextWorkspace);
+      if (
+        requestedRevisionId &&
+        nextWorkspace.revisions.some(
+          (revision) => revision.revisionId === requestedRevisionId,
+        )
+      )
+        setViewingRevisionId(requestedRevisionId);
       setSaveState(nextState);
       setStatus(statusLabel(nextState));
       setHydrated(true);
@@ -136,7 +148,7 @@ export function useLocalDesignWorkspace() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [requestedRevisionId]);
 
   const viewingRevision = useMemo<ObstacleDesignRevision | null>(() => {
     if (viewingRevisionId === null) return null;
@@ -174,29 +186,57 @@ export function useLocalDesignWorkspace() {
     }
   }
 
-  async function saveRevision() {
-    if (!hydrated || viewingRevision !== null) return;
+  async function saveRevision(): Promise<SaveRevisionResult> {
+    if (!hydrated || viewingRevision !== null)
+      return {
+        ok: false,
+        error: {
+          kind: "invalid_workspace",
+          message:
+            "The working draft must finish loading before it can be saved.",
+        },
+      };
     let verifiedArtifactHashes: ReadonlySet<string> | undefined;
     const artworkConfiguration = workspace.draft.intent.artworkConfiguration;
     if (artworkConfiguration) {
       const verified = await verifyArtworkConfiguration(artworkConfiguration);
       if (!verified.ok) {
         setArtifactError(`${verified.error.kind}: ${verified.error.message}`);
-        return;
+        return {
+          ok: false,
+          error: {
+            kind: "artifact_verification_required",
+            message: verified.error.message,
+          },
+        };
       }
       verifiedArtifactHashes = new Set(verified.value);
     }
+    const revisionId = localId("revision");
     const saved = saveLocalRevision(workspace, {
-      revisionId: localId("revision"),
+      revisionId,
       now: now(),
       verifiedArtifactHashes,
     });
     if (!saved.ok) {
       setArtifactError(`${saved.error.kind}: ${saved.error.message}`);
-      return;
+      return saved;
     }
+    const revision = saved.value.revisions.find(
+      (item) => item.revisionId === revisionId,
+    );
+    if (!revision)
+      return {
+        ok: false,
+        error: {
+          kind: "invalid_revision",
+          message:
+            "The exact saved revision could not be recovered after the immutable append.",
+        },
+      };
     setArtifactError(null);
     commit(saved.value, "revision_saved", saved.value.revisions.length);
+    return { ok: true, revision };
   }
 
   function confirmArtwork(configuration: ArtworkConfiguration | null) {

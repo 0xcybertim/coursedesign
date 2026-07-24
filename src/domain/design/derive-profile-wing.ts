@@ -3,6 +3,7 @@ import {
   PROFILE_WING_C1_SCHEMA_VERSION,
   type DerivedProfileWingPrototype,
   type ProfileWingAcceptanceDecision,
+  type ProfileWingAppearance,
   type ProfileWingDerivationFailureKind,
   type ProfileWingDerivationResult,
   type ProfileWingGenericQuantity,
@@ -22,7 +23,30 @@ import {
   type LocalSilhouetteReview,
 } from "../silhouette/review.ts";
 import type { SilhouettePoint } from "../silhouette/types.ts";
+import type { FrameColor } from "../product/types.ts";
 import { stableHash } from "./stable-hash.ts";
+
+const PROFILE_FRAME_HEX: Record<FrameColor, string> = {
+  white: "#F7F6F1",
+  blue: "#0D43C7",
+  red: "#FF5547",
+  yellow: "#E8D51B",
+};
+
+export function profileWingAppearance(
+  frameColor: FrameColor,
+): ProfileWingAppearance {
+  return {
+    frameColor,
+    palette: {
+      wing: PROFILE_FRAME_HEX[frameColor],
+      supports: PROFILE_FRAME_HEX[frameColor],
+      polePrimary: "#0D43C7",
+      poleSecondary: "#F7F6F1",
+      hardware: "#252624",
+    },
+  };
+}
 
 function failure(
   kind: ProfileWingDerivationFailureKind,
@@ -130,6 +154,7 @@ function genericQuantities(): readonly ProfileWingGenericQuantity[] {
 
 function renderManifest(
   sourceNormalizedPolygon: readonly SilhouettePoint[],
+  appearance?: ProfileWingAppearance,
 ): ProfileWingRenderManifest | null {
   const fittedPolygonMm = fitProfilePolygon(sourceNormalizedPolygon);
   if (!fittedPolygonMm) return null;
@@ -159,6 +184,7 @@ function renderManifest(
     schemaVersion: PROFILE_WING_C1_SCHEMA_VERSION,
     rendererContract: "profile-wing-render-manifest-v1",
     geometrySha256,
+    ...(appearance ? { appearance } : {}),
     sharedProfileGeometry,
     wingInstances: [
       {
@@ -218,8 +244,9 @@ function deriveAcceptedProfileWing(input: {
   readonly sourceLabel?: string;
   readonly sourceContentHash?: string;
   readonly provider?: "remove-bg" | "deterministic-test";
+  readonly appearance?: ProfileWingAppearance;
 }): ProfileWingDerivationResult {
-  const manifest = renderManifest(input.points);
+  const manifest = renderManifest(input.points, input.appearance);
   if (!manifest)
     return failure(
       "invalid_source_geometry",
@@ -238,6 +265,7 @@ function deriveAcceptedProfileWing(input: {
       ? { sourceContentHash: input.sourceContentHash }
       : {}),
     ...(input.provider ? { provider: input.provider } : {}),
+    ...(input.appearance ? { appearance: input.appearance } : {}),
   } as const;
   const identity = {
     schemaVersion: PROFILE_WING_C1_SCHEMA_VERSION,
@@ -254,6 +282,7 @@ function deriveAcceptedProfileWing(input: {
     displayName: PROFILE_WING_C1_DEFINITION.displayName,
     purpose: PROFILE_WING_C1_DEFINITION.purpose,
     evidenceStatus: PROFILE_WING_C1_DEFINITION.evidenceStatus,
+    ...(input.appearance ? { appearance: input.appearance } : {}),
     source: {
       ...sourceIdentity,
       decisionId: input.decision.decisionId,
@@ -348,6 +377,7 @@ export function deriveProfileWingPrototype(
 export function deriveProfileWingPrototypeFromCreation(input: {
   readonly candidate: ProfileWingCreationCandidate;
   readonly decision: ProfileWingCreationDecision;
+  readonly appearance?: ProfileWingAppearance;
 }): ProfileWingDerivationResult;
 export function deriveProfileWingPrototypeFromCreation(
   input: unknown,
@@ -385,5 +415,10 @@ export function deriveProfileWingPrototypeFromCreation(
     sourceLabel: candidate.source.sourceLabel,
     sourceContentHash: candidate.source.contentHash,
     provider: candidate.provenance.provider,
+    appearance: (
+      input as {
+        readonly appearance?: ProfileWingAppearance;
+      }
+    ).appearance,
   });
 }

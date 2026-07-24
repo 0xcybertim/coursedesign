@@ -28,12 +28,29 @@ export interface CourseInstance {
   displayNumber: number;
 }
 
+export type CourseSurface = "sand" | "grass";
+export type CourseSceneryKind = "palm_tree" | "leafy_tree" | "flower_box";
+
+export interface CourseSceneryItem {
+  sceneryId: string;
+  kind: CourseSceneryKind;
+  xMm: number;
+  yMm: number;
+  displayNumber: number;
+}
+
+export interface CourseEnvironment {
+  surface: CourseSurface;
+  scenery: readonly CourseSceneryItem[];
+}
+
 export interface CourseDraft {
   schemaVersion: typeof COURSE_SCHEMA_VERSION;
   courseId: "local-course-1";
   draftVersion: number;
   arena: ArenaDimensions;
   instances: readonly CourseInstance[];
+  environment: CourseEnvironment;
   updatedAt: string;
 }
 
@@ -143,7 +160,9 @@ export interface CourseFailure {
       | "invalid_course"
       | "unsupported_course_schema"
       | "invalid_instance"
-      | "instance_not_found";
+      | "instance_not_found"
+      | "invalid_scenery"
+      | "scenery_not_found";
     message: string;
   };
 }

@@ -7,6 +7,19 @@ export const metadata: Metadata = {
     "Phase 1C browser-local course workspace with pinned obstacle revisions and purchase-planning geometry warnings.",
 };
 
-export default function LocalCourseStudioPage() {
-  return <CourseStudioClient />;
+export default async function LocalCourseStudioPage({
+  searchParams,
+}: {
+  readonly searchParams: Promise<{
+    readonly revision?: string;
+    readonly force3d?: string;
+  }>;
+}) {
+  const query = await searchParams;
+  return (
+    <CourseStudioClient
+      requestedRevisionId={query.revision}
+      forceThreeFailure={query.force3d === "fail"}
+    />
+  );
 }

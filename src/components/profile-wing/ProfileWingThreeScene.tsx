@@ -153,7 +153,9 @@ export default function ProfileWingThreeScene({
     );
     manifest.wingInstances.forEach((wing, index) => {
       const material = new THREE.MeshStandardMaterial({
-        color: index === 0 ? 0xff5547 : 0xe8d51b,
+        color:
+          manifest.appearance?.palette.wing ??
+          (index === 0 ? 0xff5547 : 0xe8d51b),
         roughness: 0.58,
         metalness: 0.02,
         side: THREE.DoubleSide,
@@ -202,7 +204,11 @@ export default function ProfileWingThreeScene({
         product,
         [1200, 70, foot.depthMm],
         [foot.xMm, 35, 0],
-        index === 0 ? 0xff5547 : 0xe8d51b,
+        manifest.appearance
+          ? new THREE.Color(manifest.appearance.palette.supports).getHex()
+          : index === 0
+            ? 0xff5547
+            : 0xe8d51b,
       );
     });
     manifest.fixedSupports.flags.forEach((flag, index) => {

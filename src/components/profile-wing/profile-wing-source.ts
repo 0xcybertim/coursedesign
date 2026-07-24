@@ -90,7 +90,10 @@ async function decodeSource(
   }
 }
 
-function canvasBlob(canvas: HTMLCanvasElement) {
+function canvasBlob(
+  canvas: HTMLCanvasElement,
+  mediaType: "image/png" | "image/jpeg",
+) {
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
       (blob) =>
@@ -102,8 +105,8 @@ function canvasBlob(canvas: HTMLCanvasElement) {
                 "The browser could not encode the Profile Wing source.",
               ),
             ),
-      "image/jpeg",
-      0.92,
+      mediaType,
+      mediaType === "image/jpeg" ? 0.92 : undefined,
     );
   });
 }
@@ -179,16 +182,24 @@ export async function prepareProfileWingSource(
       dependencies.createCanvas?.() ?? document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    const context = canvas.getContext("2d", { alpha: false });
+    const outputMediaType =
+      input.sourceKind === "generated_concept"
+        ? ("image/png" as const)
+        : ("image/jpeg" as const);
+    const preserveAlpha = outputMediaType === "image/png";
+    const context = canvas.getContext("2d", { alpha: preserveAlpha });
     if (!context)
       throw sourceFailure(
         "source_processing_failure",
         "Profile Wing canvas processing is unavailable.",
       );
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, width, height);
+    if (preserveAlpha) context.clearRect(0, 0, width, height);
+    else {
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, width, height);
+    }
     context.drawImage(decoded.source, 0, 0, width, height);
-    const blob = await canvasBlob(canvas);
+    const blob = await canvasBlob(canvas, outputMediaType);
     const derivativeBytes = await profileWingBlobBytes(blob);
     const contentHash = hashArtworkBytes(derivativeBytes);
     const stored = await (dependencies.store ?? storeContentAddressedBlob)({
@@ -206,7 +217,7 @@ export async function prepareProfileWingSource(
         sourceLabel: input.sourceLabel.trim().slice(0, 160),
         originalFilename: input.filename.slice(0, 160),
         contentHash,
-        mediaType: "image/jpeg",
+        mediaType: outputMediaType,
         byteLength: blob.size,
         pixelWidth: width,
         pixelHeight: height,

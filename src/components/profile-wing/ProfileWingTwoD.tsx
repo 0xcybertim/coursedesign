@@ -28,6 +28,8 @@ export function ProfileWingTwoD({
   readonly manifest: ProfileWingRenderManifest;
 }) {
   const geometry = manifest.sharedProfileGeometry;
+  const wingFill = manifest.appearance?.palette.wing;
+  const supportFill = manifest.appearance?.palette.supports;
 
   return (
     <svg
@@ -89,7 +91,7 @@ export function ProfileWingTwoD({
         <path
           key={`foot-${foot.xMm}`}
           d={`M${VIEW_WIDTH / 2 + foot.xMm - 600} ${FLOOR_Y + 45}h1200l-120 115h-960Z`}
-          fill={index === 0 ? "#ff5547" : "#e8d51b"}
+          fill={supportFill ?? (index === 0 ? "#ff5547" : "#e8d51b")}
           stroke="#0b0b0b"
           strokeWidth="28"
         />
@@ -103,7 +105,7 @@ export function ProfileWingTwoD({
             VIEW_WIDTH / 2 + wing.translateMm[0],
             wing.mirrorX,
           )}
-          fill={index === 0 ? "#ff5547" : "#e8d51b"}
+          fill={wingFill ?? (index === 0 ? "#ff5547" : "#e8d51b")}
           stroke="#0b0b0b"
           strokeLinejoin="round"
           strokeWidth="34"

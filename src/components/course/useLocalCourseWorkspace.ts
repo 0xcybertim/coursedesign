@@ -3,16 +3,22 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   COURSE_STORAGE_KEY,
+  addCourseScenery,
   createCourseDraft,
   deriveCourseWarnings,
   moveCourseInstance,
   moveCourseInstanceTo,
+  moveCourseScenery,
   parseCourseDraft,
   placeCourseInstance,
   removeCourseInstance,
+  removeCourseScenery,
   rotateCourseInstance,
   serializeCourseDraft,
+  setCourseSurface,
   type CourseDraft,
+  type CourseSceneryKind,
+  type CourseSurface,
 } from "@/domain/course";
 import {
   LOCAL_DESIGN_LIBRARY_STORAGE_KEY,
@@ -44,6 +50,19 @@ function localInstanceId() {
   return `instance-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function localSceneryId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `scenery-${crypto.randomUUID()}`;
+  }
+  return `scenery-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+const SCENERY_LABEL: Record<CourseSceneryKind, string> = {
+  palm_tree: "Palm tree",
+  leafy_tree: "Leafy tree",
+  flower_box: "Flower box",
+};
+
 function statusLabel(state: SaveState) {
   switch (state) {
     case "checking":
@@ -59,7 +78,7 @@ function statusLabel(state: SaveState) {
   }
 }
 
-export function useLocalCourseWorkspace() {
+export function useLocalCourseWorkspace(requestedRevisionId?: string) {
   const [course, setCourse] = useState<CourseDraft>(INITIAL_COURSE);
   const [revisions, setRevisions] = useState<readonly LocalDesignRevision[]>(
     [],
@@ -72,7 +91,13 @@ export function useLocalCourseWorkspace() {
   const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(
     null,
   );
+  const [selectedSceneryId, setSelectedSceneryId] = useState<string | null>(
+    null,
+  );
   const [announcement, setAnnouncement] = useState("Course workspace loading.");
+  const [requestedRevisionStatus, setRequestedRevisionStatus] = useState<
+    "none" | "ready" | "invalid"
+  >("none");
 
   useEffect(() => {
     let cancelled = false;
@@ -131,14 +156,36 @@ export function useLocalCourseWorkspace() {
       }
       setCourse(nextCourse);
       setRevisions(nextRevisions);
-      setSelectedRevisionId(nextRevisions[0]?.revisionId ?? null);
+      const requestedRevision = requestedRevisionId
+        ? nextRevisions.find(
+            (revision) => revision.revisionId === requestedRevisionId,
+          )
+        : null;
+      if (requestedRevision) {
+        setSelectedRevisionId(requestedRevision.revisionId);
+        setRequestedRevisionStatus("ready");
+        setAnnouncement(
+          `Revision ${String(requestedRevision.ordinal).padStart(
+            2,
+            "0",
+          )} is ready to place.`,
+        );
+      } else {
+        setSelectedRevisionId(nextRevisions[0]?.revisionId ?? null);
+        if (requestedRevisionId) {
+          setRequestedRevisionStatus("invalid");
+          setAnnouncement(
+            "The requested saved revision is unavailable. No placement was created.",
+          );
+        }
+      }
       setSaveState(nextState);
       setHydrated(true);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [requestedRevisionId]);
 
   const status = statusLabel(saveState);
   const unavailableArtworkRevisionIds =
@@ -149,6 +196,13 @@ export function useLocalCourseWorkspace() {
         (instance) => instance.instanceId === selectedInstanceId,
       ) ?? null,
     [course.instances, selectedInstanceId],
+  );
+  const selectedScenery = useMemo(
+    () =>
+      course.environment.scenery.find(
+        (item) => item.sceneryId === selectedSceneryId,
+      ) ?? null,
+    [course.environment.scenery, selectedSceneryId],
   );
 
   function commit(nextCourse: CourseDraft) {
@@ -198,11 +252,13 @@ export function useLocalCourseWorkspace() {
     if (!instance) return;
     commit(result.value);
     setSelectedInstanceId(instance.instanceId);
+    setSelectedSceneryId(null);
     announceInstance("Placed and selected", result.value, instance.instanceId);
   }
 
   function selectInstance(instanceId: string) {
     setSelectedInstanceId(instanceId);
+    setSelectedSceneryId(null);
     announceInstance("Selected", course, instanceId);
   }
 
@@ -266,6 +322,77 @@ export function useLocalCourseWorkspace() {
     setAnnouncement(`Removed Obstacle ${removedNumber}.`);
   }
 
+  function updateSurface(surface: CourseSurface) {
+    const result = setCourseSurface(course, surface, now());
+    if (!result.ok) return;
+    commit(result.value);
+    setAnnouncement(
+      `${surface === "grass" ? "Grass" : "Sand"} surface selected. This visual environment does not change obstacle geometry or equipment quantities.`,
+    );
+  }
+
+  function addScenery(kind: CourseSceneryKind) {
+    const result = addCourseScenery(course, {
+      sceneryId: localSceneryId(),
+      kind,
+      now: now(),
+    });
+    if (!result.ok) return;
+    const item = result.value.environment.scenery.at(-1);
+    if (!item) return;
+    commit(result.value);
+    setSelectedInstanceId(null);
+    setSelectedSceneryId(item.sceneryId);
+    setAnnouncement(
+      `Added and selected ${SCENERY_LABEL[kind]} ${item.displayNumber}. Visual scenery is excluded from obstacle warnings and equipment quantities.`,
+    );
+  }
+
+  function selectScenery(sceneryId: string) {
+    const item = course.environment.scenery.find(
+      (candidate) => candidate.sceneryId === sceneryId,
+    );
+    if (!item) return;
+    setSelectedInstanceId(null);
+    setSelectedSceneryId(sceneryId);
+    setAnnouncement(
+      `Selected ${SCENERY_LABEL[item.kind]} ${item.displayNumber}. Position ${(item.xMm / 1000).toFixed(1)} by ${(item.yMm / 1000).toFixed(1)} metres.`,
+    );
+  }
+
+  function moveSelectedScenery(
+    delta: { xMm: number; yMm: number },
+    targetSceneryId = selectedSceneryId,
+  ) {
+    if (!targetSceneryId) return;
+    const result = moveCourseScenery(course, targetSceneryId, delta, now());
+    if (!result.ok) return;
+    commit(result.value);
+    setSelectedSceneryId(targetSceneryId);
+    const item = result.value.environment.scenery.find(
+      (candidate) => candidate.sceneryId === targetSceneryId,
+    );
+    if (!item) return;
+    setAnnouncement(
+      `Moved ${SCENERY_LABEL[item.kind]} ${item.displayNumber}. Position ${(item.xMm / 1000).toFixed(1)} by ${(item.yMm / 1000).toFixed(1)} metres.`,
+    );
+  }
+
+  function removeSelectedScenery(targetSceneryId = selectedSceneryId) {
+    if (!targetSceneryId) return;
+    const item = course.environment.scenery.find(
+      (candidate) => candidate.sceneryId === targetSceneryId,
+    );
+    if (!item) return;
+    const result = removeCourseScenery(course, targetSceneryId, now());
+    if (!result.ok) return;
+    commit(result.value);
+    setSelectedSceneryId(null);
+    setAnnouncement(
+      `Removed ${SCENERY_LABEL[item.kind]} ${item.displayNumber}.`,
+    );
+  }
+
   return {
     course,
     revisions,
@@ -277,7 +404,10 @@ export function useLocalCourseWorkspace() {
     setSelectedRevisionId,
     selectedInstanceId,
     selectedInstance,
+    selectedSceneryId,
+    selectedScenery,
     announcement,
+    requestedRevisionStatus,
     setAnnouncement,
     placeSelectedRevision,
     selectInstance,
@@ -285,5 +415,10 @@ export function useLocalCourseWorkspace() {
     moveSelectedTo,
     rotateSelected,
     removeSelected,
+    updateSurface,
+    addScenery,
+    selectScenery,
+    moveSelectedScenery,
+    removeSelectedScenery,
   };
 }

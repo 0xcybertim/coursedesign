@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import { AppShell } from "@/components/shell/AppShell";
+import { LanguageProvider } from "@/i18n/LanguageProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Course Design Prototype",
-  description: "Non-sellable SPJ-04 configuration prototype.",
+  title: {
+    default: "Course Design",
+    template: "%s · Course Design",
+  },
+  description:
+    "Create and save exact browser-local obstacle design revisions, then arrange them in a course.",
 };
 
 export default function RootLayout({
@@ -11,7 +17,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <LanguageProvider>
+          <AppShell labEnabled={process.env.DEVELOPER_LAB_ENABLED === "true"}>
+            {children}
+          </AppShell>
+        </LanguageProvider>
+      </body>
     </html>
   );
 }

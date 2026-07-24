@@ -10,10 +10,19 @@ export const metadata: Metadata = {
 export default async function NewProfileWingPage({
   searchParams,
 }: {
-  readonly searchParams: Promise<{ readonly force3d?: string }>;
+  readonly searchParams: Promise<{
+    readonly force3d?: string;
+    readonly source?: string;
+    readonly concept?: string;
+  }>;
 }) {
   const query = await searchParams;
   return (
-    <ProfileWingCreatorClient forceThreeFailure={query.force3d === "fail"} />
+    <ProfileWingCreatorClient
+      forceThreeFailure={query.force3d === "fail"}
+      acceptedConceptHash={
+        query.source === "accepted-concept" ? query.concept : undefined
+      }
+    />
   );
 }

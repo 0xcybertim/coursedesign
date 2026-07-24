@@ -5,8 +5,8 @@ import type {
 } from "@/domain/generation";
 import { recognizedFixtureSubject } from "@/domain/generation";
 
-export const CONCEPT_PROVIDER_ADAPTER_VERSION = "1.0.0-phase1g" as const;
-export const DEFAULT_OPENAI_IMAGE_MODEL = "gpt-image-2-2026-04-21" as const;
+export const CONCEPT_PROVIDER_ADAPTER_VERSION = "1.1.0-transparent-wing" as const;
+export const DEFAULT_OPENAI_IMAGE_MODEL = "gpt-image-1" as const;
 
 export interface ProviderImageInput {
   readonly bytes: Uint8Array;

@@ -3,7 +3,11 @@
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { CourseDraft } from "@/domain/course";
+import type {
+  CourseDraft,
+  CourseEnvironment,
+  CourseSceneryItem,
+} from "@/domain/course";
 import {
   isProfileWingRevision,
   type LocalDesignRevision,
@@ -496,6 +500,118 @@ export function populateCourseArena(
   }
 }
 
+function createPalmTree() {
+  const group = new THREE.Group();
+  group.name = "palm-tree";
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.16, 0.28, 4.2, 10),
+    new THREE.MeshStandardMaterial({ color: 0x8b5a36, roughness: 0.95 }),
+  );
+  trunk.position.y = 2.1;
+  trunk.rotation.z = -0.06;
+  group.add(trunk);
+  const crown = new THREE.Group();
+  crown.position.set(-0.25, 4.15, 0);
+  for (let index = 0; index < 7; index += 1) {
+    const leaf = new THREE.Mesh(
+      new THREE.ConeGeometry(0.52, 2.8, 5),
+      new THREE.MeshStandardMaterial({
+        color: index % 2 === 0 ? 0x2e7d45 : 0x3e9656,
+        roughness: 0.9,
+      }),
+    );
+    leaf.rotation.z = Math.PI / 2.35;
+    leaf.rotation.y = (index / 7) * Math.PI * 2;
+    leaf.position.set(
+      Math.cos((index / 7) * Math.PI * 2) * 0.8,
+      -0.2,
+      Math.sin((index / 7) * Math.PI * 2) * 0.8,
+    );
+    crown.add(leaf);
+  }
+  group.add(crown);
+  return group;
+}
+
+function createLeafyTree() {
+  const group = new THREE.Group();
+  group.name = "leafy-tree";
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.2, 0.32, 3.2, 10),
+    new THREE.MeshStandardMaterial({ color: 0x725038, roughness: 0.95 }),
+  );
+  trunk.position.y = 1.6;
+  group.add(trunk);
+  const leafMaterial = new THREE.MeshStandardMaterial({
+    color: 0x357b3f,
+    roughness: 0.92,
+  });
+  for (const [x, y, z, radius] of [
+    [0, 3.65, 0, 1.35],
+    [-0.85, 3.4, 0.2, 0.9],
+    [0.75, 3.45, -0.2, 1],
+    [0.1, 4.45, 0.1, 0.9],
+  ] as const) {
+    const crown = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(radius, 1),
+      leafMaterial,
+    );
+    crown.position.set(x, y, z);
+    group.add(crown);
+  }
+  return group;
+}
+
+function createFlowerBox() {
+  const group = new THREE.Group();
+  group.name = "flower-box";
+  addBox(group, [1800, 450, 650], [0, 225, 0], 0xb56d3d, "planter-box");
+  addBox(group, [1650, 180, 540], [0, 500, 0], 0x365c2e, "planter-greenery");
+  const flowerColors = [0xff5547, 0xd7f200, 0xffffff, 0x8f5bd7];
+  for (let index = 0; index < 8; index += 1) {
+    const flower = new THREE.Mesh(
+      new THREE.SphereGeometry(0.11, 8, 6),
+      new THREE.MeshStandardMaterial({
+        color: flowerColors[index % flowerColors.length],
+        roughness: 0.72,
+      }),
+    );
+    flower.position.set(
+      -0.7 + index * 0.2,
+      0.68,
+      index % 2 === 0 ? -0.12 : 0.12,
+    );
+    group.add(flower);
+  }
+  return group;
+}
+
+function buildScenery(item: CourseSceneryItem) {
+  const object =
+    item.kind === "palm_tree"
+      ? createPalmTree()
+      : item.kind === "leafy_tree"
+        ? createLeafyTree()
+        : createFlowerBox();
+  object.name = `course-scenery-${item.sceneryId}`;
+  object.position.set(
+    item.xMm * MM_TO_WORLD - ARENA_WIDTH_WORLD / 2,
+    0,
+    item.yMm * MM_TO_WORLD - ARENA_DEPTH_WORLD / 2,
+  );
+  object.userData.sceneryId = item.sceneryId;
+  object.userData.kind = item.kind;
+  return object;
+}
+
+export function populateCourseEnvironment(
+  root: THREE.Group,
+  environment: CourseEnvironment,
+) {
+  clearGroup(root);
+  for (const item of environment.scenery) root.add(buildScenery(item));
+}
+
 function createArenaGrid() {
   const points: THREE.Vector3[] = [];
   for (let x = -ARENA_WIDTH_WORLD / 2; x <= ARENA_WIDTH_WORLD / 2; x += 5)
@@ -555,6 +671,12 @@ export default function CourseArenaThreeScene({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const courseRootRef = useRef<THREE.Group | null>(null);
+  const environmentRootRef = useRef<THREE.Group | null>(null);
+  const floorRef = useRef<THREE.Mesh<
+    THREE.PlaneGeometry,
+    THREE.MeshStandardMaterial
+  > | null>(null);
+  const courseRef = useRef(course);
   const controlsRef = useRef<OrbitControls | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -579,6 +701,10 @@ export default function CourseArenaThreeScene({
   useEffect(() => {
     activeRef.current = active;
   }, [active]);
+
+  useEffect(() => {
+    courseRef.current = course;
+  }, [course]);
 
   useEffect(() => {
     horsePovPlayingRef.current = horsePovPlaying;
@@ -725,8 +851,18 @@ export default function CourseArenaThreeScene({
     );
     floor.name = "prototype-arena-floor";
     floor.rotation.x = -Math.PI / 2;
+    floorRef.current = floor;
     scene.add(floor);
     scene.add(createArenaGrid());
+
+    const environmentRoot = new THREE.Group();
+    environmentRoot.name = "course-environment";
+    environmentRootRef.current = environmentRoot;
+    scene.add(environmentRoot);
+    populateCourseEnvironment(environmentRoot, courseRef.current.environment);
+    floor.material.color.set(
+      courseRef.current.environment.surface === "grass" ? 0x789b55 : 0xeee9dd,
+    );
 
     const courseRoot = new THREE.Group();
     courseRoot.name = "course-placements";
@@ -838,6 +974,8 @@ export default function CourseArenaThreeScene({
       renderer.forceContextLoss();
       renderer.domElement.remove();
       courseRootRef.current = null;
+      environmentRootRef.current = null;
+      floorRef.current = null;
       controlsRef.current = null;
       cameraRef.current = null;
       canvasRef.current = null;
@@ -860,6 +998,14 @@ export default function CourseArenaThreeScene({
     });
   }, [course, revisions, selectedInstanceId, warningInstanceIds]);
 
+  useEffect(() => {
+    const root = environmentRootRef.current;
+    if (root) populateCourseEnvironment(root, course.environment);
+    floorRef.current?.material.color.set(
+      course.environment.surface === "grass" ? 0x789b55 : 0xeee9dd,
+    );
+  }, [course.environment]);
+
   return (
     <div
       ref={containerRef}
@@ -867,6 +1013,8 @@ export default function CourseArenaThreeScene({
       data-testid="course-arena-3d"
       data-course-version={course.draftVersion}
       data-placement-count={course.instances.length}
+      data-surface={course.environment.surface}
+      data-scenery-count={course.environment.scenery.length}
     />
   );
 }

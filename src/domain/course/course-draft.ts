@@ -1,9 +1,13 @@
 import {
   COURSE_SCHEMA_VERSION,
   type CourseDraft,
+  type CourseEnvironment,
   type CourseFailure,
   type CourseInstance,
   type CourseResult,
+  type CourseSceneryItem,
+  type CourseSceneryKind,
+  type CourseSurface,
 } from "./types";
 
 export const PROTOTYPE_ARENA = {
@@ -15,6 +19,20 @@ export const PROTOTYPE_ARENA = {
 export const NORMAL_MOVE_MM = 500 as const;
 export const LARGE_MOVE_MM = 2000 as const;
 export const ROTATION_STEP_DEG = 15 as const;
+export const DEFAULT_COURSE_ENVIRONMENT: CourseEnvironment = {
+  surface: "sand",
+  scenery: [],
+};
+
+const DEFAULT_SCENERY_POSITIONS = [
+  { xMm: 5000, yMm: 5000 },
+  { xMm: 55000, yMm: 5000 },
+  { xMm: 55000, yMm: 35000 },
+  { xMm: 5000, yMm: 35000 },
+  { xMm: 30000, yMm: 5000 },
+  { xMm: 30000, yMm: 35000 },
+] as const;
+const MAX_SCENERY_ITEMS = 48;
 
 function failure(
   kind: CourseFailure["error"]["kind"],
@@ -50,7 +68,162 @@ export function createCourseDraft(now: string): CourseDraft {
     draftVersion: 1,
     arena: PROTOTYPE_ARENA,
     instances: [],
+    environment: DEFAULT_COURSE_ENVIRONMENT,
     updatedAt: now,
+  };
+}
+
+function updateEnvironment(
+  draft: CourseDraft,
+  now: string,
+  environment: CourseEnvironment,
+): CourseDraft {
+  return {
+    ...draft,
+    draftVersion: draft.draftVersion + 1,
+    environment,
+    updatedAt: now,
+  };
+}
+
+export function setCourseSurface(
+  draft: CourseDraft,
+  surface: CourseSurface,
+  now: string,
+): CourseResult<CourseDraft> {
+  if (surface !== "sand" && surface !== "grass") {
+    return failure("invalid_scenery", "The arena surface is not supported.");
+  }
+  if (draft.environment.surface === surface) return { ok: true, value: draft };
+  return {
+    ok: true,
+    value: updateEnvironment(draft, now, {
+      ...draft.environment,
+      surface,
+    }),
+  };
+}
+
+export function addCourseScenery(
+  draft: CourseDraft,
+  input: {
+    sceneryId: string;
+    kind: CourseSceneryKind;
+    now: string;
+    xMm?: number;
+    yMm?: number;
+  },
+): CourseResult<CourseDraft> {
+  if (
+    !isNonEmptyString(input.sceneryId) ||
+    !isCourseSceneryKind(input.kind) ||
+    draft.environment.scenery.some(
+      (item) => item.sceneryId === input.sceneryId,
+    ) ||
+    draft.environment.scenery.length >= MAX_SCENERY_ITEMS
+  ) {
+    return failure(
+      "invalid_scenery",
+      "Scenery requires a unique identifier and a supported visual type.",
+    );
+  }
+  const fallback =
+    DEFAULT_SCENERY_POSITIONS[
+      draft.environment.scenery.length % DEFAULT_SCENERY_POSITIONS.length
+    ]!;
+  const xMm = snapToMovementGrid(input.xMm ?? fallback.xMm);
+  const yMm = snapToMovementGrid(input.yMm ?? fallback.yMm);
+  if (
+    !isCoordinate(xMm) ||
+    !isCoordinate(yMm) ||
+    xMm < 0 ||
+    xMm > draft.arena.width ||
+    yMm < 0 ||
+    yMm > draft.arena.height
+  ) {
+    return failure(
+      "invalid_scenery",
+      "Scenery coordinates must stay inside the arena.",
+    );
+  }
+  const displayNumber =
+    draft.environment.scenery.reduce(
+      (highest, item) => Math.max(highest, item.displayNumber),
+      0,
+    ) + 1;
+  return {
+    ok: true,
+    value: updateEnvironment(draft, input.now, {
+      ...draft.environment,
+      scenery: [
+        ...draft.environment.scenery,
+        {
+          sceneryId: input.sceneryId,
+          kind: input.kind,
+          xMm,
+          yMm,
+          displayNumber,
+        },
+      ],
+    }),
+  };
+}
+
+export function moveCourseScenery(
+  draft: CourseDraft,
+  sceneryId: string,
+  delta: { xMm: number; yMm: number },
+  now: string,
+): CourseResult<CourseDraft> {
+  if (!isCoordinate(delta.xMm) || !isCoordinate(delta.yMm)) {
+    return failure(
+      "invalid_scenery",
+      "Scenery movement must use whole millimetres.",
+    );
+  }
+  let found = false;
+  const scenery = draft.environment.scenery.map((item) => {
+    if (item.sceneryId !== sceneryId) return item;
+    found = true;
+    return {
+      ...item,
+      xMm: Math.min(
+        draft.arena.width,
+        Math.max(0, snapToMovementGrid(item.xMm + delta.xMm)),
+      ),
+      yMm: Math.min(
+        draft.arena.height,
+        Math.max(0, snapToMovementGrid(item.yMm + delta.yMm)),
+      ),
+    };
+  });
+  if (!found)
+    return failure("scenery_not_found", "That scenery item no longer exists.");
+  return {
+    ok: true,
+    value: updateEnvironment(draft, now, {
+      ...draft.environment,
+      scenery,
+    }),
+  };
+}
+
+export function removeCourseScenery(
+  draft: CourseDraft,
+  sceneryId: string,
+  now: string,
+): CourseResult<CourseDraft> {
+  if (!draft.environment.scenery.some((item) => item.sceneryId === sceneryId)) {
+    return failure("scenery_not_found", "That scenery item no longer exists.");
+  }
+  return {
+    ok: true,
+    value: updateEnvironment(draft, now, {
+      ...draft.environment,
+      scenery: draft.environment.scenery.filter(
+        (item) => item.sceneryId !== sceneryId,
+      ),
+    }),
   };
 }
 
@@ -245,6 +418,66 @@ function parseInstance(value: unknown): CourseResult<CourseInstance> {
   };
 }
 
+function isCourseSceneryKind(value: unknown): value is CourseSceneryKind {
+  return (
+    value === "palm_tree" || value === "leafy_tree" || value === "flower_box"
+  );
+}
+
+function parseCourseEnvironment(
+  value: unknown,
+): CourseResult<CourseEnvironment> {
+  if (value === undefined)
+    return { ok: true, value: DEFAULT_COURSE_ENVIRONMENT };
+  if (
+    !isRecord(value) ||
+    (value.surface !== "sand" && value.surface !== "grass") ||
+    !Array.isArray(value.scenery) ||
+    value.scenery.length > MAX_SCENERY_ITEMS
+  ) {
+    return failure("invalid_scenery", "The course environment is malformed.");
+  }
+
+  const scenery: CourseSceneryItem[] = [];
+  const ids = new Set<string>();
+  const numbers = new Set<number>();
+  for (const candidate of value.scenery) {
+    if (
+      !isRecord(candidate) ||
+      !isNonEmptyString(candidate.sceneryId) ||
+      !isCourseSceneryKind(candidate.kind) ||
+      !isCoordinate(candidate.xMm) ||
+      !isCoordinate(candidate.yMm) ||
+      candidate.xMm < 0 ||
+      candidate.xMm > PROTOTYPE_ARENA.width ||
+      candidate.yMm < 0 ||
+      candidate.yMm > PROTOTYPE_ARENA.height ||
+      !Number.isInteger(candidate.displayNumber) ||
+      (candidate.displayNumber as number) < 1 ||
+      ids.has(candidate.sceneryId) ||
+      numbers.has(candidate.displayNumber as number)
+    ) {
+      return failure("invalid_scenery", "A scenery item is malformed.");
+    }
+    ids.add(candidate.sceneryId);
+    numbers.add(candidate.displayNumber as number);
+    scenery.push({
+      sceneryId: candidate.sceneryId,
+      kind: candidate.kind,
+      xMm: candidate.xMm,
+      yMm: candidate.yMm,
+      displayNumber: candidate.displayNumber as number,
+    });
+  }
+  return {
+    ok: true,
+    value: {
+      surface: value.surface,
+      scenery,
+    },
+  };
+}
+
 export function parseCourseDraft(
   serialized: string,
 ): CourseResult<CourseDraft> {
@@ -297,6 +530,8 @@ export function parseCourseDraft(
     numbers.add(parsed.value.displayNumber);
     instances.push(parsed.value);
   }
+  const environment = parseCourseEnvironment(value.environment);
+  if (!environment.ok) return environment;
 
   return {
     ok: true,
@@ -306,6 +541,7 @@ export function parseCourseDraft(
       draftVersion: value.draftVersion as number,
       arena: PROTOTYPE_ARENA,
       instances,
+      environment: environment.value,
       updatedAt: value.updatedAt,
     },
   };
