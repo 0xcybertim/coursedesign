@@ -24,6 +24,7 @@
     "acceptance:phase1h": "node --no-warnings --experimental-strip-types scripts/verify-phase-1h-browser.mjs",
     "acceptance:phase1h:c1": "node --no-warnings --experimental-strip-types tools/phase-1h/run-profile-wing-c1.ts",
     "acceptance:profile-wing-creation": "node scripts/verify-profile-wing-creation-browser.mjs",
+    "acceptance:persistence:production": "node scripts/verify-production-persistence-browser.mjs",
     "acceptance:workspace": "node scripts/verify-unified-workspace-browser.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

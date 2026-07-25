@@ -8281,6 +8281,25 @@ a:visited {
 }
 
 @media (max-width: 640px) {
+  .server-workspace-selector {
+    padding-inline: 16px;
+  }
+
+  .server-workspace-selector > section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .server-workspace-selector h1 {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .server-workspace-selector button {
+    width: 100%;
+    min-height: 44px;
+    justify-self: stretch;
+  }
+
   .workspace-hero,
   .workspace-title-block {
     padding: 40px 16px;
