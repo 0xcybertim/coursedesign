@@ -15,6 +15,8 @@ export {
   findLocalRevision,
   LOCAL_WORKSPACE_SCHEMA_VERSION,
   LOCAL_WORKSPACE_STORAGE_KEY,
+  parseObstacleDesignRevision,
+  parseObstacleDraft,
   parseLocalDesignWorkspace,
   referencedLocalDesignWorkspaceArtworkHashes,
   saveLocalRevision,
@@ -30,6 +32,7 @@ export {
   LOCAL_DESIGN_LIBRARY_STORAGE_KEY,
   migrateLocalDesignLibrary,
   parseLocalDesignLibrary,
+  parseProfileWingDesignRevision,
   saveProfileWingRevision,
   serializeLocalDesignLibrary,
 } from "./local-library";

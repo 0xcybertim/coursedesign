@@ -93,8 +93,8 @@ export function ProfileWingStudioClient({
       revision.designId === `local-profile-wing-${prototype.source.fixtureId}`,
   );
 
-  function saveGeneratedRevision() {
-    const saved = designLibrary.saveGeneratedProfile(prototype);
+  async function saveGeneratedRevision() {
+    const saved = await designLibrary.saveGeneratedProfile(prototype);
     setSaveMessage(
       saved.ok
         ? "Immutable generated-prototype revision saved. Existing course placements were not changed."
@@ -204,7 +204,7 @@ export function ProfileWingStudioClient({
           </p>
           <button
             type="button"
-            onClick={saveGeneratedRevision}
+            onClick={() => void saveGeneratedRevision()}
             disabled={!designLibrary.hydrated || !designLibrary.library}
           >
             Save immutable generated revision

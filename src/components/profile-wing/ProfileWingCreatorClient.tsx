@@ -25,6 +25,7 @@ import {
 } from "@/domain/silhouette";
 import { useLocalConceptWorkspace } from "@/components/concepts/useLocalConceptWorkspace";
 import { useLocalDesignLibrary } from "@/components/design/useLocalDesignLibrary";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
 import {
   getArtworkBlob,
   storeContentAddressedBlob,
@@ -41,9 +42,7 @@ import { useLocalProfileWingCreation } from "./useLocalProfileWingCreation";
 type ProviderAvailability = {
   readonly enabled: boolean;
   readonly provider: "remove-bg" | "deterministic-test" | null;
-  readonly generatedConceptProvider:
-    | "deterministic-test"
-    | null;
+  readonly generatedConceptProvider: "deterministic-test" | null;
   readonly reason: string;
   readonly automaticRetries: 0;
   readonly externalCallOccursOnlyOnPost: true;
@@ -143,6 +142,7 @@ export function ProfileWingCreatorClient({
   const concepts = useLocalConceptWorkspace();
   const creation = useLocalProfileWingCreation();
   const designLibrary = useLocalDesignLibrary();
+  const persistenceMode = usePersistenceMode();
   const [availability, setAvailability] = useState<ProviderAvailability | null>(
     null,
   );
@@ -594,8 +594,7 @@ export function ProfileWingCreatorClient({
       !generatedConceptUsesLocalProvider ||
       reviewReady ||
       processing ||
-      generatedAutoProcessAttemptedRef.current ===
-        prepared.metadata.contentHash
+      generatedAutoProcessAttemptedRef.current === prepared.metadata.contentHash
     )
       return;
     generatedAutoProcessAttemptedRef.current = prepared.metadata.contentHash;
@@ -720,18 +719,20 @@ export function ProfileWingCreatorClient({
     );
   }
 
-  function savePrototype() {
+  async function savePrototype() {
     if (!prototype) return;
-    const saved = designLibrary.saveGeneratedProfile(prototype);
+    const saved = await designLibrary.saveGeneratedProfile(prototype);
     if (!saved.ok) {
       setError(saved.error.message);
       return;
     }
     setSavedRevision(saved.revision);
     setStatus(
-      embedded
-        ? "Immutable custom-jump revision saved. Existing course placements were not changed."
-        : "Immutable generated-prototype revision saved. Existing course placements were not changed.",
+      persistenceMode === "server"
+        ? "Final immutable revision and canonical render saved to the server workspace. Processing evidence remains local."
+        : embedded
+          ? "Immutable custom-jump revision saved. Existing course placements were not changed."
+          : "Immutable generated-prototype revision saved. Existing course placements were not changed.",
     );
   }
 
@@ -772,8 +773,10 @@ export function ProfileWingCreatorClient({
             <p>
               Start with an image or an accepted description, validate the
               silhouette, then choose the jump color before saving the complete
-              jump. Nothing leaves this browser until you explicitly request
-              background removal.
+              jump.{" "}
+              {persistenceMode === "server"
+                ? "Raw sources and processing history remain local. An explicit final save sends only the canonical render and immutable snapshot to this public server workspace."
+                : "Nothing leaves this browser until you explicitly request background removal."}
             </p>
           </div>
           <aside>
@@ -800,9 +803,7 @@ export function ProfileWingCreatorClient({
           { label: "Source", complete: prepared !== null },
           {
             label: generatedConceptSource ? "Extract" : "Permission",
-            complete: generatedConceptSource
-              ? reviewReady
-              : uploadConsentReady,
+            complete: generatedConceptSource ? reviewReady : uploadConsentReady,
           },
           {
             label: "Inspect",
@@ -987,8 +988,8 @@ export function ProfileWingCreatorClient({
               <div>
                 <p>
                   Concept art is not product geometry yet. We isolate and
-                  validate one wing silhouette before building the matching
-                  2.5D and 3D preview.
+                  validate one wing silhouette before building the matching 2.5D
+                  and 3D preview.
                 </p>
                 <p>
                   {generatedConceptUsesLocalProvider
@@ -1056,8 +1057,7 @@ export function ProfileWingCreatorClient({
               </>
             )}
             <div className="profile-creator-provider-actions">
-              {!generatedConceptSource ||
-              !generatedConceptUsesLocalProvider ? (
+              {!generatedConceptSource || !generatedConceptUsesLocalProvider ? (
                 <button
                   type="button"
                   onClick={() => void processSource()}
@@ -1313,7 +1313,7 @@ export function ProfileWingCreatorClient({
                 <span className="eyebrow">05 / Save complete jump</span>
                 <button
                   type="button"
-                  onClick={savePrototype}
+                  onClick={() => void savePrototype()}
                   disabled={
                     !designLibrary.hydrated ||
                     !designLibrary.library ||
@@ -1344,6 +1344,12 @@ export function ProfileWingCreatorClient({
                 ) : (
                   <span>Save a revision to add it to a course.</span>
                 )}
+                {persistenceMode === "server" ? (
+                  <span>
+                    Final revision and canonical render: server workspace.
+                    Processing evidence: this browser only.
+                  </span>
+                ) : null}
                 <button
                   type="button"
                   className="secondary"

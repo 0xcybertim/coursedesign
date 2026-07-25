@@ -11,6 +11,8 @@ import { Breadcrumbs } from "@/components/shell/Breadcrumbs";
 import { PrototypeBoundary } from "@/components/shared/PrototypeBoundary";
 import { ProfileWingTwoD } from "@/components/profile-wing/ProfileWingTwoD";
 import { useLocalWorkspaceSummary } from "@/components/workspace/useLocalWorkspaceSummary";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
+import { useServerWorkspaceCore } from "@/components/persistence/useServerWorkspaceCore";
 
 function validDesignId(value: string) {
   return /^[a-z0-9][a-z0-9-]{2,127}$/.test(value);
@@ -25,16 +27,23 @@ export function DesignDetailClient({
 }: {
   readonly designId: string;
 }) {
-  const { hydrated, sources } = useLocalWorkspaceSummary();
+  const mode = usePersistenceMode();
+  const local = useLocalWorkspaceSummary(mode === "browser");
+  const server = useServerWorkspaceCore(mode === "server");
+  const { sources } = local;
+  const hydrated = mode === "server" ? server.hydrated : local.hydrated;
   const library = sources?.designLibrary.value ?? null;
   const revisions = useMemo(
     () =>
-      library
-        ? localDesignLibraryRevisions(library)
-            .filter((revision) => revision.designId === designId)
-            .sort((left, right) => right.ordinal - left.ordinal)
-        : [],
-    [designId, library],
+      (mode === "server"
+        ? server.revisions
+        : library
+          ? localDesignLibraryRevisions(library)
+          : []
+      )
+        .filter((revision) => revision.designId === designId)
+        .sort((left, right) => right.ordinal - left.ordinal),
+    [designId, library, mode, server.revisions],
   );
   const [selectedRevisionId, setSelectedRevisionId] = useState<string | null>(
     null,
@@ -45,13 +54,21 @@ export function DesignDetailClient({
     revisions[0] ??
     null;
   const isSpj = designId === "local-spj-04";
-  const draft = isSpj && library ? library.spj04Workspace.draft : null;
+  const draft =
+    isSpj && mode === "server"
+      ? (server.design?.draft ?? null)
+      : isSpj && library
+        ? library.spj04Workspace.draft
+        : null;
 
   if (!validDesignId(designId))
     return (
       <main className="workspace-page missing-design-page">
-        <h1>Design not found in this browser.</h1>
-        <p>The route does not contain a valid local design identifier.</p>
+        <h1>
+          Design not found in this{" "}
+          {mode === "server" ? "server workspace" : "browser"}.
+        </h1>
+        <p>The route does not contain a valid design identifier.</p>
         <Link href="/designs">Return to Designs</Link>
       </main>
     );
@@ -67,13 +84,15 @@ export function DesignDetailClient({
     );
 
   if (
-    sources?.designLibrary.status === "invalid" ||
-    sources?.designLibrary.status === "unavailable"
+    (mode === "server" && server.error) ||
+    (mode === "browser" &&
+      (sources?.designLibrary.status === "invalid" ||
+        sources?.designLibrary.status === "unavailable"))
   )
     return (
       <main className="workspace-page missing-design-page">
         <h1>Saved designs are unavailable.</h1>
-        <p>{sources.designLibrary.error}</p>
+        <p>{mode === "server" ? server.error : sources?.designLibrary.error}</p>
         <p>No stored value was overwritten.</p>
         <Link href="/designs">Return to Designs</Link>
       </main>
@@ -85,7 +104,9 @@ export function DesignDetailClient({
         <h1>
           {isSpj && draft
             ? "SPJ-04 has no saved revisions yet."
-            : "Design not found in this browser."}
+            : `Design not found in this ${
+                mode === "server" ? "server workspace" : "browser"
+              }.`}
         </h1>
         <p>
           {isSpj && draft
@@ -118,7 +139,9 @@ export function DesignDetailClient({
           </p>
           <h1>{displayName}</h1>
           <p>
-            {revisionLabel(selected)} · saved locally · exact immutable revision
+            {revisionLabel(selected)} · saved{" "}
+            {mode === "server" ? "to server workspace" : "locally"} · exact
+            immutable revision
           </p>
           <div className="design-detail-actions">
             {profile ? (

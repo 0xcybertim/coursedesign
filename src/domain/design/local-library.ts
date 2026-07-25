@@ -311,7 +311,7 @@ export function saveProfileWingRevision(
   };
 }
 
-function parseProfileRevision(
+export function parseProfileWingDesignRevision(
   value: unknown,
 ): LocalDesignLibraryResult<ProfileWingDesignRevision> {
   if (!isRecord(value) || !isRecord(value.snapshot))
@@ -400,7 +400,7 @@ export function parseLocalDesignLibrary(
   );
   const ordinalByDesign = new Map<string, number>();
   for (const rawRevision of value.profileWingRevisions) {
-    const parsed = parseProfileRevision(rawRevision);
+    const parsed = parseProfileWingDesignRevision(rawRevision);
     if (!parsed.ok) return parsed;
     if (ids.has(parsed.value.revisionId))
       return failure(

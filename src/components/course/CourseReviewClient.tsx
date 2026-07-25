@@ -113,9 +113,9 @@ export function CourseReviewClient() {
     queueMicrotask(() => previewTriggerRef.current?.focus());
   }
 
-  function confirmUpdate() {
+  async function confirmUpdate() {
     if (!updatePreview) return;
-    const result = confirmUpdatePreview(updatePreview);
+    const result = await confirmUpdatePreview(updatePreview);
     if (!result.ok) {
       setUpdateFailure(`${result.error.kind}: ${result.error.message}`);
       return;
@@ -844,7 +844,7 @@ export function CourseReviewClient() {
             <button
               className="is-confirm"
               type="button"
-              onClick={confirmUpdate}
+              onClick={() => void confirmUpdate()}
             >
               {updatePreview.operation.kind === "update_one"
                 ? "Confirm placement update"

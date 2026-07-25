@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { RenderManifest } from "@/domain/product/types";
 import { getArtworkBlob } from "@/lib/browser/artifact-store";
+import { getServerRenderableArtwork } from "@/lib/browser/persistence-api";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
 
 export type ArtworkUrlMap = Readonly<Record<string, string>>;
 
@@ -18,6 +20,7 @@ export function releaseArtworkObjectUrl(url: string) {
 }
 
 export function useArtworkAssets(manifest: RenderManifest) {
+  const persistenceMode = usePersistenceMode();
   const builtInUrls = useMemo(() => {
     const urls: Record<string, string> = {};
     for (const slot of Object.values(manifest.artworkSlots)) {
@@ -60,18 +63,35 @@ export function useArtworkAssets(manifest: RenderManifest) {
     void (async () => {
       const next: Record<string, string> = {};
       for (const hash of customHashes) {
-        const result = await getArtworkBlob(hash);
-        if (!result.ok) {
-          if (!cancelled) {
-            setResolvedUrls({});
-            setStatus("missing");
-            setError(`${result.error.kind}: ${result.error.message}`);
+        let url: string;
+        if (persistenceMode === "server") {
+          const result = await getServerRenderableArtwork(hash);
+          if (!result.ok) {
+            if (!cancelled) {
+              setResolvedUrls({});
+              setStatus("missing");
+              setError(`${result.error.kind}: ${result.error.message}`);
+            }
+            for (const objectUrl of objectUrls)
+              releaseArtworkObjectUrl(objectUrl);
+            return;
           }
-          for (const url of objectUrls) releaseArtworkObjectUrl(url);
-          return;
+          url = result.value.url;
+        } else {
+          const result = await getArtworkBlob(hash);
+          if (!result.ok) {
+            if (!cancelled) {
+              setResolvedUrls({});
+              setStatus("missing");
+              setError(`${result.error.kind}: ${result.error.message}`);
+            }
+            for (const objectUrl of objectUrls)
+              releaseArtworkObjectUrl(objectUrl);
+            return;
+          }
+          url = URL.createObjectURL(result.value);
+          objectUrls.push(url);
         }
-        const url = URL.createObjectURL(result.value);
-        objectUrls.push(url);
         next[hash] = url;
       }
       if (!cancelled) {
@@ -85,7 +105,7 @@ export function useArtworkAssets(manifest: RenderManifest) {
       cancelled = true;
       for (const url of objectUrls) releaseArtworkObjectUrl(url);
     };
-  }, [manifest.artworkSlots]);
+  }, [manifest.artworkSlots, persistenceMode]);
 
   const urls = useMemo(
     () => ({ ...builtInUrls, ...resolvedUrls }) as ArtworkUrlMap,

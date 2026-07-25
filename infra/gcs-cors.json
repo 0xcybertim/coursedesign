@@ -1,0 +1,23 @@
+[
+  {
+    "origin": [
+      "https://coursedesign.onrender.com",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:3100",
+      "http://localhost:3000"
+    ],
+    "method": ["GET", "HEAD", "PUT"],
+    "responseHeader": [
+      "Content-Type",
+      "ETag",
+      "x-goog-generation",
+      "x-goog-hash",
+      "x-goog-meta-byte-length",
+      "x-goog-meta-canonical-purpose",
+      "x-goog-meta-pixel-height",
+      "x-goog-meta-pixel-width",
+      "x-goog-meta-sha256"
+    ],
+    "maxAgeSeconds": 300
+  }
+]

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   COURSE_STORAGE_KEY,
   addCourseScenery,
@@ -28,6 +28,13 @@ import {
   serializeLocalDesignLibrary,
   type LocalDesignRevision,
 } from "@/domain/design";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
+import type {
+  CourseRecord,
+  DesignRevisionPage,
+  PersistenceFailure,
+} from "@/persistence";
+import { persistenceApi } from "@/lib/browser/persistence-api";
 import { useRevisionArtworkAvailability } from "./useRevisionArtworkAvailability";
 
 type SaveState =
@@ -79,12 +86,20 @@ function statusLabel(state: SaveState) {
 }
 
 export function useLocalCourseWorkspace(requestedRevisionId?: string) {
+  const persistenceMode = usePersistenceMode();
   const [course, setCourse] = useState<CourseDraft>(INITIAL_COURSE);
   const [revisions, setRevisions] = useState<readonly LocalDesignRevision[]>(
     [],
   );
   const [hydrated, setHydrated] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("checking");
+  const [status, setStatus] = useState(statusLabel("checking"));
+  const [conflict, setConflict] = useState<{
+    readonly attempted: CourseDraft;
+    readonly latest: CourseRecord;
+  } | null>(null);
+  const lockVersionRef = useRef(1);
+  const saveQueue = useRef(Promise.resolve());
   const [selectedRevisionId, setSelectedRevisionId] = useState<string | null>(
     null,
   );
@@ -101,6 +116,62 @@ export function useLocalCourseWorkspace(requestedRevisionId?: string) {
 
   useEffect(() => {
     let cancelled = false;
+    if (persistenceMode === "server") {
+      void Promise.all([
+        persistenceApi<CourseRecord>("/api/courses/local-course-1"),
+        persistenceApi<DesignRevisionPage>(
+          "/api/designs/local-spj-04/revisions?limit=100",
+        ),
+      ]).then(([courseResult, revisionResult]) => {
+        if (cancelled) return;
+        if (!courseResult.ok) {
+          setStatus(courseResult.error.message);
+          setSaveState("unavailable");
+          setHydrated(true);
+          return;
+        }
+        if (!revisionResult.ok) {
+          setStatus(revisionResult.error.message);
+          setSaveState("unavailable");
+          setHydrated(true);
+          return;
+        }
+        const nextCourse = courseResult.value.draft;
+        const nextRevisions = revisionResult.value.revisions;
+        lockVersionRef.current = courseResult.value.lockVersion;
+        setCourse(nextCourse);
+        setRevisions(nextRevisions);
+        const requestedRevision = requestedRevisionId
+          ? nextRevisions.find(
+              (revision) => revision.revisionId === requestedRevisionId,
+            )
+          : null;
+        if (requestedRevision) {
+          setSelectedRevisionId(requestedRevision.revisionId);
+          setRequestedRevisionStatus("ready");
+          setAnnouncement(
+            `Revision ${String(requestedRevision.ordinal).padStart(
+              2,
+              "0",
+            )} is ready to place.`,
+          );
+        } else {
+          setSelectedRevisionId(nextRevisions[0]?.revisionId ?? null);
+          if (requestedRevisionId) {
+            setRequestedRevisionStatus("invalid");
+            setAnnouncement(
+              "The requested saved revision is unavailable. No placement was created.",
+            );
+          }
+        }
+        setSaveState("restored");
+        setStatus("Course restored from server workspace");
+        setHydrated(true);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
     queueMicrotask(() => {
       if (cancelled) return;
       let nextCourse: CourseDraft;
@@ -180,14 +251,14 @@ export function useLocalCourseWorkspace(requestedRevisionId?: string) {
         }
       }
       setSaveState(nextState);
+      setStatus(statusLabel(nextState));
       setHydrated(true);
     });
     return () => {
       cancelled = true;
     };
-  }, [requestedRevisionId]);
+  }, [persistenceMode, requestedRevisionId]);
 
-  const status = statusLabel(saveState);
   const unavailableArtworkRevisionIds =
     useRevisionArtworkAvailability(revisions);
   const selectedInstance = useMemo(
@@ -207,15 +278,76 @@ export function useLocalCourseWorkspace(requestedRevisionId?: string) {
 
   function commit(nextCourse: CourseDraft) {
     setCourse(nextCourse);
+    if (persistenceMode === "server") {
+      setStatus("Saving course to server workspace…");
+      saveQueue.current = saveQueue.current.then(async () => {
+        const expectedLockVersion = lockVersionRef.current;
+        const saved = await persistenceApi<CourseRecord>(
+          "/api/courses/local-course-1",
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              expectedLockVersion,
+              draft: nextCourse,
+            }),
+          },
+        );
+        if (saved.ok) {
+          lockVersionRef.current = saved.value.lockVersion;
+          setCourse((current) =>
+            current.updatedAt === nextCourse.updatedAt
+              ? saved.value.draft
+              : current,
+          );
+          setConflict(null);
+          setSaveState("saved");
+          setStatus("Course saved to server workspace");
+          return;
+        }
+        if (saved.error.kind === "stale_version") {
+          const stale = saved as PersistenceFailure<CourseRecord>;
+          if (stale.error.kind === "stale_version") {
+            lockVersionRef.current = stale.error.actualLockVersion;
+            setConflict({ attempted: nextCourse, latest: stale.error.latest });
+            setSaveState("unavailable");
+            setStatus(
+              "Conflict: this course changed elsewhere. Your attempted edit is preserved.",
+            );
+            return;
+          }
+        }
+        setSaveState("unavailable");
+        setStatus(saved.error.message);
+      });
+      return;
+    }
     try {
       window.localStorage.setItem(
         COURSE_STORAGE_KEY,
         serializeCourseDraft(nextCourse),
       );
       setSaveState("saved");
+      setStatus(statusLabel("saved"));
     } catch {
       setSaveState("unavailable");
+      setStatus(statusLabel("unavailable"));
     }
+  }
+
+  function reloadLatest() {
+    if (!conflict) return;
+    lockVersionRef.current = conflict.latest.lockVersion;
+    setCourse(conflict.latest.draft);
+    setConflict(null);
+    setSaveState("restored");
+    setStatus("Latest server course loaded. Your prior attempt was not saved.");
+  }
+
+  function retryAttempted() {
+    if (!conflict) return;
+    const attempted = conflict.attempted;
+    setConflict(null);
+    commit(attempted);
   }
 
   function announceInstance(
@@ -408,6 +540,7 @@ export function useLocalCourseWorkspace(requestedRevisionId?: string) {
     selectedScenery,
     announcement,
     requestedRevisionStatus,
+    conflict,
     setAnnouncement,
     placeSelectedRevision,
     selectInstance,
@@ -420,5 +553,7 @@ export function useLocalCourseWorkspace(requestedRevisionId?: string) {
     selectScenery,
     moveSelectedScenery,
     removeSelectedScenery,
+    reloadLatest,
+    retryAttempted,
   };
 }

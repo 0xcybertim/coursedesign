@@ -21,10 +21,11 @@ import type { ArtworkConfiguration } from "@/domain/artwork";
 import { ConceptStudioClient } from "@/components/concepts/ConceptStudioClient";
 import { ProfileWingCreatorClient } from "@/components/profile-wing/ProfileWingCreatorClient";
 import { ProfileWingThreeStage } from "@/components/profile-wing/ProfileWingThreeStage";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
 import { ArtworkEditor } from "./ArtworkEditor";
 import { ThreeStage } from "./ThreeStage";
 import type { ArtworkUrlMap } from "./useArtworkAssets";
-import { useLocalDesignWorkspace } from "./useLocalDesignWorkspace";
+import { useDesignWorkspace } from "./useDesignWorkspace";
 
 const FRAME_LABELS: Record<FrameColor, string> = {
   white: "White",
@@ -91,7 +92,8 @@ export function StudioClient({
   initialWingStyle?: WingStyle;
   initialAcceptedConceptHash?: string;
 }) {
-  const localWorkspace = useLocalDesignWorkspace(requestedRevisionId);
+  const localWorkspace = useDesignWorkspace(requestedRevisionId);
+  const persistenceMode = usePersistenceMode();
   const reducedMotion = useReducedMotion();
   const [artworkEditorOpen, setArtworkEditorOpen] = useState(false);
   const [artworkPreview, setArtworkPreview] = useState<{
@@ -465,7 +467,11 @@ export function StudioClient({
                     : "Custom artwork · independent wings"
                   : "Club Classic · both wing panels"}
               </strong>
-              <small>Fixed panel slots · browser-local prototype assets</small>
+              <small>
+                {persistenceMode === "server"
+                  ? "Fixed panel slots · canonical render derivatives cross devices"
+                  : "Fixed panel slots · browser-local prototype assets"}
+              </small>
               <button
                 ref={artworkTriggerRef}
                 type="button"
@@ -619,7 +625,12 @@ export function StudioClient({
           >
             <div className="revision-heading">
               <div>
-                <p className="eyebrow">02 / Local design record</p>
+                <p className="eyebrow">
+                  02 /{" "}
+                  {persistenceMode === "server"
+                    ? "Server design record"
+                    : "Local design record"}
+                </p>
                 <h2 id="revision-workspace-title">
                   Draft here. History pinned.
                 </h2>
@@ -633,10 +644,33 @@ export function StudioClient({
                   {localWorkspace.status}
                 </p>
                 <small>
-                  Browser-local on this device · no account or cloud copy
+                  {persistenceMode === "server"
+                    ? "Saved to this unverified public server workspace"
+                    : "Browser-local on this device · no account or cloud copy"}
                 </small>
               </div>
             </div>
+
+            {localWorkspace.conflict ? (
+              <div className="revision-view-banner" role="alert">
+                <div>
+                  <span className="eyebrow">Server save conflict</span>
+                  <strong>Your attempted edit was not overwritten.</strong>
+                  <p>
+                    This design changed in another context. Load the latest
+                    version or retry your preserved edit against it.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" onClick={localWorkspace.reloadLatest}>
+                    Load latest server version
+                  </button>
+                  <button type="button" onClick={localWorkspace.retryAttempted}>
+                    Retry my preserved edit
+                  </button>
+                </div>
+              </div>
+            ) : null}
 
             {localWorkspace.viewingRevision ? (
               <div className="revision-view-banner" role="status">
@@ -703,8 +737,9 @@ export function StudioClient({
                   </div>
                 </dl>
                 <p>
-                  Changes replace this one working copy and restore
-                  automatically in this browser.
+                  {persistenceMode === "server"
+                    ? "Changes replace this one server working copy with conflict protection."
+                    : "Changes replace this one working copy and restore automatically in this browser."}
                 </p>
               </article>
 
@@ -727,8 +762,9 @@ export function StudioClient({
                   <div className="empty-revisions">
                     <strong>No saved revisions yet</strong>
                     <p>
-                      Configure the obstacle, then save an immutable
-                      browser-local checkpoint.
+                      {persistenceMode === "server"
+                        ? "Configure the obstacle, then append an immutable server revision."
+                        : "Configure the obstacle, then save an immutable browser-local checkpoint."}
                     </p>
                   </div>
                 ) : (
@@ -913,10 +949,9 @@ export function StudioClient({
       <footer className="prototype-footer">
         <strong>Non-sellable prototype</strong>
         <p>
-          Drafts, artwork, revisions, and course placements exist only in this
-          browser. No account, server persistence, cross-device sync, sharing,
-          ordering, checkout, delivery promise, supplier approval, production
-          claim, or safety claim is provided.
+          {persistenceMode === "server"
+            ? "Core drafts, canonical render artwork, immutable revisions, and course placements are saved to this unverified public server workspace. Raw uploads, masks, generated concepts, and processing histories stay in this browser. No account security, private sharing, ordering, checkout, delivery promise, supplier approval, production claim, or safety claim is provided."
+            : "Drafts, artwork, revisions, and course placements exist only in this browser. No account, server persistence, cross-device sync, sharing, ordering, checkout, delivery promise, supplier approval, production claim, or safety claim is provided."}
         </p>
       </footer>
 

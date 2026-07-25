@@ -24,6 +24,8 @@ const DUTCH_TEXT: Readonly<Record<string, string>> = {
   "Customize a jump": "Pas een sprong aan",
   "Local prototype · saved in this browser":
     "Lokaal prototype · opgeslagen in deze browser",
+  "Server workspace · shared through this public selector":
+    "Serverwerkruimte · gedeeld via deze openbare selector",
   "Temporary session · browser storage unavailable":
     "Tijdelijke sessie · browseropslag niet beschikbaar",
   "Browser-local work stays on this device and is not backed up.":

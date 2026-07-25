@@ -25,6 +25,7 @@ import {
 } from "@/domain/design";
 import type { HorsePovProgress } from "./CourseArenaThreeScene";
 import { useLocalCourseWorkspace } from "./useLocalCourseWorkspace";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
 
 const CourseArenaThreeScene = dynamic(() => import("./CourseArenaThreeScene"), {
   ssr: false,
@@ -86,6 +87,7 @@ export function CourseStudioClient({
   readonly requestedRevisionId?: string;
 }) {
   const workspace = useLocalCourseWorkspace(requestedRevisionId);
+  const persistenceMode = usePersistenceMode();
   const arenaRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
     pointerId: number;
@@ -345,10 +347,30 @@ export function CourseStudioClient({
           />
           <div>
             <strong data-testid="course-save-status">{workspace.status}</strong>
-            <small>Browser-local · clearing storage removes this course</small>
+            <small>
+              {persistenceMode === "server"
+                ? "Saved to this unverified public server workspace"
+                : "Browser-local · clearing storage removes this course"}
+            </small>
           </div>
         </div>
       </header>
+
+      {workspace.conflict ? (
+        <section className="requested-revision-notice is-error" role="alert">
+          <strong>Your attempted course edit was not overwritten.</strong>
+          <p>
+            This course changed in another context. Load the latest course or
+            retry the preserved edit against it.
+          </p>
+          <button type="button" onClick={workspace.reloadLatest}>
+            Load latest server course
+          </button>
+          <button type="button" onClick={workspace.retryAttempted}>
+            Retry my preserved course edit
+          </button>
+        </section>
+      ) : null}
 
       <div className="course-workspace">
         <aside
@@ -367,8 +389,9 @@ export function CourseStudioClient({
             </p>
           ) : workspace.requestedRevisionStatus === "invalid" ? (
             <p className="requested-revision-notice is-error" role="alert">
-              The requested revision is not in this browser. The normal
-              selection remains available and nothing was placed.
+              The requested revision is not in this{" "}
+              {persistenceMode === "server" ? "server workspace" : "browser"}.
+              The normal selection remains available and nothing was placed.
             </p>
           ) : null}
           {!workspace.hydrated ? (

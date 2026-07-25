@@ -187,6 +187,17 @@ export function referencedArtworkHashes(
   ].sort();
 }
 
+export function referencedRenderableArtworkHashes(
+  configuration: ArtworkConfiguration,
+): readonly string[] {
+  return [
+    ...new Set([
+      configuration.left.renderContentHash,
+      configuration.right.renderContentHash,
+    ]),
+  ].sort();
+}
+
 export function backgroundColor(background: ArtworkBackground): string | null {
   return background.mode === "transparent" ? null : background.color;
 }

@@ -277,7 +277,7 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function parseRevision(
+export function parseObstacleDesignRevision(
   value: unknown,
   expectedOrdinal: number,
 ): LocalWorkspaceResult<ObstacleDesignRevision> {
@@ -325,6 +325,40 @@ function parseRevision(
   };
 }
 
+export function parseObstacleDraft(
+  value: unknown,
+): LocalWorkspaceResult<ObstacleDraft> {
+  if (!isRecord(value)) {
+    return failure("invalid_draft", "The stored draft is malformed.");
+  }
+  if (
+    value.schemaVersion !== LOCAL_WORKSPACE_SCHEMA_VERSION ||
+    value.designId !== "local-spj-04" ||
+    !isNonEmptyString(value.draftId) ||
+    !Number.isInteger(value.draftVersion) ||
+    (value.draftVersion as number) < 1 ||
+    !isNonEmptyString(value.updatedAt) ||
+    (value.basedOnRevisionId !== null &&
+      !isNonEmptyString(value.basedOnRevisionId))
+  ) {
+    return failure("invalid_draft", "The stored draft is malformed.");
+  }
+  const draftDerived = deriveStoredIntent(value.intent);
+  if (!draftDerived.ok) return draftDerived;
+  return {
+    ok: true,
+    value: {
+      schemaVersion: LOCAL_WORKSPACE_SCHEMA_VERSION,
+      draftId: value.draftId,
+      designId: "local-spj-04",
+      draftVersion: value.draftVersion as number,
+      basedOnRevisionId: value.basedOnRevisionId as string | null,
+      intent: snapshotIntent(draftDerived.value),
+      updatedAt: value.updatedAt,
+    },
+  };
+}
+
 export function parseLocalDesignWorkspace(
   serialized: string,
 ): LocalWorkspaceResult<LocalDesignWorkspace> {
@@ -355,27 +389,16 @@ export function parseLocalDesignWorkspace(
     return failure("invalid_workspace", "The local workspace is malformed.");
   }
 
-  const draft = value.draft;
-  if (
-    draft.schemaVersion !== LOCAL_WORKSPACE_SCHEMA_VERSION ||
-    draft.designId !== "local-spj-04" ||
-    !isNonEmptyString(draft.draftId) ||
-    !Number.isInteger(draft.draftVersion) ||
-    (draft.draftVersion as number) < 1 ||
-    !isNonEmptyString(draft.updatedAt) ||
-    (draft.basedOnRevisionId !== null &&
-      !isNonEmptyString(draft.basedOnRevisionId))
-  ) {
-    return failure("invalid_draft", "The locally stored draft is malformed.");
-  }
-
-  const draftDerived = deriveStoredIntent(draft.intent);
-  if (!draftDerived.ok) return draftDerived;
+  const draft = parseObstacleDraft(value.draft);
+  if (!draft.ok) return draft;
 
   const revisions: ObstacleDesignRevision[] = [];
   const ids = new Set<string>();
   for (let index = 0; index < value.revisions.length; index += 1) {
-    const parsed = parseRevision(value.revisions[index], index + 1);
+    const parsed = parseObstacleDesignRevision(
+      value.revisions[index],
+      index + 1,
+    );
     if (!parsed.ok) return parsed;
     if (ids.has(parsed.value.revisionId)) {
       return failure(
@@ -388,8 +411,8 @@ export function parseLocalDesignWorkspace(
   }
 
   if (
-    draft.basedOnRevisionId !== null &&
-    !ids.has(draft.basedOnRevisionId as string)
+    draft.value.basedOnRevisionId !== null &&
+    !ids.has(draft.value.basedOnRevisionId)
   ) {
     return failure(
       "invalid_draft",
@@ -402,15 +425,7 @@ export function parseLocalDesignWorkspace(
     value: {
       schemaVersion: LOCAL_WORKSPACE_SCHEMA_VERSION,
       designId: "local-spj-04",
-      draft: {
-        schemaVersion: LOCAL_WORKSPACE_SCHEMA_VERSION,
-        draftId: draft.draftId,
-        designId: "local-spj-04",
-        draftVersion: draft.draftVersion as number,
-        basedOnRevisionId: draft.basedOnRevisionId as string | null,
-        intent: snapshotIntent(draftDerived.value),
-        updatedAt: draft.updatedAt,
-      },
+      draft: draft.value,
       revisions,
     },
   };

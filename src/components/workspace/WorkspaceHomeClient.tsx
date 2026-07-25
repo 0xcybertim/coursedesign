@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { WorkspaceSources, WorkspaceSummary } from "@/domain/workspace";
 import { PrototypeBoundary } from "@/components/shared/PrototypeBoundary";
 import { useLocalWorkspaceSummary } from "./useLocalWorkspaceSummary";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
+import { useServerWorkspaceCore } from "@/components/persistence/useServerWorkspaceCore";
 
 function formatDate(value: string | null) {
   if (!value) return "Date unavailable";
@@ -197,6 +199,85 @@ export function WorkspaceHomeView({
 }
 
 export function WorkspaceHomeClient() {
-  const state = useLocalWorkspaceSummary();
+  const mode = usePersistenceMode();
+  const state = useLocalWorkspaceSummary(mode === "browser");
+  const server = useServerWorkspaceCore(mode === "server");
+  if (mode === "server") {
+    return (
+      <main className="workspace-page workspace-home">
+        <section className="workspace-hero">
+          <div>
+            <p className="eyebrow">Server-backed design workspace</p>
+            <h1>Customize a jump. Build a course.</h1>
+            <p>
+              Core designs, immutable revisions, canonical render artwork, and
+              the course cross contexts through this public workspace selector.
+            </p>
+          </div>
+          <p className="workspace-hero-proof">
+            Exact revisions
+            <span>Append-only server history</span>
+          </p>
+        </section>
+        {!server.hydrated ? (
+          <div
+            className="workspace-loading"
+            aria-label="Loading server workspace"
+          >
+            <span />
+            <span />
+            <span />
+          </div>
+        ) : server.error ? (
+          <section className="workspace-source-errors" role="status">
+            <strong>Open a public server workspace to continue.</strong>
+            <p>{server.error}</p>
+            <p>
+              Existing browser-local work was not read, imported, or changed.
+            </p>
+          </section>
+        ) : (
+          <>
+            <section className="workspace-section">
+              <div className="workspace-section-heading">
+                <p className="eyebrow">Server working draft</p>
+                <h2>SPJ-04 · Club Classic</h2>
+                <Link href="/designs/local-spj-04/edit">
+                  Customize this jump
+                </Link>
+              </div>
+              <p>
+                Draft version {server.design?.draft.draftVersion ?? 1} ·{" "}
+                {server.revisions.length} immutable server{" "}
+                {server.revisions.length === 1 ? "revision" : "revisions"}
+              </p>
+            </section>
+            <section className="workspace-section">
+              <div className="workspace-section-heading">
+                <p className="eyebrow">Server course</p>
+                <h2>Local Course 01</h2>
+              </div>
+              <div className="current-course-summary">
+                <p>
+                  <strong>{server.course?.draft.instances.length ?? 0}</strong>
+                  <span>pinned placements</span>
+                </p>
+                <div>
+                  <Link href="/courses/local-course-1">Edit course</Link>
+                  <Link href="/courses/local-course-1/review">
+                    Review course
+                  </Link>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+        <p className="workspace-local-boundary">
+          Lab histories, raw uploads, masks, and processing evidence remain on
+          this device.
+        </p>
+      </main>
+    );
+  }
   return <WorkspaceHomeView {...state} />;
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  createLocalDesignLibrary,
   LOCAL_DESIGN_LIBRARY_STORAGE_KEY,
   LOCAL_WORKSPACE_STORAGE_KEY,
   localDesignLibraryRevisions,
@@ -13,6 +14,13 @@ import {
   type LocalDesignLibraryResult,
   type ProfileWingDesignRevision,
 } from "@/domain/design";
+import { usePersistenceMode } from "@/components/persistence/PersistenceModeProvider";
+import type { DesignRevisionPage } from "@/persistence";
+import {
+  persistenceApi,
+  uploadCanonicalArtwork,
+} from "@/lib/browser/persistence-api";
+import { renderCanonicalProfileWing } from "@/lib/browser/profile-wing-canonical-render";
 
 function localId(prefix: "draft" | "revision") {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -29,6 +37,7 @@ export type SaveGeneratedProfileResult =
   | Extract<LocalDesignLibraryResult<never>, { readonly ok: false }>;
 
 export function useLocalDesignLibrary() {
+  const persistenceMode = usePersistenceMode();
   const [library, setLibrary] = useState<LocalDesignLibrary | null>(null);
   const libraryRef = useRef<LocalDesignLibrary | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -37,6 +46,44 @@ export function useLocalDesignLibrary() {
 
   useEffect(() => {
     let cancelled = false;
+    if (persistenceMode === "server") {
+      void persistenceApi<DesignRevisionPage>(
+        "/api/designs/local-spj-04/revisions?limit=100",
+      ).then((result) => {
+        if (cancelled) return;
+        if (!result.ok) {
+          setStatus(result.error.message);
+          setIntegrityError(result.error.message);
+          setHydrated(true);
+          return;
+        }
+        const next = createLocalDesignLibrary({
+          draftId: "server-library-envelope",
+          now: new Date().toISOString(),
+        });
+        const serverLibrary: LocalDesignLibrary = {
+          ...next,
+          spj04Workspace: {
+            ...next.spj04Workspace,
+            revisions: result.value.revisions.filter(
+              (revision) => revision.designId === "local-spj-04",
+            ) as LocalDesignLibrary["spj04Workspace"]["revisions"],
+          },
+          profileWingRevisions: result.value.revisions.filter(
+            (revision): revision is ProfileWingDesignRevision =>
+              "familyId" in revision &&
+              revision.familyId === "profile-wing-vertical-v1",
+          ),
+        };
+        libraryRef.current = serverLibrary;
+        setLibrary(serverLibrary);
+        setStatus("Design library restored from server workspace");
+        setHydrated(true);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
     queueMicrotask(() => {
       if (cancelled) return;
       try {
@@ -92,11 +139,11 @@ export function useLocalDesignLibrary() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [persistenceMode]);
 
-  function saveGeneratedProfile(
+  async function saveGeneratedProfile(
     prototype: DerivedProfileWingPrototype,
-  ): SaveGeneratedProfileResult {
+  ): Promise<SaveGeneratedProfileResult> {
     const current = libraryRef.current;
     if (!current)
       return {
@@ -106,6 +153,63 @@ export function useLocalDesignLibrary() {
           message: "The trusted local design library is unavailable.",
         },
       };
+    if (persistenceMode === "server") {
+      try {
+        const canonical = await renderCanonicalProfileWing(prototype);
+        const uploaded = await uploadCanonicalArtwork(canonical);
+        if (!uploaded.ok) {
+          return {
+            ok: false,
+            error: {
+              kind: "invalid_profile_revision",
+              message: uploaded.error.message,
+            },
+          };
+        }
+        const saved = await persistenceApi<ProfileWingDesignRevision>(
+          "/api/designs/profile-wings/revisions",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              idempotencyKey: localId("revision"),
+              prototype,
+              canonicalRenderHash: canonical.contentHash,
+            }),
+          },
+        );
+        if (!saved.ok) {
+          return {
+            ok: false,
+            error: {
+              kind: "invalid_profile_revision",
+              message: saved.error.message,
+            },
+          };
+        }
+        const next: LocalDesignLibrary = {
+          ...current,
+          profileWingRevisions: [...current.profileWingRevisions, saved.value],
+        };
+        libraryRef.current = next;
+        setLibrary(next);
+        setStatus(
+          `Generated revision ${String(saved.value.ordinal).padStart(
+            2,
+            "0",
+          )} saved to server workspace`,
+        );
+        return { ok: true, library: next, revision: saved.value };
+      } catch {
+        return {
+          ok: false,
+          error: {
+            kind: "invalid_profile_revision",
+            message:
+              "The canonical Profile Wing derivative could not be created. Nothing was saved.",
+          },
+        };
+      }
+    }
     const revisionId = localId("revision");
     const saved = saveProfileWingRevision(current, {
       prototype,

@@ -73,7 +73,10 @@ export type SaveRevisionResult =
   | { readonly ok: true; readonly revision: ObstacleDesignRevision }
   | { readonly ok: false; readonly error: LocalWorkspaceFailure["error"] };
 
-export function useLocalDesignWorkspace(requestedRevisionId?: string) {
+export function useLocalDesignWorkspace(
+  requestedRevisionId?: string,
+  enabled = true,
+) {
   const [workspace, setWorkspace] =
     useState<LocalDesignWorkspace>(INITIAL_WORKSPACE);
   const [library, setLibrary] = useState<LocalDesignLibrary>(INITIAL_LIBRARY);
@@ -86,6 +89,7 @@ export function useLocalDesignWorkspace(requestedRevisionId?: string) {
   const [artifactError, setArtifactError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
 
     queueMicrotask(() => {
@@ -148,7 +152,7 @@ export function useLocalDesignWorkspace(requestedRevisionId?: string) {
     return () => {
       cancelled = true;
     };
-  }, [requestedRevisionId]);
+  }, [enabled, requestedRevisionId]);
 
   const viewingRevision = useMemo<ObstacleDesignRevision | null>(() => {
     if (viewingRevisionId === null) return null;
@@ -274,6 +278,7 @@ export function useLocalDesignWorkspace(requestedRevisionId?: string) {
     saveState,
     status,
     artifactError,
+    conflict: null,
     viewingRevision,
     updateIntent,
     saveRevision,
@@ -281,5 +286,7 @@ export function useLocalDesignWorkspace(requestedRevisionId?: string) {
     openRevision,
     returnToDraft,
     duplicateRevision,
+    reloadLatest: () => undefined,
+    retryAttempted: () => undefined,
   };
 }

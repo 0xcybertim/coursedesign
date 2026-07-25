@@ -7216,6 +7216,42 @@ a:visited {
   color: var(--color-ink);
 }
 
+.server-workspace-selector {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  background: #fff8dc;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+}
+
+.server-workspace-selector > section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 1rem;
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.server-workspace-selector h1,
+.server-workspace-selector p {
+  margin: 0;
+}
+
+.server-workspace-selector [role="note"] {
+  grid-column: 1 / -1;
+  font-weight: 700;
+}
+
+.server-workspace-selector form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+}
+
+.server-workspace-selector label {
+  width: 100%;
+}
+
 .workspace-hero,
 .workspace-title-block {
   display: grid;

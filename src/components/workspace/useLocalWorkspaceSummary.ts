@@ -20,19 +20,21 @@ const INITIAL: LocalWorkspaceSummaryState = {
   summary: null,
 };
 
-export function useLocalWorkspaceSummary() {
+export function useLocalWorkspaceSummary(enabled = true) {
   const [state, setState] = useState<LocalWorkspaceSummaryState>(INITIAL);
 
   const refresh = useCallback(() => {
+    if (!enabled) return;
     const sources = readLocalWorkspaceSources(window.localStorage);
     setState({
       hydrated: true,
       sources,
       summary: deriveWorkspaceSummary(sources),
     });
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
     queueMicrotask(() => {
       if (!cancelled) refresh();
@@ -43,7 +45,7 @@ export function useLocalWorkspaceSummary() {
       cancelled = true;
       window.removeEventListener("storage", handleStorage);
     };
-  }, [refresh]);
+  }, [enabled, refresh]);
 
   return { ...state, refresh };
 }
