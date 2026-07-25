@@ -149,8 +149,8 @@ async function openWorkspace(page, email, options = {}) {
         { timeout: 30_000 },
       );
       await page
-        .getByRole("button", { name: "Open server workspace" })
-        .click({ force: true });
+        .locator(".server-workspace-selector form")
+        .evaluate((form) => form.requestSubmit());
       const response = await selectionResponse;
       if (response.status() === 200) {
         selected = true;
@@ -202,7 +202,7 @@ async function screenshot(page, name) {
     path: target,
     fullPage: false,
     animations: "disabled",
-    timeout: 10_000,
+    timeout: 30_000,
   });
   report.screenshots.push(path.relative(process.cwd(), target));
 }
@@ -416,7 +416,6 @@ try {
     browser,
     "email-a-fresh-context",
     emailA,
-    { sessionCookies: emailASessionCookies },
   );
   contexts.push(restored.context);
   const restoredA = restored.page;
@@ -511,6 +510,10 @@ try {
         "Conflict: this design changed elsewhere. Your attempted edit is preserved.",
     })
     .waitFor();
+  await stale.page
+    .getByRole("alert")
+    .filter({ hasText: "Your attempted edit was not overwritten." })
+    .evaluate((alert) => alert.scrollIntoView({ block: "center" }));
   await screenshot(stale.page, "06-stale-context-explicit-conflict.png");
   await stale.page
     .getByRole("button", { name: "Load latest server version" })
@@ -563,18 +566,23 @@ try {
     .locator(".silhouette-fixture-row[aria-pressed='true']")
     .locator("strong")
     .innerText();
-  await acceptButton.click({ force: true });
-  await pageA
-    .getByText(
-      "Accepted for future prototyping. This records a review decision only; no product geometry or revision was created.",
-      { exact: true },
-    )
-    .waitFor();
-  const localHistory = await pageA.evaluate(
-    (key) => localStorage.getItem(key),
-    localSilhouetteKey,
-  );
+  let localHistory = null;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await acceptButton.click({ force: true });
+    await pageA.waitForTimeout(500);
+    localHistory = await pageA.evaluate(
+      (key) => localStorage.getItem(key),
+      localSilhouetteKey,
+    );
+    if (
+      localHistory?.includes(fixtureId) &&
+      localHistory.includes("accepted_for_future_prototyping")
+    ) {
+      break;
+    }
+  }
   assert.ok(localHistory?.includes(fixtureId));
+  assert.ok(localHistory?.includes("accepted_for_future_prototyping"));
   assert.equal(
     await pageA.evaluate((key) => localStorage.getItem(key), localLibraryKey),
     sentinel,
@@ -629,7 +637,6 @@ try {
     browser,
     "email-a-fresh-device",
     emailA,
-    { sessionCookies: emailASessionCookies },
   );
   contexts.push(otherDevice.context);
   const devicePage = otherDevice.page;

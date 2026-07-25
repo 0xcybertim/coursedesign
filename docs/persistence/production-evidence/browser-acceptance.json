@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "1.0.0-production-persistence-browser-acceptance",
+  "generatedAt": "2026-07-25T13:26:37.340Z",
+  "baseUrl": "https://coursedesign.onrender.com",
+  "deploymentMode": "server",
+  "emails": {
+    "emailA": "prod-a-1784981175271@example.test",
+    "emailB": "prod-b-1784981175271@example.test"
+  },
+  "identities": {
+    "spjRevisionId": "c69327a4-40cb-4ea6-8335-74a1786a8f91",
+    "spjConfigurationHash": "c53f04ef3a83f41d4db348a8b91a9d3e6a1738f872f94fb2ea8f8d64d8577d48",
+    "restoredDraftFrameColor": "yellow",
+    "spjArtworkHashes": [
+      "87704d04d4e6f15b7321351c6285455864926c60834513794770c4a85fa27713"
+    ],
+    "courseLockVersion": 2,
+    "profileFixtureId": "clean-dog-side",
+    "profileRevisionId": "167b86b2-34d4-40d5-9368-d44a552a3e92",
+    "profileConfigurationHash": "686324482e62db978e450f438c2b3d50977050959ddaa309321ad1c71e1d46d7"
+  },
+  "checks": [
+    {
+      "name": "exact production health reports server mode and restricted runtime",
+      "detail": "passed"
+    },
+    {
+      "name": "email A visibly opens with the exact unverified-workspace warning",
+      "detail": "passed"
+    },
+    {
+      "name": "email A restores the identical SPJ-04 draft, linked artwork, and immutable red revision",
+      "detail": "revision=c69327a4-40cb-4ea6-8335-74a1786a8f91 config=c53f04ef3a83f41d4db348a8b91a9d3e6a1738f872f94fb2ea8f8d64d8577d48"
+    },
+    {
+      "name": "course pins the exact immutable SPJ-04 revision",
+      "detail": "passed"
+    },
+    {
+      "name": "fresh email-A context restores identical design, artwork, revision, and course",
+      "detail": "passed"
+    },
+    {
+      "name": "email B is completely isolated and starts clean",
+      "detail": "passed"
+    },
+    {
+      "name": "stale email-A context receives explicit conflict recovery without overwriting newer work",
+      "detail": "passed"
+    },
+    {
+      "name": "existing browser-local data remains intact and is neither imported nor displayed as server data",
+      "detail": "passed"
+    },
+    {
+      "name": "final Profile Wing canonical derivative and immutable revision save to email A",
+      "detail": "revision=167b86b2-34d4-40d5-9368-d44a552a3e92 fixture=clean-dog-side"
+    },
+    {
+      "name": "final Profile Wing revision crosses devices while processing history remains local",
+      "detail": "passed"
+    },
+    {
+      "name": "production restoration remains usable at a realistic mobile viewport",
+      "detail": "passed"
+    },
+    {
+      "name": "exploratory production pass covers Home, Designs, Course edit, and Course review",
+      "detail": "passed"
+    },
+    {
+      "name": "production browser diagnostics are clean",
+      "detail": "passed"
+    }
+  ],
+  "screenshots": [
+    "docs/persistence/production-evidence/screenshots/03-email-a-restored-home.png",
+    "docs/persistence/production-evidence/screenshots/04-email-a-exact-revision-pinned-course.png",
+    "docs/persistence/production-evidence/screenshots/05-email-b-isolated-empty-workspace.png",
+    "docs/persistence/production-evidence/screenshots/06-stale-context-explicit-conflict.png",
+    "docs/persistence/production-evidence/screenshots/07-email-a-profile-wing-server-revision.png",
+    "docs/persistence/production-evidence/screenshots/08-email-a-profile-wing-restored-fresh-device.png",
+    "docs/persistence/production-evidence/screenshots/09-email-a-mobile-restored-home.png"
+  ],
+  "layouts": [
+    {
+      "label": "email-a-restored-home",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "route": "/",
+      "overflowX": 0,
+      "tooSmall": [
+        {
+          "label": "Clear or switch workspace",
+          "width": 942,
+          "height": 30,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "label": "email-a-pinned-course",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "route": "/courses/local-course-1?revision=c69327a4-40cb-4ea6-8335-74a1786a8f91",
+      "overflowX": 0,
+      "tooSmall": [
+        {
+          "label": "Clear or switch workspace",
+          "width": 942,
+          "height": 30,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "label": "email-a-mobile-home",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/",
+      "overflowX": 0,
+      "tooSmall": []
+    },
+    {
+      "label": "email-a-mobile-design-library",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/designs",
+      "overflowX": 0,
+      "tooSmall": []
+    }
+  ],
+  "diagnostics": {
+    "consoleProblems": [],
+    "failedRequests": [],
+    "httpErrors": [],
+    "expectedConflictResponses": [
+      "email-a-stale-context 409 PATCH /api/designs/local-spj-04"
+    ],
+    "ignoredAbortedRequests": [
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses/local-course-1/review net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/courses/local-course-1/review net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/courses/local-course-1/review net::ERR_ABORTED",
+      "email-b-isolated GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-stale-context GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-newer-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-newer-context GET https://storage.googleapis.com/course-design-prod-artwork-20260725/workspaces/9b4c18b8-a489-4f76-a1da-01f116954501/sha256/87704d04d4e6f15b7321351c6285455864926c60834513794770c4a85fa27713 net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/courses net::ERR_ABORTED",
+      "email-a-primary GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/designs/local-spj-04 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/designs/local-profile-wing-clean-dog-side net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/designs/local-profile-wing-clean-dog-side net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/designs/local-spj-04 net::ERR_ABORTED",
+      "email-a-fresh-device GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/ net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/designs/local-profile-wing-clean-dog-side net::ERR_ABORTED",
+      "email-a-mobile-context GET https://coursedesign.onrender.com/courses/local-course-1 net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/designs/local-spj-04/edit net::ERR_ABORTED",
+      "email-a-fresh-context GET https://coursedesign.onrender.com/courses net::ERR_ABORTED"
+    ]
+  },
+  "failure": null
+}
