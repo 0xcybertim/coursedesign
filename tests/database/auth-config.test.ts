@@ -39,6 +39,21 @@ describe("WorkOS authentication configuration", () => {
     });
   });
 
+  it("accepts the opaque signing-secret format currently issued by WorkOS", () => {
+    expect(
+      parseAuthenticationConfig({
+        ...SERVER_ENVIRONMENT,
+        WORKOS_WEBHOOK_SECRET: "AbCdEfGhIjKlMnOpQrStUvWxY",
+      }).webhookSecret,
+    ).toBe("AbCdEfGhIjKlMnOpQrStUvWxY");
+    expect(() =>
+      parseAuthenticationConfig({
+        ...SERVER_ENVIRONMENT,
+        WORKOS_WEBHOOK_SECRET: "too-short",
+      }),
+    ).toThrow("WorkOS webhook signing secret");
+  });
+
   it("rejects browser persistence and unsafe or incomplete WorkOS settings", () => {
     expect(() =>
       parseAuthenticationConfig({

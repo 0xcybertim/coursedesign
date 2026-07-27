@@ -105,7 +105,7 @@ export function parseAuthenticationConfig(
     );
   }
   const webhookSecret = required(environment, "WORKOS_WEBHOOK_SECRET");
-  if (!/^whsec_[A-Za-z0-9_-]+$/.test(webhookSecret)) {
+  if (!/^(?:whsec_)?[A-Za-z0-9_-]{20,}$/.test(webhookSecret)) {
     throw new PersistenceConfigError(
       "WORKOS_WEBHOOK_SECRET must be a WorkOS webhook signing secret.",
     );
