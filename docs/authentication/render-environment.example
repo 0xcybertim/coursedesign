@@ -1,0 +1,16 @@
+# Public configuration
+PERSISTENCE_MODE=server
+AUTH_BASE_URL=https://coursedesign.onrender.com
+ALLOWED_ORIGINS=https://coursedesign.onrender.com
+WORKOS_COOKIE_NAME=__Host-course-design-auth
+WORKOS_COOKIE_MAX_AGE=604800
+WORKOS_COOKIE_SAMESITE=lax
+NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://coursedesign.onrender.com/auth/callback
+
+# Store these as Render secrets. Never paste their values into logs or commits.
+WORKOS_CLIENT_ID=client_replace_me
+WORKOS_API_KEY=sk_test_replace_me
+WORKOS_WEBHOOK_SECRET=whsec_replace_me
+WORKOS_COOKIE_PASSWORD=replace-with-at-least-32-random-bytes
+
+# WORKOS_COOKIE_DOMAIN must remain unset.

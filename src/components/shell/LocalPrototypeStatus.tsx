@@ -14,7 +14,7 @@ export function LocalPrototypeStatus({
       <span aria-hidden="true" />
       {translate(
         persistenceMode === "server"
-          ? "Server workspace · shared through this public selector"
+          ? "Private team workspace · server-backed"
           : unavailable
             ? "Temporary session · browser storage unavailable"
             : "Local prototype · saved in this browser",

@@ -53,11 +53,15 @@ vi.mock("@/components/concepts/useLocalConceptWorkspace", () => ({
 
 vi.mock("@/components/profile-wing/ProfileWingThreeStage", () => ({
   ProfileWingThreeStage: (props: {
-    readonly manifest: { readonly geometrySha256: string };
+    readonly manifest: {
+      readonly geometrySha256: string;
+      readonly appearance?: { readonly frameColor: string };
+    };
   }) => (
     <div
       data-testid="mock-profile-stage"
       data-geometry-sha256={props.manifest.geometrySha256}
+      data-frame-color={props.manifest.appearance?.frameColor}
     />
   ),
 }));
@@ -65,8 +69,9 @@ vi.mock("@/components/profile-wing/ProfileWingThreeStage", () => ({
 const sourceBlob = new Blob(["prepared-source"], { type: "image/jpeg" });
 const sourceHash =
   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-const maskBlob = new Blob(["returned-mask"], { type: "image/png" });
-const maskHash = hashArtworkBytes(new TextEncoder().encode("returned-mask"));
+const maskBytes = new TextEncoder().encode("returned-mask");
+const maskBlob = new Blob([maskBytes], { type: "image/png" });
+const maskHash = hashArtworkBytes(maskBytes);
 
 describe("Create Profile Wing workflow", () => {
   afterEach(cleanup);
@@ -93,20 +98,29 @@ describe("Create Profile Wing workflow", () => {
       configurable: true,
       value: vi.fn(),
     });
-    mocks.prepare.mockResolvedValue({
-      blob: sourceBlob,
-      metadata: {
-        sourceId: "upload-aaaaaaaaaaaaaaaaaaaaaaaa",
-        sourceKind: "user_upload",
-        sourceLabel: "my-dog.png",
-        originalFilename: "my-dog.png",
-        contentHash: sourceHash,
-        mediaType: "image/jpeg",
-        byteLength: sourceBlob.size,
-        pixelWidth: 1200,
-        pixelHeight: 800,
-      },
-    });
+    mocks.prepare.mockImplementation(
+      async (input: {
+        readonly sourceKind: "user_upload" | "generated_concept";
+        readonly sourceLabel: string;
+        readonly filename: string;
+      }) => ({
+        blob: sourceBlob,
+        metadata: {
+          sourceId:
+            input.sourceKind === "generated_concept"
+              ? "concept-aaaaaaaaaaaaaaaaaaaaaaaa"
+              : "upload-aaaaaaaaaaaaaaaaaaaaaaaa",
+          sourceKind: input.sourceKind,
+          sourceLabel: input.sourceLabel,
+          originalFilename: input.filename,
+          contentHash: sourceHash,
+          mediaType: "image/jpeg",
+          byteLength: sourceBlob.size,
+          pixelWidth: 1200,
+          pixelHeight: 800,
+        },
+      }),
+    );
     mocks.store.mockResolvedValue({ ok: true, value: maskHash });
     mocks.get.mockImplementation(async (hash: string) => ({
       ok: true,
@@ -205,13 +219,13 @@ describe("Create Profile Wing workflow", () => {
               headers: { "content-type": "application/json" },
             },
           );
-        return new Response(maskBlob, {
+        return new Response(maskBytes.slice(), {
           status: 200,
           headers: {
             "content-type": "image/png",
             "x-profile-wing-provider": "deterministic-test",
             "x-profile-wing-adapter-version":
-              "1.0.0-profile-wing-deterministic",
+              "1.1.0-profile-wing-deterministic-concept-aware",
             "x-profile-wing-provider-request-id": "none",
           },
         });
@@ -258,12 +272,23 @@ describe("Create Profile Wing workflow", () => {
     );
     expect(
       await screen.findByRole("heading", {
-        name: "One polygon. Two faithful views.",
+        name: "Shape approved. Choose the color.",
       }),
     ).toBeVisible();
     expect(screen.getByTestId("mock-profile-stage")).toHaveAttribute(
       "data-geometry-sha256",
       expect.stringMatching(/^[a-f0-9]{64}$/),
+    );
+    expect(screen.getByTestId("mock-profile-stage")).toHaveAttribute(
+      "data-frame-color",
+      "blue",
+    );
+    await user.click(
+      screen.getByRole("radio", { name: "Red frame and wings" }),
+    );
+    expect(screen.getByTestId("mock-profile-stage")).toHaveAttribute(
+      "data-frame-color",
+      "red",
     );
 
     const save = screen.getByRole("button", {
@@ -285,6 +310,11 @@ describe("Create Profile Wing workflow", () => {
           {
             designId: "local-profile-wing-upload-aaaaaaaaaaaaaaaaaaaaaaaa",
             snapshot: {
+              prototype: {
+                appearance: {
+                  frameColor: "red",
+                },
+              },
               provenance: {
                 sourceKind: "user_upload",
                 sourceLabel: "my-dog.png",
@@ -339,10 +369,187 @@ describe("Create Profile Wing workflow", () => {
       ),
     );
     expect(
-      screen.getByText(
-        "Accepted concept prepared locally. Nothing has been uploaded.",
+      await screen.findByText("Deterministic canonical polygon"),
+    ).toBeVisible();
+    expect(
+      screen.queryByText("I own this image or have the right to use it."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not let an existing upload candidate overwrite a newly selected concept", async () => {
+    mocks.conceptWorkspace = {
+      schemaVersion: "1.0.0-phase1g",
+      requests: [
+        {
+          requestId: "request-switch-to-concept",
+          constraints: {
+            silhouetteSubject: "butterfly",
+            colors: "red and white",
+          },
+        },
+      ],
+      batches: [
+        {
+          batchId: "batch-switch-to-concept",
+          provenance: { provider: "deterministic-test" },
+        },
+      ],
+      concepts: [
+        {
+          conceptId: "concept-switch-to-concept",
+          batchId: "batch-switch-to-concept",
+          requestId: "request-switch-to-concept",
+          ordinal: 1,
+          contentHash: sourceHash,
+          mediaType: "image/svg+xml",
+        },
+      ],
+      outcomes: [],
+      selectionEvents: [],
+      selectedConceptId: "concept-switch-to-concept",
+      acceptedConceptId: "concept-switch-to-concept",
+      updatedAt: "2026-07-23T00:00:00.000Z",
+    };
+    const user = userEvent.setup();
+    render(<ProfileWingCreatorClient forceThreeFailure />);
+    await screen.findByText("Local QA provider ready");
+
+    await user.upload(
+      screen.getByLabelText("Choose image"),
+      new File(["source"], "upload.png", { type: "image/png" }),
+    );
+    for (const label of [
+      "I own this image or have the right to use it.",
+      /I understand this derivative is sent to remove.bg/,
+      "The image contains no identifiable person.",
+      /It contains one clear subject/,
+    ])
+      await user.click(screen.getByLabelText(label));
+    await user.click(
+      screen.getByRole("button", { name: "Run local mask simulation" }),
+    );
+    await screen.findByText("Deterministic canonical polygon");
+
+    await user.click(
+      screen.getByRole("button", { name: "Use accepted concept" }),
+    );
+    await waitFor(() =>
+      expect(mocks.prepare).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          sourceKind: "generated_concept",
+          sourceLabel: "Accepted concept 1",
+        }),
+      ),
+    );
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(3));
+    expect(screen.getByText("generated concept")).toBeVisible();
+    expect(
+      screen.queryByText("Confirm before upload."),
+    ).not.toBeInTheDocument();
+    const generatedForm = vi.mocked(fetch).mock.calls[2]?.[1]?.body as FormData;
+    expect(generatedForm.get("generatedConceptSubject")).toBe("butterfly");
+  });
+
+  it("prepares and locally extracts an exact accepted-concept handoff once", async () => {
+    mocks.conceptWorkspace = {
+      schemaVersion: "1.0.0-phase1g",
+      requests: [
+        {
+          requestId: "request-auto-handoff",
+          constraints: { silhouetteSubject: "butterfly" },
+        },
+      ],
+      batches: [
+        {
+          batchId: "batch-auto-handoff",
+          provenance: { provider: "deterministic-test" },
+        },
+      ],
+      concepts: [
+        {
+          conceptId: "concept-auto-handoff",
+          batchId: "batch-auto-handoff",
+          requestId: "request-auto-handoff",
+          ordinal: 3,
+          contentHash: sourceHash,
+          mediaType: "image/svg+xml",
+        },
+      ],
+      outcomes: [],
+      selectionEvents: [],
+      selectedConceptId: "concept-auto-handoff",
+      acceptedConceptId: "concept-auto-handoff",
+      updatedAt: "2026-07-23T00:00:00.000Z",
+    };
+    const { rerender } = render(
+      <ProfileWingCreatorClient
+        acceptedConceptHash={sourceHash}
+        forceThreeFailure
+      />,
+    );
+    await waitFor(() => expect(mocks.prepare).toHaveBeenCalledTimes(1));
+    expect(
+      await screen.findByText("Deterministic canonical polygon"),
+    ).toBeVisible();
+    expect(fetch).toHaveBeenCalledTimes(2);
+    const maskRequest = vi.mocked(fetch).mock.calls[1]?.[1];
+    const form = maskRequest?.body as FormData;
+    expect(form.get("generatedConceptConversionConfirmed")).toBe("true");
+    expect(form.get("generatedConceptSubject")).toBe("butterfly");
+    expect(form.get("rightsConfirmed")).toBe("false");
+    expect(form.get("providerDisclosureConfirmed")).toBe("false");
+    expect(form.get("noIdentifiablePeopleConfirmed")).toBe("false");
+    expect(form.get("singleSubjectConfirmed")).toBe("false");
+    rerender(
+      <ProfileWingCreatorClient
+        acceptedConceptHash={sourceHash}
+        forceThreeFailure
+      />,
+    );
+    await waitFor(() => expect(mocks.prepare).toHaveBeenCalledTimes(1));
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("fails a stale accepted-concept hash closed", async () => {
+    mocks.conceptWorkspace = {
+      schemaVersion: "1.0.0-phase1g",
+      requests: [],
+      batches: [
+        {
+          batchId: "batch-stale-handoff",
+          provenance: { provider: "deterministic-test" },
+        },
+      ],
+      concepts: [
+        {
+          conceptId: "concept-stale-handoff",
+          batchId: "batch-stale-handoff",
+          ordinal: 1,
+          contentHash: sourceHash,
+          mediaType: "image/svg+xml",
+        },
+      ],
+      outcomes: [],
+      selectionEvents: [],
+      selectedConceptId: "concept-stale-handoff",
+      acceptedConceptId: "concept-stale-handoff",
+      updatedAt: "2026-07-23T00:00:00.000Z",
+    };
+    render(
+      <ProfileWingCreatorClient
+        acceptedConceptHash={
+          "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+        forceThreeFailure
+      />,
+    );
+    expect(
+      await screen.findByText(
+        "The accepted concept changed in another tab. Choose the current accepted concept or return to Concept Studio.",
       ),
     ).toBeVisible();
+    expect(mocks.prepare).not.toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it("auto-fits recoverable placement findings without another provider request", async () => {
@@ -414,7 +621,7 @@ describe("Create Profile Wing workflow", () => {
     );
     expect(
       await screen.findByRole("heading", {
-        name: "One polygon. Two faithful views.",
+        name: "Shape approved. Choose the color.",
       }),
     ).toBeVisible();
   });

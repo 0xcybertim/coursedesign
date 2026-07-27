@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "course-design-workos-local-browser-engine-smoke-v2",
+  "status": "superseded-workos-engine-proof-pending",
+  "runDate": "2026-07-26",
+  "productionMutated": false,
+  "supersedes": "course-design-auth-local-browser-engine-smoke-v1",
+  "reason": "The earlier Firefox/WebKit evidence exercised the removed Better Auth credential UI and cannot be used as WorkOS AuthKit evidence.",
+  "currentEvidence": "docs/authentication/local-browser-acceptance.json",
+  "pending": [
+    "WorkOS staging Firefox hosted-flow proof",
+    "WorkOS staging WebKit/Safari hosted-flow proof",
+    "Exact Render production browser and real-device matrix after explicit cutover approval"
+  ]
+}

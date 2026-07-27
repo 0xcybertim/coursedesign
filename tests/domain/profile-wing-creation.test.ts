@@ -3,6 +3,7 @@ import benchmark from "../../docs/phase-1h/vectorization-benchmark-results.json"
 import {
   createLocalDesignLibrary,
   deriveProfileWingPrototypeFromCreation,
+  profileWingAppearance,
   saveProfileWingRevision,
 } from "@/domain/design";
 import {
@@ -187,6 +188,7 @@ describe("user-created Profile Wing integrity boundary", () => {
     const derived = deriveProfileWingPrototypeFromCreation({
       candidate: accepted.candidate,
       decision: accepted.decision,
+      appearance: profileWingAppearance("red"),
     });
     expect(derived.ok).toBe(true);
     if (!derived.ok) throw new Error(derived.error.message);
@@ -205,6 +207,10 @@ describe("user-created Profile Wing integrity boundary", () => {
       threeDExtrusionSourceGeometrySha256:
         derived.value.renderManifest.geometrySha256,
     });
+    expect(derived.value.appearance).toEqual(profileWingAppearance("red"));
+    expect(derived.value.renderManifest.appearance).toEqual(
+      profileWingAppearance("red"),
+    );
 
     const library = createLocalDesignLibrary({
       now: "2026-07-23T11:00:00.000Z",
@@ -221,6 +227,11 @@ describe("user-created Profile Wing integrity boundary", () => {
       designId: "local-profile-wing-upload-aaaaaaaaaaaaaaaaaaaaaaaa",
       ordinal: 1,
       snapshot: {
+        prototype: {
+          appearance: {
+            frameColor: "red",
+          },
+        },
         provenance: {
           sourceKind: "user_upload",
           sourceLabel: "my-dog.png",

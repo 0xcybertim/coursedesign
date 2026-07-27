@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  UNVERIFIED_WORKSPACE_WARNING,
-  normalizeEmailSelector,
-} from "@/domain/identity";
-import {
   BoundedRateLimiter,
   COURSE_DESIGN_CSRF_HEADER,
   COURSE_DESIGN_CSRF_VALUE,
@@ -20,35 +16,7 @@ import {
   isOpaqueSessionToken,
 } from "@/server/identity/session-token";
 
-describe("provisional identity policy", () => {
-  it("normalizes only by trimming and lowercasing", () => {
-    expect(normalizeEmailSelector("  Tim+Course@Example.COM  ")).toEqual({
-      ok: true,
-      value: "tim+course@example.com",
-    });
-    expect(normalizeEmailSelector("first.last@example.com")).not.toEqual(
-      normalizeEmailSelector("firstlast@example.com"),
-    );
-  });
-
-  it("rejects malformed and unreasonably long selectors", () => {
-    expect(normalizeEmailSelector("not-an-email")).toMatchObject({
-      ok: false,
-    });
-    expect(
-      normalizeEmailSelector(`${"a".repeat(65)}@example.com`),
-    ).toMatchObject({ ok: false });
-    expect(
-      normalizeEmailSelector(`${"a".repeat(310)}@example.com`),
-    ).toMatchObject({ ok: false });
-  });
-
-  it("locks the exact public-workspace warning", () => {
-    expect(UNVERIFIED_WORKSPACE_WARNING).toBe(
-      "Unverified email workspace. Anyone who enters this email can access and change this work.",
-    );
-  });
-
+describe("authentication boundary policy", () => {
   it("generates opaque tokens and stores deterministic SHA-256 digests", () => {
     const token = generateOpaqueSessionToken();
     expect(isOpaqueSessionToken(token)).toBe(true);
@@ -84,6 +52,18 @@ describe("provisional identity policy", () => {
         new Request("https://coursedesign.onrender.com/api", {
           headers: {
             origin: "https://attacker.invalid",
+            [COURSE_DESIGN_CSRF_HEADER]: COURSE_DESIGN_CSRF_VALUE,
+          },
+        }),
+        ["https://coursedesign.onrender.com"],
+      ),
+    ).toMatchObject({ ok: false, error: { kind: "forbidden" } });
+    expect(
+      verifyMutationRequest(
+        new Request("https://coursedesign.onrender.com/api", {
+          headers: {
+            origin: "https://coursedesign.onrender.com",
+            "sec-fetch-site": "cross-site",
             [COURSE_DESIGN_CSRF_HEADER]: COURSE_DESIGN_CSRF_VALUE,
           },
         }),

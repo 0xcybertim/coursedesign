@@ -230,27 +230,101 @@ describe("Course Design schema invariants", () => {
     });
   });
 
-  it("stores only exact SHA-256 session digests", async () => {
-    const seeded = await fixture();
+  it("stores only exact SHA-256 WorkOS session observations", async () => {
     await withTestClient(async (client) => {
+      const identity = await client.query<{ id: string }>(
+        `INSERT INTO auth_identities (
+           provider, provider_tenant_id, provider_subject,
+           email, email_verified
+         )
+         VALUES (
+           'workos', 'client_test', 'user_test',
+           'digest@example.test', true
+         )
+         RETURNING id`,
+      );
       await expect(
         client.query(
-          `INSERT INTO provisional_sessions (
-             workspace_id, user_id, token_digest, expires_at
+          `INSERT INTO auth_session_observations (
+             auth_identity_id, provider_session_digest, expires_at
            )
-           VALUES ($1, $2, $3, now() + interval '30 days')`,
-          [seeded.workspaceId, seeded.userId, "opaque-token-not-a-digest"],
+           VALUES ($1, $2, now() + interval '1 day')`,
+          [identity.rows[0]!.id, "provider-session-not-a-digest"],
         ),
       ).rejects.toMatchObject({ code: "23514" });
       await expect(
         client.query(
-          `INSERT INTO provisional_sessions (
-             workspace_id, user_id, token_digest, expires_at
+          `INSERT INTO auth_session_observations (
+             auth_identity_id, provider_session_digest, expires_at
            )
-           VALUES ($1, $2, $3, now() + interval '30 days')`,
-          [seeded.workspaceId, seeded.userId, "f".repeat(64)],
+           VALUES ($1, $2, now() + interval '1 day')`,
+          [identity.rows[0]!.id, "f".repeat(64)],
         ),
       ).resolves.toBeDefined();
+    });
+  });
+
+  it("keeps auth audit events append-only and legacy selectors closed to runtime", async () => {
+    const seeded = await fixture();
+    await withTestClient(async (client) => {
+      const legacyReadPrivileges = await client.query<{
+        selectors: boolean;
+        sessions: boolean;
+      }>(
+        `SELECT
+          has_table_privilege(
+            'coursedesign_runtime',
+            'provisional_email_selectors',
+            'SELECT'
+          ) AS selectors,
+          has_table_privilege(
+            'coursedesign_runtime',
+            'provisional_sessions',
+            'SELECT'
+          ) AS sessions`,
+      );
+      expect(legacyReadPrivileges.rows[0]).toEqual({
+        selectors: false,
+        sessions: false,
+      });
+
+      await client.query("BEGIN");
+      try {
+        await client.query("SET LOCAL ROLE coursedesign_runtime");
+        await client.query(
+          `INSERT INTO auth_audit_events (event_type, outcome)
+           VALUES ('security_test', 'success')`,
+        );
+        await expect(
+          client.query(
+            `UPDATE auth_audit_events
+             SET outcome = 'failure'
+             WHERE event_type = 'security_test'`,
+          ),
+        ).rejects.toMatchObject({ code: "42501" });
+        await client.query("ROLLBACK");
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      }
+
+      await client.query("BEGIN");
+      try {
+        await client.query("SET LOCAL ROLE coursedesign_runtime");
+        await expect(
+          client.query(
+            `INSERT INTO provisional_email_selectors (
+               workspace_id, user_id, email_normalized
+             )
+             VALUES ($1, $2, 'cannot-reopen@example.test')`,
+            [seeded.workspaceId, seeded.userId],
+          ),
+        ).rejects.toMatchObject({ code: "42501" });
+        await client.query("ROLLBACK");
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      }
     });
   });
 

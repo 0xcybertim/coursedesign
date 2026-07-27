@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   aggregateCourseQuantities,
+  addCourseScenery,
   COURSE_SCHEMA_VERSION,
   createCourseDraft,
   deriveCourseWarnings,
   LARGE_MOVE_MM,
   moveCourseInstance,
   moveCourseInstanceTo,
+  moveCourseScenery,
   NORMAL_MOVE_MM,
   normalizeRotation,
   parseCourseDraft,
@@ -14,10 +16,12 @@ import {
   polygonsOverlapWithPositiveArea,
   PROTOTYPE_ARENA,
   removeCourseInstance,
+  removeCourseScenery,
   rotateCourseInstance,
   rotatedFootprintPolygon,
   ROTATION_STEP_DEG,
   serializeCourseDraft,
+  setCourseSurface,
   type CourseDraft,
   type CourseResult,
 } from "@/domain/course";
@@ -87,12 +91,68 @@ describe("Phase 1C course domain", () => {
       draftVersion: 1,
       arena: PROTOTYPE_ARENA,
       instances: [],
+      environment: { surface: "sand", scenery: [] },
     });
     expect(PROTOTYPE_ARENA).toEqual({
       units: "mm",
       width: 60000,
       height: 40000,
       gridSize: 5000,
+    });
+  });
+
+  it("stores grass and movable visual scenery without changing obstacle truth", () => {
+    const draft = place(createCourseDraft(T0), "instance-1");
+    const grass = courseSuccess(setCourseSurface(draft, "grass", T1));
+    const withPalm = courseSuccess(
+      addCourseScenery(grass, {
+        sceneryId: "scenery-1",
+        kind: "palm_tree",
+        now: T1,
+      }),
+    );
+    const withTree = courseSuccess(
+      addCourseScenery(withPalm, {
+        sceneryId: "scenery-2",
+        kind: "leafy_tree",
+        now: T1,
+        xMm: 58000,
+        yMm: 38000,
+      }),
+    );
+    const moved = courseSuccess(
+      moveCourseScenery(withTree, "scenery-2", { xMm: 5000, yMm: 5000 }, T2),
+    );
+
+    expect(moved.environment).toEqual({
+      surface: "grass",
+      scenery: [
+        expect.objectContaining({
+          sceneryId: "scenery-1",
+          kind: "palm_tree",
+          displayNumber: 1,
+        }),
+        expect.objectContaining({
+          sceneryId: "scenery-2",
+          kind: "leafy_tree",
+          xMm: 60000,
+          yMm: 40000,
+          displayNumber: 2,
+        }),
+      ],
+    });
+    expect(deriveCourseWarnings(moved, revisions())).toEqual(
+      deriveCourseWarnings(draft, revisions()),
+    );
+    expect(aggregateCourseQuantities(moved, revisions())).toEqual(
+      aggregateCourseQuantities(draft, revisions()),
+    );
+
+    const removed = courseSuccess(removeCourseScenery(moved, "scenery-1", T2));
+    expect(removed.environment.scenery).toHaveLength(1);
+    expect(removeCourseScenery(removed, "missing-scenery", T2)).toMatchObject({
+      ok: false,
+      error: { kind: "scenery_not_found" },
     });
   });
 
@@ -309,5 +369,33 @@ describe("Phase 1C course domain", () => {
         }),
       ),
     ).toMatchObject({ ok: false, error: { kind: "invalid_instance" } });
+    const legacyDraft = { ...draft } as Record<string, unknown>;
+    delete legacyDraft.environment;
+    expect(parseCourseDraft(JSON.stringify(legacyDraft))).toMatchObject({
+      ok: true,
+      value: { environment: { surface: "sand", scenery: [] } },
+    });
+    expect(
+      parseCourseDraft(
+        JSON.stringify({
+          ...draft,
+          environment: {
+            surface: "grass",
+            scenery: [
+              {
+                sceneryId: "bad",
+                kind: "palm_tree",
+                xMm: 70000,
+                yMm: 0,
+                displayNumber: 1,
+              },
+            ],
+          },
+        }),
+      ),
+    ).toMatchObject({
+      ok: false,
+      error: { kind: "invalid_scenery" },
+    });
   });
 });

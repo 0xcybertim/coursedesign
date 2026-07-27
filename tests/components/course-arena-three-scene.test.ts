@@ -5,8 +5,10 @@ import {
   disposeCourseArenaObject,
   moveCourseArenaCamera,
   populateCourseArena,
+  populateCourseEnvironment,
 } from "@/components/course/CourseArenaThreeScene";
 import {
+  addCourseScenery,
   createCourseDraft,
   placeCourseInstance,
   type CourseDraft,
@@ -178,6 +180,31 @@ describe("Course arena Three.js projection", () => {
     });
     expect(sharedGeometryMeshFound).toBe(true);
 
+    disposeCourseArenaObject(root);
+  });
+
+  it("projects palm, leafy-tree, and flower-box scenery outside the obstacle group", () => {
+    let course = createCourseDraft(T0);
+    for (const kind of ["palm_tree", "leafy_tree", "flower_box"] as const) {
+      const itemIndex = course.environment.scenery.length;
+      const result = addCourseScenery(course, {
+        sceneryId: `scenery-${itemIndex + 1}`,
+        kind,
+        now: T1,
+      });
+      if (!result.ok) throw new Error(result.error.message);
+      course = result.value;
+    }
+    const root = new THREE.Group();
+    populateCourseEnvironment(root, course.environment);
+
+    expect(root.children).toHaveLength(3);
+    expect(root.getObjectByName("course-scenery-scenery-1")).toMatchObject({
+      position: expect.objectContaining({ x: -25, y: 0, z: -15 }),
+      userData: { sceneryId: "scenery-1", kind: "palm_tree" },
+    });
+    expect(root.getObjectByName("course-scenery-scenery-2")).toBeDefined();
+    expect(root.getObjectByName("course-scenery-scenery-3")).toBeDefined();
     disposeCourseArenaObject(root);
   });
 

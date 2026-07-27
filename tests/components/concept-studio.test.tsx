@@ -125,7 +125,7 @@ describe("Phase 1G concept studio", () => {
   it("renders the complete structured workflow and Phase 1H boundary", async () => {
     render(<ConceptStudioClient providerMode="deterministic" />);
     expect(
-      screen.getByRole("heading", { name: "Create a jump concept." }),
+      screen.getByRole("heading", { name: "Describe custom wings." }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Family")).toHaveValue(
       "Profile Wing Vertical",
@@ -140,10 +140,12 @@ describe("Phase 1G concept studio", () => {
       ).toBeEnabled(),
     );
     expect(
-      screen.getByRole("button", { name: "Build this concept" }),
+      screen.getByRole("button", { name: "Use this wing design" }),
     ).toBeDisabled();
     expect(
-      screen.getByText(/cannot create or mutate SPJ-04/i),
+      screen.getByText(
+        /prepares it as the wing source inside the jump customizer/i,
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText("Workflow simulator")).toBeInTheDocument();
     expect(
@@ -240,6 +242,35 @@ describe("Phase 1G concept studio", () => {
     });
   });
 
+  it("hands an accepted description back to an embedded jump configurator", async () => {
+    const onUseSelectedConcept = vi.fn();
+    await seedOneFixtureBatch();
+    render(
+      <ConceptStudioClient
+        embedded
+        providerMode="deterministic"
+        onUseSelectedConcept={onUseSelectedConcept}
+      />,
+    );
+
+    const firstConcept = await screen.findByRole("radio", {
+      name: "Select concept 1",
+    });
+    await waitFor(() => expect(firstConcept).toBeEnabled());
+    fireEvent.click(firstConcept);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Use this wing design" }),
+    );
+
+    expect(onUseSelectedConcept).toHaveBeenCalledWith(
+      hashArtworkBytes(new TextEncoder().encode("fixture-1")),
+    );
+    expect(screen.getByText(/Accepted concept recorded/i)).toBeInTheDocument();
+    expect(
+      screen.queryByText("Back to Customize a jump"),
+    ).not.toBeInTheDocument();
+  });
+
   it("preprocesses orientation-corrected dimensions, re-encodes, hashes, and stores exact derivative bytes", async () => {
     const close = vi.fn();
     const drawImage = vi.fn();
@@ -310,7 +341,7 @@ describe("Phase 1G concept studio", () => {
     ).rejects.toMatchObject({ kind: "photo_decode_failure" });
   });
 
-  it("requires all reference-photo consent checks and links logos to Phase 1F", async () => {
+  it("preserves creative input and links to the canonical SPJ-04 editor", async () => {
     render(<ConceptStudioClient providerMode="deterministic" />);
     await waitFor(() =>
       expect(
@@ -318,10 +349,8 @@ describe("Phase 1G concept studio", () => {
       ).toBeEnabled(),
     );
     expect(
-      screen.getAllByRole("link", {
-        name: /exact SPJ-04 artwork workflow/i,
-      })[0],
-    ).toHaveAttribute("href", "/studio/obstacles/spj-04");
+      screen.getByRole("link", { name: "Use standard wings" }),
+    ).toHaveAttribute("href", "/designs/local-spj-04/edit");
     fireEvent.change(screen.getByLabelText("Creative direction — optional"), {
       target: { value: "A portrait of a person" },
     });

@@ -24,6 +24,20 @@ export function verifyMutationRequest(
       "This request did not come from an approved Course Design origin.",
     );
   }
+  const fetchSite = request.headers.get("sec-fetch-site");
+  if (fetchSite && fetchSite !== "same-origin") {
+    return persistenceFailure(
+      "forbidden",
+      "Cross-site mutation requests are not allowed.",
+    );
+  }
+  const fetchMode = request.headers.get("sec-fetch-mode");
+  if (fetchMode === "navigate") {
+    return persistenceFailure(
+      "forbidden",
+      "Navigation requests cannot mutate Course Design data.",
+    );
+  }
   if (
     request.headers.get(COURSE_DESIGN_CSRF_HEADER) !== COURSE_DESIGN_CSRF_VALUE
   ) {

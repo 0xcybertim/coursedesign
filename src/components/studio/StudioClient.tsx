@@ -645,7 +645,7 @@ export function StudioClient({
                 </p>
                 <small>
                   {persistenceMode === "server"
-                    ? "Saved to this unverified public server workspace"
+                    ? "Saved to your authenticated team workspace"
                     : "Browser-local on this device · no account or cloud copy"}
                 </small>
               </div>
@@ -950,7 +950,7 @@ export function StudioClient({
         <strong>Non-sellable prototype</strong>
         <p>
           {persistenceMode === "server"
-            ? "Core drafts, canonical render artwork, immutable revisions, and course placements are saved to this unverified public server workspace. Raw uploads, masks, generated concepts, and processing histories stay in this browser. No account security, private sharing, ordering, checkout, delivery promise, supplier approval, production claim, or safety claim is provided."
+            ? "Core drafts, canonical render artwork, immutable revisions, and course placements are saved to your authenticated team workspace. Raw uploads, masks, generated concepts, and processing histories stay in this browser. Team invitations and private sharing are not available yet. No ordering, checkout, delivery promise, supplier approval, production claim, or safety claim is provided."
             : "Drafts, artwork, revisions, and course placements exist only in this browser. No account, server persistence, cross-device sync, sharing, ordering, checkout, delivery promise, supplier approval, production claim, or safety claim is provided."}
         </p>
       </footer>

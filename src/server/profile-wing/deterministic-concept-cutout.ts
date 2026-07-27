@@ -6,10 +6,7 @@ type DeterministicConceptSubject = SupportedFixtureSubject | "generic";
 
 const SIZE = 480;
 
-const PROFILES: Record<
-  DeterministicConceptSubject,
-  readonly Point[]
-> = {
+const PROFILES: Record<DeterministicConceptSubject, readonly Point[]> = {
   butterfly: [
     [240, 92],
     [276, 48],
@@ -138,11 +135,7 @@ const PROFILES: Record<
   ],
 };
 
-function containsPoint(
-  x: number,
-  y: number,
-  polygon: readonly Point[],
-) {
+function containsPoint(x: number, y: number, polygon: readonly Point[]) {
   let inside = false;
   for (
     let index = 0, previous = polygon.length - 1;
@@ -154,8 +147,7 @@ function containsPoint(
     const crosses =
       currentY > y !== previousY > y &&
       x <
-        ((previousX - currentX) * (y - currentY)) /
-          (previousY - currentY) +
+        ((previousX - currentX) * (y - currentY)) / (previousY - currentY) +
           currentX;
     if (crosses) inside = !inside;
   }

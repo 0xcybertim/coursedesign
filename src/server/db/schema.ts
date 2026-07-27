@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   foreignKey,
   index,
@@ -22,16 +23,222 @@ const timestamps = {
     .notNull(),
 };
 
-export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  ...timestamps,
-});
+export const authIdentities = pgTable(
+  "auth_identities",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    provider: text("provider").notNull().default("workos"),
+    providerTenantId: text("provider_tenant_id").notNull(),
+    providerSubject: text("provider_subject").notNull(),
+    email: text("email"),
+    displayName: text("display_name"),
+    emailVerified: boolean("email_verified").notNull().default(false),
+    state: text("state").notNull().default("active"),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex("auth_identities_provider_subject_uidx").on(
+      table.provider,
+      table.providerTenantId,
+      table.providerSubject,
+    ),
+    index("auth_identities_email_idx").on(table.email),
+    check("auth_identities_provider_check", sql`${table.provider} = 'workos'`),
+    check(
+      "auth_identities_provider_values_check",
+      sql`char_length(${table.providerTenantId}) between 3 and 255
+        and char_length(${table.providerSubject}) between 3 and 255`,
+    ),
+    check(
+      "auth_identities_email_check",
+      sql`${table.email} is null or (
+        ${table.email} = lower(btrim(${table.email}))
+        and char_length(${table.email}) between 3 and 320
+      )`,
+    ),
+    check(
+      "auth_identities_state_check",
+      sql`${table.state} in ('active', 'deletion_pending', 'deleted')`,
+    ),
+    check(
+      "auth_identities_deleted_state_check",
+      sql`(${table.state} = 'deleted') = (${table.deletedAt} is not null)`,
+    ),
+  ],
+);
 
-export const workspaces = pgTable("workspaces", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  displayName: text("display_name").notNull(),
-  ...timestamps,
-});
+export const users = pgTable(
+  "users",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    authIdentityId: uuid("auth_identity_id").references(
+      () => authIdentities.id,
+      {
+        onDelete: "restrict",
+      },
+    ),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex("users_auth_identity_uidx")
+      .on(table.authIdentityId)
+      .where(sql`${table.authIdentityId} is not null`),
+  ],
+);
+
+export const workspaces = pgTable(
+  "workspaces",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    displayName: text("display_name").notNull(),
+    retiredAt: timestamp("retired_at", { withTimezone: true }),
+    retirementReason: text("retirement_reason"),
+    ...timestamps,
+  },
+  (table) => [
+    check(
+      "workspaces_retirement_state_check",
+      sql`(
+        ${table.retiredAt} is null and ${table.retirementReason} is null
+      ) or (
+        ${table.retiredAt} is not null
+        and ${table.retirementReason} in (
+          'unverified_selector_retired',
+          'account_deletion_requested',
+          'administrator_retired'
+        )
+      )`,
+    ),
+  ],
+);
+
+export const authSessionObservations = pgTable(
+  "auth_session_observations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    authIdentityId: uuid("auth_identity_id")
+      .notNull()
+      .references(() => authIdentities.id, { onDelete: "restrict" }),
+    providerSessionDigest: text("provider_session_digest").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    firstSeenAt: timestamp("first_seen_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex("auth_session_observations_digest_uidx").on(
+      table.providerSessionDigest,
+    ),
+    index("auth_session_observations_identity_expiry_idx").on(
+      table.authIdentityId,
+      table.expiresAt,
+    ),
+    index("auth_session_observations_maintenance_idx").on(
+      table.expiresAt,
+      table.revokedAt,
+    ),
+    check(
+      "auth_session_observations_digest_check",
+      sql`${table.providerSessionDigest} ~ '^[0-9a-f]{64}$'`,
+    ),
+  ],
+);
+
+export const authRevokedProviderSessions = pgTable(
+  "auth_revoked_provider_sessions",
+  {
+    providerSessionDigest: text("provider_session_digest").primaryKey(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("auth_revoked_provider_sessions_expiry_idx").on(table.expiresAt),
+    check(
+      "auth_revoked_provider_sessions_digest_check",
+      sql`${table.providerSessionDigest} ~ '^[0-9a-f]{64}$'`,
+    ),
+  ],
+);
+
+export const authWebhookEvents = pgTable(
+  "auth_webhook_events",
+  {
+    eventDigest: text("event_digest").primaryKey(),
+    eventType: text("event_type").notNull(),
+    processedAt: timestamp("processed_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    check(
+      "auth_webhook_events_digest_check",
+      sql`${table.eventDigest} ~ '^[0-9a-f]{64}$'`,
+    ),
+    check(
+      "auth_webhook_events_type_check",
+      sql`${table.eventType} ~ '^[a-z0-9_.]{3,100}$'`,
+    ),
+  ],
+);
+
+export const authAuditEvents = pgTable(
+  "auth_audit_events",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    actorAuthIdentityId: uuid("actor_auth_identity_id").references(
+      () => authIdentities.id,
+      { onDelete: "set null" },
+    ),
+    providerSessionDigest: text("provider_session_digest"),
+    eventType: text("event_type").notNull(),
+    subjectDigest: text("subject_digest"),
+    outcome: text("outcome").notNull(),
+    metadata: jsonb("metadata")
+      .$type<Readonly<Record<string, string | number | boolean | null>>>()
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("auth_audit_events_actor_created_idx").on(
+      table.actorAuthIdentityId,
+      table.createdAt,
+    ),
+    index("auth_audit_events_created_idx").on(table.createdAt),
+    check(
+      "auth_audit_events_event_type_check",
+      sql`${table.eventType} ~ '^[a-z0-9_]{3,80}$'`,
+    ),
+    check(
+      "auth_audit_events_session_digest_check",
+      sql`${table.providerSessionDigest} is null
+        or ${table.providerSessionDigest} ~ '^[0-9a-f]{64}$'`,
+    ),
+    check(
+      "auth_audit_events_subject_digest_check",
+      sql`${table.subjectDigest} is null
+        or ${table.subjectDigest} ~ '^[0-9a-f]{64}$'`,
+    ),
+    check(
+      "auth_audit_events_outcome_check",
+      sql`${table.outcome} in ('success', 'failure', 'requested')`,
+    ),
+    check(
+      "auth_audit_events_metadata_object_check",
+      sql`jsonb_typeof(${table.metadata}) = 'object'`,
+    ),
+  ],
+);
 
 export const workspaceMemberships = pgTable(
   "workspace_memberships",

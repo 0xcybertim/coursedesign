@@ -121,17 +121,17 @@ async function ready() {
   });
 }
 
-describe("Phase 1E Course Review Sheet", () => {
+describe("Course Review", () => {
   it("renders the direct read-only review content and return navigation", async () => {
     store(revisionWorkspace(), reviewCourse());
     render(<CourseReviewClient />);
     await ready();
     expect(
-      screen.getByRole("heading", { name: "Course Review Sheet", level: 1 }),
+      screen.getByRole("heading", { name: "Course Review", level: 1 }),
     ).toBeVisible();
     expect(
       screen.getByRole("link", { name: "Return to editable course" }),
-    ).toHaveAttribute("href", "/studio/courses/local-course-1");
+    ).toHaveAttribute("href", "/courses/local-course-1");
     expect(
       screen.getByRole("img", {
         name: /60 by 40 metres, 2 numbered placements/,

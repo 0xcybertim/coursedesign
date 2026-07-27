@@ -1,8 +1,25 @@
 import { Client } from "pg";
+import type { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 import { runMigrations } from "@/server/db/migrations";
+import { bootstrapStarterRecords } from "@/server/db/starter-records";
+import * as schema from "@/server/db/schema";
+import type { ValidatedSessionContext } from "@/persistence";
 
 export const COURSE_DESIGN_TABLE_ALLOWLIST = [
+  "auth_audit_events",
+  "auth_session_observations",
+  "auth_revoked_provider_sessions",
+  "auth_webhook_events",
+  "auth_identities",
+  "auth_rate_limits",
+  "auth_passkeys",
+  "auth_email_tokens",
+  "auth_verifications",
+  "auth_accounts",
+  "auth_sessions",
+  "auth_users",
   "operation_idempotency",
   "artwork_assets",
   "courses",
@@ -93,5 +110,49 @@ export async function migrateCourseDesignTestDatabase() {
     connectionString: TEST_MIGRATION_URL,
     advisoryLockId: 1129270605n,
     statementTimeoutMs: 30_000,
+  });
+}
+
+export async function createTestWorkspaceSession(
+  pool: Pool,
+  now: Date,
+): Promise<ValidatedSessionContext> {
+  const database = drizzle(pool, { schema });
+  return database.transaction(async (transaction) => {
+    const [user] = await transaction
+      .insert(schema.users)
+      .values({ createdAt: now, updatedAt: now })
+      .returning({ id: schema.users.id });
+    const [workspace] = await transaction
+      .insert(schema.workspaces)
+      .values({
+        displayName: "Course Design test team",
+        createdAt: now,
+        updatedAt: now,
+      })
+      .returning({ id: schema.workspaces.id });
+    if (!user || !workspace) {
+      throw new Error("The test workspace was not created.");
+    }
+    await transaction.insert(schema.workspaceMemberships).values({
+      workspaceId: workspace.id,
+      userId: user.id,
+      role: "owner",
+      createdAt: now,
+      updatedAt: now,
+    });
+    await bootstrapStarterRecords(transaction, {
+      workspaceId: workspace.id,
+      now: now.toISOString(),
+    });
+    return {
+      authIdentityId: crypto.randomUUID(),
+      sessionId: crypto.randomUUID(),
+      userId: user.id,
+      workspaceId: workspace.id,
+      membershipRole: "owner",
+      expiresAt: new Date(now.getTime() + 60 * 60 * 1_000).toISOString(),
+      authenticatedAt: now.toISOString(),
+    };
   });
 }

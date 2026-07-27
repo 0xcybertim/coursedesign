@@ -21,7 +21,6 @@ import {
   STARTER_DESIGN_ROUTE_KEY,
 } from "@/persistence";
 import type { ValidatedSessionContext } from "@/persistence/identity-service";
-import { DatabaseProvisionalIdentityService } from "@/server/identity/provisional-identity-service";
 import {
   DatabaseCourseRepository,
   DatabaseDesignRepository,
@@ -29,6 +28,7 @@ import {
 
 import {
   migrateCourseDesignTestDatabase,
+  createTestWorkspaceSession,
   TEST_MIGRATION_URL,
   truncateCourseDesignTestData,
   withTestClient,
@@ -37,19 +37,9 @@ import {
 const T0 = new Date("2026-07-25T09:00:00.000Z");
 const T1 = "2026-07-25T09:01:00.000Z";
 let pool: Pool;
-let tokenOrdinal = 0;
-
-function nextToken() {
-  return String.fromCharCode(65 + tokenOrdinal++).repeat(43);
-}
-
-async function session(email: string): Promise<ValidatedSessionContext> {
-  const selected = await new DatabaseProvisionalIdentityService(pool, {
-    now: () => new Date(T0),
-    generateToken: nextToken,
-  }).selectWorkspace({ email });
-  if (!selected.ok) throw new Error(selected.error.message);
-  return selected.value.session;
+async function session(_email: string): Promise<ValidatedSessionContext> {
+  void _email;
+  return createTestWorkspaceSession(pool, T0);
 }
 
 function updateDraft(
@@ -91,7 +81,6 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await truncateCourseDesignTestData();
-  tokenOrdinal = 0;
 });
 
 describe("server design repository", () => {

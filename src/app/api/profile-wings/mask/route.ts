@@ -150,11 +150,7 @@ function generatedConceptCutout(input: {
       const decoded = decodePng(input.bytes);
       let hasTransparentPixel = false;
       let hasSolidPixel = false;
-      for (
-        let pixel = 0;
-        pixel < decoded.width * decoded.height;
-        pixel += 1
-      ) {
+      for (let pixel = 0; pixel < decoded.width * decoded.height; pixel += 1) {
         const value = decoded.rgba[pixel * 4 + 3] ?? 255;
         if (value <= 8) hasTransparentPixel = true;
         if (value >= 247) hasSolidPixel = true;

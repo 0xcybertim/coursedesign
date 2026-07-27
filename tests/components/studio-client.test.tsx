@@ -13,8 +13,14 @@ import {
   parseLocalDesignLibrary,
 } from "@/domain/design";
 
-afterEach(() => cleanup());
-beforeEach(() => window.localStorage.clear());
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
+beforeEach(() => {
+  window.localStorage.clear();
+  window.history.replaceState({}, "", "/designs/local-spj-04/edit");
+});
 
 async function waitForLocalReady() {
   await waitFor(() => {
@@ -25,6 +31,60 @@ async function waitForLocalReady() {
 }
 
 describe("SPJ-04 studio interface", () => {
+  it("keeps standard, described, and uploaded wings inside one configurator", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        json: async () => ({
+          enabled: true,
+          provider: "deterministic-test",
+          reason: "enabled",
+          automaticRetries: 0,
+          externalCallOccursOnlyOnPost: true,
+        }),
+      })),
+    );
+    render(<StudioClient forceThreeFailure />);
+    await waitForLocalReady();
+
+    expect(
+      screen.getByRole("radio", { name: /Standard panels/i }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole("radio", { name: /Describe custom wings/i }),
+    ).toBeVisible();
+    const imageStyle = screen.getByRole("radio", {
+      name: /Upload a wing image/i,
+    });
+    expect(imageStyle).toBeVisible();
+
+    await user.click(imageStyle);
+
+    expect(window.location.search).toBe("?wing=image");
+    expect(
+      screen.getByRole("heading", {
+        name: "Build custom wings from an image",
+      }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("heading", { name: "Start with one clear subject." }),
+    ).toBeVisible();
+    expect(screen.queryByTestId("local-save-status")).toBeNull();
+    expect(
+      screen.getByText(
+        "Standard foundation shown until the custom silhouette is approved.",
+      ),
+    ).toBeVisible();
+
+    await user.click(screen.getByRole("radio", { name: /Standard panels/i }));
+    expect(window.location.search).toBe("");
+    expect(
+      screen.getByRole("radio", { name: "White frame, selected" }),
+    ).toBeVisible();
+    expect(screen.getByTestId("local-save-status")).toBeVisible();
+  });
+
   it("shows named swatches with a visible selected state", () => {
     render(<StudioClient forceThreeFailure />);
     expect(
@@ -58,10 +118,11 @@ describe("SPJ-04 studio interface", () => {
       screen.getAllByText("Non-sellable prototype").length,
     ).toBeGreaterThan(0);
     expect(
-      screen.getByRole("button", {
-        name: "Continue unavailable · prototype only",
-      }),
+      screen.getByRole("button", { name: "Add to course" }),
     ).toBeDisabled();
+    expect(
+      screen.getByText("Save a revision to add it to a course."),
+    ).toBeVisible();
   });
 
   it("updates the visual, hashes, bill of materials and specification from one option change", async () => {
@@ -236,6 +297,30 @@ describe("SPJ-04 studio interface", () => {
     expect(
       screen.getByRole("button", { name: "Open revision 01" }),
     ).toBeVisible();
+  });
+
+  it("offers the exact newly saved revision to the course", async () => {
+    const user = userEvent.setup();
+    render(<StudioClient forceThreeFailure />);
+    await waitForLocalReady();
+    await user.click(
+      screen.getByRole("button", { name: "Save immutable revision" }),
+    );
+    const stored = parseLocalDesignLibrary(
+      window.localStorage.getItem(LOCAL_DESIGN_LIBRARY_STORAGE_KEY) ?? "",
+    );
+    if (!stored.ok) throw new Error(stored.error.message);
+    const exact = stored.value.spj04Workspace.revisions[0];
+    expect(exact).toBeDefined();
+    expect(
+      screen.getByRole("link", { name: "Add Revision 01 to course" }),
+    ).toHaveAttribute(
+      "href",
+      `/courses/local-course-1?revision=${exact?.revisionId}`,
+    );
+    expect(
+      screen.getByRole("link", { name: "View saved design" }),
+    ).toHaveAttribute("href", "/designs/local-spj-04");
   });
 
   it("does not let malformed browser data become trusted configuration", async () => {

@@ -211,7 +211,7 @@ export function WorkspaceHomeClient() {
             <h1>Customize a jump. Build a course.</h1>
             <p>
               Core designs, immutable revisions, canonical render artwork, and
-              the course cross contexts through this public workspace selector.
+              the course move together inside your authenticated team.
             </p>
           </div>
           <p className="workspace-hero-proof">
@@ -230,7 +230,7 @@ export function WorkspaceHomeClient() {
           </div>
         ) : server.error ? (
           <section className="workspace-source-errors" role="status">
-            <strong>Open a public server workspace to continue.</strong>
+            <strong>Sign in to open your private team workspace.</strong>
             <p>{server.error}</p>
             <p>
               Existing browser-local work was not read, imported, or changed.

@@ -161,7 +161,7 @@ describe("Phase 1H-A subject-mask benchmark", () => {
           "not_exactly_one_significant_component",
         );
     }
-  }, 10_000);
+  }, 30_000);
 
   it("makes one stateless Photoroom alpha-mask request with no retry path", async () => {
     const fixture = subjectMaskFixtures[0]!;

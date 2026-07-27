@@ -425,8 +425,10 @@ describe("Phase 1G concept route", () => {
     const generate = vi.fn(() => ({
       withResponse: async () => ({
         data: {
-          data: [1, 2, 3, 4].map(() => ({ b64_json: "/9j/" })),
-          output_format: "jpeg" as const,
+          data: [1, 2, 3, 4].map(() => ({
+            b64_json: "iVBORw0KGgo=",
+          })),
+          output_format: "png" as const,
         },
         response: new Response(),
         request_id: "openai-request",
@@ -435,8 +437,10 @@ describe("Phase 1G concept route", () => {
     const edit = vi.fn(() => ({
       withResponse: async () => ({
         data: {
-          data: [1, 2, 3, 4].map(() => ({ b64_json: "/9j/" })),
-          output_format: "jpeg" as const,
+          data: [1, 2, 3, 4].map(() => ({
+            b64_json: "iVBORw0KGgo=",
+          })),
+          output_format: "png" as const,
         },
         response: new Response(),
         request_id: "openai-edit",
@@ -460,9 +464,14 @@ describe("Phase 1G concept route", () => {
     expect((await provider.generate(base)).images).toHaveLength(4);
     expect(generate).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: "gpt-image-2-2026-04-21",
+        model: "gpt-image-1",
         n: 4,
         quality: "low",
+        output_format: "png",
+        background: "transparent",
+        prompt: expect.stringMatching(
+          /one isolated Profile Wing Vertical plate.*transparent background/s,
+        ),
       }),
       expect.objectContaining({ signal, maxRetries: 0 }),
     );
@@ -477,7 +486,7 @@ describe("Phase 1G concept route", () => {
     });
     expect(edit).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: "gpt-image-2-2026-04-21",
+        model: "gpt-image-1",
         n: 4,
         image: expect.any(File),
       }),

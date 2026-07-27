@@ -85,7 +85,7 @@ describe("Phase 1C course studio", () => {
     );
     expect(
       screen.getByRole("link", { name: "Create and save an obstacle" }),
-    ).toHaveAttribute("href", "/studio/obstacles/spj-04");
+    ).toHaveAttribute("href", "/designs/local-spj-04/edit");
     expect(screen.queryByRole("button", { name: /Obstacle 1/ })).toBeNull();
     expect(screen.getByRole("button", { name: "Horse POV" })).toBeDisabled();
   });
@@ -107,9 +107,39 @@ describe("Phase 1C course studio", () => {
     expect(screen.getAllByText(/Obstacle 2 overlaps Obstacle 1/)).toHaveLength(
       2,
     );
+    expect(screen.getByRole("link", { name: "Review course" })).toHaveAttribute(
+      "href",
+      "/courses/local-course-1/review",
+    );
+  });
+
+  it("selects a requested exact revision without placing it", async () => {
+    storeObstacleWorkspace(workspaceWithTwoRevisions());
+    render(<CourseStudioClient requestedRevisionId="revision-2" />);
+    await ready();
     expect(
-      screen.getByRole("link", { name: "Open Course Review Sheet" }),
-    ).toHaveAttribute("href", "/studio/courses/local-course-1/review");
+      screen.getByText(
+        "Requested revision selected and ready to place. Nothing was placed automatically.",
+      ),
+    ).toBeVisible();
+    expect(screen.getByRole("radio", { name: /Revision 02/ })).toBeChecked();
+    expect(screen.queryByRole("button", { name: /Obstacle 1,/ })).toBeNull();
+    expect(
+      screen.getByRole("link", { name: "Edit selected SPJ-04 revision" }),
+    ).toHaveAttribute("href", "/designs/local-spj-04/edit?revision=revision-2");
+  });
+
+  it("rejects an unknown requested revision without placing it", async () => {
+    storeObstacleWorkspace(workspaceWithRevisionOne());
+    render(<CourseStudioClient requestedRevisionId="unknown-revision" />);
+    await ready();
+    expect(
+      screen.getByText(
+        "The requested revision is not in this browser. The normal selection remains available and nothing was placed.",
+      ),
+    ).toBeVisible();
+    expect(screen.getByRole("radio", { name: /Revision 01/ })).toBeChecked();
+    expect(screen.queryByRole("button", { name: /Obstacle 1,/ })).toBeNull();
   });
 
   it("supports visible movement, rotation, removal, and non-blocking warnings", async () => {
@@ -275,6 +305,64 @@ describe("Phase 1C course studio", () => {
     expect(screen.getByTestId("quantity-summary")).toHaveTextContent("Gates1");
   });
 
+  it("adds grass and movable scenery as a persistent visual-only layer", async () => {
+    const user = userEvent.setup();
+    const first = render(<CourseStudioClient />);
+    await ready();
+
+    await user.click(screen.getByRole("button", { name: "Grass" }));
+    await user.click(screen.getByRole("button", { name: "Add palm tree" }));
+    expect(screen.getByTestId("arena-canvas")).toHaveAttribute(
+      "data-surface",
+      "grass",
+    );
+    expect(
+      screen.getByRole("button", { name: /Palm tree 1, visual scenery/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Palm tree 1")).toBeVisible();
+
+    await user.click(
+      screen.getByRole("button", { name: "Move scenery right 2 m" }),
+    );
+    const stored = parseCourseDraft(
+      window.localStorage.getItem(COURSE_STORAGE_KEY) ?? "",
+    );
+    expect(stored).toMatchObject({
+      ok: true,
+      value: {
+        environment: {
+          surface: "grass",
+          scenery: [
+            {
+              kind: "palm_tree",
+              xMm: 7000,
+              yMm: 5000,
+              displayNumber: 1,
+            },
+          ],
+        },
+      },
+    });
+    expect(screen.getByTestId("quantity-summary")).toHaveTextContent(
+      "Obstacle instances0",
+    );
+
+    first.unmount();
+    render(<CourseStudioClient />);
+    await waitFor(() =>
+      expect(screen.getByTestId("course-save-status")).toHaveTextContent(
+        "Course restored",
+      ),
+    );
+    expect(screen.getByTestId("arena-canvas")).toHaveAttribute(
+      "data-surface",
+      "grass",
+    );
+    expect(
+      screen.getByRole("button", { name: /Palm tree 1, visual scenery/ }),
+    ).toBeVisible();
+  });
+
   it("keeps mobile-essential controls present and at least structurally usable", async () => {
     Object.defineProperty(window, "innerWidth", {
       value: 375,
@@ -293,6 +381,8 @@ describe("Phase 1C course studio", () => {
       screen.getByRole("button", { name: "Rotate right 15 degrees" }),
     ).toBeDisabled();
     expect(screen.getByRole("button", { name: "Remove" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Grass" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Add palm tree" })).toBeVisible();
   });
 
   it("offers an on-demand 3D arena and returns safely to the editable plan when WebGL fails", async () => {

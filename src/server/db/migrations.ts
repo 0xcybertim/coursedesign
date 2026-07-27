@@ -12,6 +12,7 @@ export interface MigrationRunOptions {
   readonly advisoryLockId: bigint;
   readonly statementTimeoutMs: number;
   readonly migrationsDirectory?: string;
+  readonly throughFilename?: string;
   readonly onMigrationApplied?: (filename: string) => void;
 }
 
@@ -51,7 +52,18 @@ export async function runMigrations(
   const directory =
     options.migrationsDirectory ??
     resolve(process.cwd(), "drizzle", "migrations");
-  const files = await migrationFiles(directory);
+  const availableFiles = await migrationFiles(directory);
+  if (
+    options.throughFilename &&
+    !availableFiles.some((file) => file.filename === options.throughFilename)
+  ) {
+    throw new Error(
+      `Migration target ${options.throughFilename} is not checked in.`,
+    );
+  }
+  const files = options.throughFilename
+    ? availableFiles.filter((file) => file.filename <= options.throughFilename!)
+    : availableFiles;
   const client = new Client({
     connectionString: options.connectionString,
     application_name: "course-design-migration-owner",

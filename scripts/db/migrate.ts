@@ -7,6 +7,7 @@ async function main() {
     connectionString: configuration.migrationDatabaseUrl,
     advisoryLockId: configuration.advisoryLockId,
     statementTimeoutMs: configuration.statementTimeoutMs,
+    throughFilename: configuration.throughFilename,
     onMigrationApplied: (filename) => {
       process.stdout.write(`Applied ${filename}\n`);
     },

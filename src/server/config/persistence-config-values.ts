@@ -56,6 +56,7 @@ export interface MigrationConfig {
   readonly migrationDatabaseUrl: string;
   readonly advisoryLockId: bigint;
   readonly statementTimeoutMs: number;
+  readonly throughFilename?: string;
 }
 
 export class PersistenceConfigError extends Error {
@@ -262,6 +263,12 @@ export function parseMigrationConfig(
       "MIGRATION_ADVISORY_LOCK_ID must be an integer.",
     );
   }
+  const throughFilename = environment.MIGRATION_TARGET?.trim();
+  if (throughFilename && !/^\d{4}_[a-z0-9_]+\.sql$/.test(throughFilename)) {
+    throw new PersistenceConfigError(
+      "MIGRATION_TARGET must be an exact checked-in SQL migration filename.",
+    );
+  }
   return {
     migrationDatabaseUrl,
     advisoryLockId,
@@ -271,5 +278,6 @@ export function parseMigrationConfig(
       60_000,
       { minimum: 1_000, maximum: 10 * 60_000 },
     ),
+    ...(throughFilename ? { throughFilename } : {}),
   };
 }

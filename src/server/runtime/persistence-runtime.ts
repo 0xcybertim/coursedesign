@@ -4,18 +4,13 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
-import { UNVERIFIED_WORKSPACE_WARNING } from "@/domain/identity";
-import type {
-  ProvisionalWorkspaceSummary,
-  ValidatedSessionContext,
-} from "@/persistence";
+import type { WorkspaceSummary, ValidatedSessionContext } from "@/persistence";
 import {
   persistenceFailure,
   type PersistenceResult,
 } from "@/persistence/result";
 import { getPersistenceConfig } from "@/server/config/persistence-config";
 import * as schema from "@/server/db/schema";
-import { DatabaseProvisionalIdentityService } from "@/server/identity/provisional-identity-service";
 import {
   DatabaseArtworkRepository,
   DatabaseCourseRepository,
@@ -57,16 +52,6 @@ export function runtimePool(): Pool | null {
   return globalThis.courseDesignRuntimePool;
 }
 
-export function identityService(): DatabaseProvisionalIdentityService | null {
-  const config = serverConfig();
-  const pool = runtimePool();
-  return config && pool
-    ? new DatabaseProvisionalIdentityService(pool, {
-        sessionTtlSeconds: config.session.ttlSeconds,
-      })
-    : null;
-}
-
 export function persistenceRepositories(session: ValidatedSessionContext) {
   const config = serverConfig();
   const pool = runtimePool();
@@ -101,7 +86,7 @@ export function localFakeObjectStorage(): LocalHttpFakeObjectStorage {
 
 export async function currentWorkspaceSummary(
   session: ValidatedSessionContext,
-): Promise<PersistenceResult<ProvisionalWorkspaceSummary>> {
+): Promise<PersistenceResult<WorkspaceSummary>> {
   const pool = runtimePool();
   if (!pool) {
     return persistenceFailure(
@@ -121,17 +106,16 @@ export async function currentWorkspaceSummary(
           ok: true,
           value: {
             displayName: workspace.displayName,
-            warning: UNVERIFIED_WORKSPACE_WARNING,
           },
         }
       : persistenceFailure(
           "session_invalid",
-          "This public workspace session is no longer valid. Enter the email again.",
+          "This team workspace is no longer available.",
         );
   } catch {
     return persistenceFailure(
       "temporarily_unavailable",
-      "The public workspace could not be checked. Try again.",
+      "The team workspace could not be checked. Try again.",
     );
   }
 }

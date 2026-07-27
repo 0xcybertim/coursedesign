@@ -34,10 +34,7 @@ describe("object storage boundary", () => {
     const sources = await Promise.all([
       readFile("src/persistence/artwork-repository.ts", "utf8"),
       readFile("src/persistence/browser/browser-artwork-repository.ts", "utf8"),
-      readFile(
-        "src/components/workspace/ProvisionalWorkspaceSelector.tsx",
-        "utf8",
-      ),
+      readFile("src/components/auth/AuthenticationPanel.tsx", "utf8"),
     ]);
     expect(sources.join("\n")).not.toContain("@google-cloud/storage");
   });

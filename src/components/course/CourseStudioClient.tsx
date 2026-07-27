@@ -349,7 +349,7 @@ export function CourseStudioClient({
             <strong data-testid="course-save-status">{workspace.status}</strong>
             <small>
               {persistenceMode === "server"
-                ? "Saved to this unverified public server workspace"
+                ? "Saved to your authenticated team workspace"
                 : "Browser-local · clearing storage removes this course"}
             </small>
           </div>

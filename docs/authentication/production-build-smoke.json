@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "course-design-workos-production-build-smoke-v2",
+  "status": "passed",
+  "target": "http://localhost:3102",
+  "productionMutated": false,
+  "checks": [
+    {
+      "name": "signed-out production boundary",
+      "result": "pass",
+      "detail": "The production server rendered only the WorkOS sign-in and account-creation entry."
+    },
+    {
+      "name": "production test seam disabled",
+      "result": "pass",
+      "detail": "Production returned 404 even while acceptance-test environment variables were deliberately present."
+    },
+    {
+      "name": "private no-store capability response",
+      "result": "pass",
+      "detail": "The public capability response was no-store and contained no session or provider secrets."
+    },
+    {
+      "name": "Next.js proxy recognized",
+      "result": "pass",
+      "detail": "The production build listed the authentication proxy as Proxy (Middleware)."
+    }
+  ],
+  "notes": [
+    "This uses non-secret placeholders and does not contact WorkOS, Render, PostgreSQL, or Google Cloud Storage.",
+    "It does not replace exact WorkOS staging or Render production acceptance."
+  ]
+}

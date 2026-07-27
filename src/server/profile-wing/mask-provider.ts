@@ -116,9 +116,7 @@ export function createRemoveBgProfileMaskProvider(options: {
 }
 
 export function createDeterministicProfileMaskProvider(
-  source:
-    | Uint8Array
-    | ((input: ProfileWingMaskProviderInput) => Uint8Array),
+  source: Uint8Array | ((input: ProfileWingMaskProviderInput) => Uint8Array),
 ): ProfileWingMaskProvider {
   if (source instanceof Uint8Array && !isPng(source))
     throw new Error("Deterministic Profile Wing mask must be a PNG.");

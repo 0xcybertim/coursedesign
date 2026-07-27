@@ -12,15 +12,13 @@ import {
   getPersistenceConfig,
   type ServerPersistenceConfig,
 } from "@/server/config/persistence-config";
-import { serializeSessionCookie } from "@/server/http/session-cookie";
-import { identityService } from "@/server/runtime/persistence-runtime";
+import { authenticatedWorkspaceSession } from "@/server/auth/workspace-authorization";
 
 export const NO_STORE_HEADERS = { "Cache-Control": "no-store" } as const;
 const MAX_JSON_BYTES = 256 * 1024;
 
 export interface RequestSession {
   readonly context: ValidatedSessionContext;
-  readonly token: string;
   readonly config: ServerPersistenceConfig;
 }
 
@@ -38,9 +36,10 @@ export function requestCookieValue(
 
 export function persistenceJson<T>(
   result: PersistenceResult<T, unknown>,
-  session?: Pick<RequestSession, "token" | "config">,
+  _session?: Pick<RequestSession, "config">,
 ): NextResponse {
-  const response = NextResponse.json(
+  void _session;
+  return NextResponse.json(
     result,
     result.ok
       ? { status: 200, headers: NO_STORE_HEADERS }
@@ -49,16 +48,6 @@ export function persistenceJson<T>(
           headers: NO_STORE_HEADERS,
         },
   );
-  if (session) {
-    response.headers.set(
-      "Set-Cookie",
-      serializeSessionCookie({
-        token: session.token,
-        maxAgeSeconds: session.config.session.ttlSeconds,
-      }),
-    );
-  }
-  return response;
 }
 
 export async function requestSession(
@@ -71,19 +60,11 @@ export async function requestSession(
       "Server persistence is not enabled.",
     );
   }
-  const token = requestCookieValue(request, config.session.cookieName);
-  const identity = identityService();
-  if (!token || !identity) {
-    return persistenceFailure(
-      "session_invalid",
-      "Enter an email to open the public server workspace.",
-    );
-  }
-  const validated = await identity.validateSession(token);
+  const validated = await authenticatedWorkspaceSession(request.headers);
   return validated.ok
     ? {
         ok: true,
-        value: { context: validated.value, token, config },
+        value: { context: validated.value, config },
       }
     : validated;
 }

@@ -5,13 +5,13 @@ import type {
   CanonicalArtworkUploadInput,
   ValidatedSessionContext,
 } from "@/persistence";
-import { DatabaseProvisionalIdentityService } from "@/server/identity/provisional-identity-service";
 import { DatabaseArtworkRepository } from "@/server/persistence";
 import { FakePrivateObjectStorage } from "@/server/storage/fake-object-storage";
 import type { StoredObjectInspection } from "@/server/storage/object-storage";
 
 import {
   migrateCourseDesignTestDatabase,
+  createTestWorkspaceSession,
   TEST_MIGRATION_URL,
   truncateCourseDesignTestData,
   withTestClient,
@@ -47,19 +47,9 @@ const CONFIG = {
 };
 
 let pool: Pool;
-let tokenOrdinal = 0;
-
-function nextToken() {
-  return String.fromCharCode(75 + tokenOrdinal++).repeat(43);
-}
-
-async function session(email: string): Promise<ValidatedSessionContext> {
-  const selected = await new DatabaseProvisionalIdentityService(pool, {
-    now: () => NOW,
-    generateToken: nextToken,
-  }).selectWorkspace({ email });
-  if (!selected.ok) throw new Error(selected.error.message);
-  return selected.value.session;
+async function session(_email: string): Promise<ValidatedSessionContext> {
+  void _email;
+  return createTestWorkspaceSession(pool, NOW);
 }
 
 function inspection(
@@ -97,7 +87,6 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await truncateCourseDesignTestData();
-  tokenOrdinal = 0;
 });
 
 describe("server artwork repository", () => {

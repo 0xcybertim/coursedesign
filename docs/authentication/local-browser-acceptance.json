@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "course-design-workos-local-browser-acceptance-v2",
+  "status": "local-chromium-passed-workos-staging-pending",
+  "target": "http://localhost:3100",
+  "productionMutated": false,
+  "checks": [
+    {
+      "name": "hosted entry boundary and responsive layout",
+      "result": "pass",
+      "detail": "Signed-out server mode exposes only WorkOS sign-in/sign-up routes and fits desktop, tablet, and mobile viewports."
+    },
+    {
+      "name": "local identity mapping, starter team, and restoration",
+      "result": "pass",
+      "detail": "A signed non-production test identity opened one private starter team and restored across reload/new page without exposing its HttpOnly cookie."
+    },
+    {
+      "name": "privacy export, selector retirement, and CSRF",
+      "result": "pass",
+      "detail": "Export omitted provider/session secrets, the unverified email selector remained 410, and a cross-site destructive request failed before authorization."
+    },
+    {
+      "name": "provider-subject workspace isolation",
+      "result": "pass",
+      "detail": "Two fresh browser contexts with distinct provider subjects stayed isolated at the same public route key."
+    },
+    {
+      "name": "compare-and-swap conflict recovery",
+      "result": "pass",
+      "detail": "Two same-account tabs surfaced a stale-version conflict and recovered the winning immutable server truth."
+    },
+    {
+      "name": "logout, revocation, and local-data preservation",
+      "result": "pass",
+      "detail": "Logout revoked the database observation, cleared the test cookie, closed workspace access, and left localStorage/IndexedDB untouched."
+    },
+    {
+      "name": "fresh-auth deletion and immutable-data preservation",
+      "result": "pass",
+      "detail": "Fresh-auth deletion retired server workspaces, cleared identity/session access, and preserved browser-local histories and inputs."
+    },
+    {
+      "name": "unverified-session failure path",
+      "result": "pass",
+      "detail": "An unverified provider identity rendered the verification gate and never resolved workspace ownership."
+    }
+  ],
+  "screenshots": [
+    "docs/authentication/screenshots/workos-signed-out-desktop.png",
+    "docs/authentication/screenshots/workos-signed-out-tablet.png",
+    "docs/authentication/screenshots/workos-signed-out-mobile.png"
+  ],
+  "diagnostics": {
+    "consoleProblems": [],
+    "failedRequests": [],
+    "serverErrors": [],
+    "externalRequests": [],
+    "tokenBearingRequestUrls": [],
+    "authenticationResponseSecretFields": []
+  },
+  "workosStagingPending": [
+    "Hosted password registration and login",
+    "Hosted email verification and Magic Auth code",
+    "Hosted Google OAuth",
+    "Hosted passkey registration and login",
+    "Hosted password recovery",
+    "WorkOS callback, session refresh, logout, and signed webhook delivery on the Render URL",
+    "Desktop Chrome, Edge, Firefox, Safari, iOS Safari, and Android Chrome fresh-context matrix"
+  ],
+  "failure": null
+}

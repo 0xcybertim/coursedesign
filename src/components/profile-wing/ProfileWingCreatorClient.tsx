@@ -775,7 +775,7 @@ export function ProfileWingCreatorClient({
               silhouette, then choose the jump color before saving the complete
               jump.{" "}
               {persistenceMode === "server"
-                ? "Raw sources and processing history remain local. An explicit final save sends only the canonical render and immutable snapshot to this public server workspace."
+                ? "Raw sources and processing history remain local. An explicit final save sends only the canonical render and immutable snapshot to your authenticated team workspace."
                 : "Nothing leaves this browser until you explicitly request background removal."}
             </p>
           </div>
