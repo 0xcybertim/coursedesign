@@ -1,9 +1,19 @@
-# Authentication visual QA
+# Authentication visual QA handoff
 
-Everything outside this checklist is automated by
-`pnpm qa:authentication:automated`. Use fresh private browser contexts and the
-WorkOS staging environment. Do not use a real customer email or production
-workspace.
+Automated and agent-operated production acceptance is recorded in
+`docs/authentication/production-evidence/browser-acceptance.json`. It covers the
+live Render health/cutover boundary, responsive signed-out layouts, real WorkOS
+password sessions, restoration, cookie security, export, cross-site request
+protection, two-subject workspace isolation, compare-and-swap recovery, account
+deletion, and browser-local data preservation.
+
+The agent also proved registration, email verification, Magic Auth, recovery,
+logout, old-password rejection, invalid-code handling, and webhook delivery.
+Do not repeat those journeys unless investigating a regression.
+
+The only remaining manual sign-off is Google, passkey, and subjective
+cross-device visual quality. Use fresh private browser contexts in the WorkOS
+staging environment. Do not use a real customer email or production workspace.
 
 ## One-time WorkOS staging setup
 
@@ -22,42 +32,30 @@ The `onrender.com` URL is valid. A custom domain is not required. Passkeys made
 now are test passkeys and may need reenrollment if a custom domain is added
 later.
 
-## Visual pass
+## Remaining visual pass
 
 Record only pass/fail and a short note. Do not capture email addresses,
 one-time codes, cookies, query strings, or dashboard secrets in screenshots.
 
-1. **Signed out**
-   Open `/` at 390 px, 768 px, and desktop width. Confirm there is no horizontal
-   overflow and only the hosted sign-in/sign-up entry is offered.
-2. **Password registration and verification**
-   Register a new staging account, verify the email, and confirm the new private
-   team workspace opens with starter content.
-3. **Magic Auth**
-   Sign out, use the six-digit email code, and confirm the same workspace opens.
-4. **Google**
-   Sign out, use Google, and confirm the expected account/workspace opens. A
-   different provider subject must never expose another test account's data.
-5. **Passkey**
+1. **Google**
+   Open `https://coursedesign.onrender.com/account/sign-in` in a fresh private
+   context, use Google, and confirm the expected private workspace opens. Sign
+   out and confirm the signed-out home returns.
+2. **Passkey**
    Enroll a test passkey, sign out, and sign back in with it. Cancel the passkey
    prompt once and confirm the hosted flow recovers cleanly.
-6. **Recovery and restoration**
-   Reset the password, confirm the previous session no longer works, then reload
-   and open a second tab to confirm the new session restores.
-7. **Logout and failure states**
-   Confirm logout returns to the signed-out screen. Try an expired/used code and
-   an unverified account; errors must be understandable and no workspace should
-   appear.
-8. **Local-data preservation**
-   Before logout and account deletion, create browser-local experimental data.
-   Confirm it still exists afterward and was neither imported into the team
-   workspace nor deleted.
+3. **Visual/device sweep**
+   In desktop Safari, Firefox, and Edge plus real iOS Safari and Android Chrome,
+   inspect the signed-out page, hosted sign-in page, and signed-in account
+   panel. Confirm there is no clipping, horizontal overflow, unreadable text,
+   broken navigation, or unexpected console error.
 
 ## Browser/device sampling
 
-- Desktop: Chrome, Edge, Firefox, Safari.
+- Automated Chromium: complete.
+- Desktop visual sign-off: Edge, Firefox, Safari.
 - Real mobile: iOS Safari and Android Chrome.
-- Use a fresh private context for each identity-isolation test.
+- Use a fresh private context for each browser/device.
 
-Visual QA is complete only when all eight flows pass and no browser console
+Visual QA is complete when all three remaining items pass and no browser console
 error, broken navigation, clipped control, or secret-bearing URL is observed.

@@ -26,6 +26,7 @@
     "acceptance:profile-wing-creation": "node scripts/verify-profile-wing-creation-browser.mjs",
     "acceptance:persistence:production": "node scripts/verify-production-persistence-browser.mjs",
     "acceptance:authentication:local": "node scripts/verify-authentication-browser.mjs",
+    "acceptance:authentication:production": "node scripts/verify-authentication-production-browser.mjs",
     "qa:authentication:local": "node scripts/run-authentication-local-qa.mjs",
     "qa:authentication:build": "node scripts/run-authentication-build-smoke.mjs",
     "qa:authentication:automated": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:db && pnpm qa:authentication:build && pnpm qa:authentication:local && pnpm audit --prod --audit-level high",

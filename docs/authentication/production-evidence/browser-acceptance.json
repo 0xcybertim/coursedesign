@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "course-design-workos-production-browser-acceptance-v1",
+  "status": "passed",
+  "target": "https://coursedesign.onrender.com",
+  "providerEnvironment": "workos-staging",
+  "syntheticUsersDeleted": true,
+  "checks": [
+    {
+      "name": "cutover health and retired public boundary",
+      "result": "pass",
+      "detail": "The exact Render app reports migration 5, least-privilege runtime access, private GCS, hosted WorkOS, a 410 legacy selector, and no production test-session route."
+    },
+    {
+      "name": "signed-out responsive boundary",
+      "result": "pass",
+      "detail": "Fresh desktop, tablet, and mobile contexts expose only hosted sign-in/sign-up and have no horizontal clipping."
+    },
+    {
+      "name": "session restoration, cookie security, export, and CSRF",
+      "result": "pass",
+      "detail": "A fresh real WorkOS session restored across pages, kept its secure HttpOnly SameSite=Lax cookie, preserved browser-local state, exported no provider/session secrets, and rejected a cross-site deletion request."
+    },
+    {
+      "name": "provider-subject workspace isolation",
+      "result": "pass",
+      "detail": "Two real WorkOS staging subjects received distinct private workspaces at the same route key; the second never observed the first subject’s saved draft."
+    },
+    {
+      "name": "compare-and-swap conflict recovery",
+      "result": "pass",
+      "detail": "Two tabs in one real account surfaced a stale-save conflict and recovered the winning immutable server truth."
+    },
+    {
+      "name": "account deletion and browser-local preservation",
+      "result": "pass",
+      "detail": "Both synthetic WorkOS users were deleted through the live UI; server access closed while localStorage and IndexedDB sentinels remained intact."
+    }
+  ],
+  "screenshots": [
+    "docs/authentication/production-evidence/screenshots/signed-out-desktop.png",
+    "docs/authentication/production-evidence/screenshots/signed-out-tablet.png",
+    "docs/authentication/production-evidence/screenshots/signed-out-mobile.png",
+    "docs/authentication/production-evidence/screenshots/stale-save-conflict.png",
+    "docs/authentication/production-evidence/screenshots/deletion-confirmation.png",
+    "docs/authentication/production-evidence/screenshots/post-deletion-signed-out.png"
+  ],
+  "diagnostics": {
+    "consoleProblems": [],
+    "failedRequests": [],
+    "serverErrors": [],
+    "tokenBearingRequestPaths": [],
+    "authenticationResponseSecretFields": []
+  },
+  "manualOnlyRemaining": [
+    "Google OAuth consent in a user-controlled account",
+    "Passkey registration and sign-in on a user-controlled device",
+    "Subjective visual review in desktop Safari, desktop Firefox, desktop Edge, iOS Safari, and Android Chrome"
+  ],
+  "failure": null
+}
