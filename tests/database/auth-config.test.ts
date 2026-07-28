@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  authenticationFailureUrl,
   parseAuthenticationConfig,
   privacyDigest,
 } from "@/server/auth/auth-config";
@@ -27,6 +28,14 @@ const SERVER_ENVIRONMENT = {
 } as const;
 
 describe("WorkOS authentication configuration", () => {
+  it("keeps callback failures on the configured public origin", () => {
+    expect(
+      authenticationFailureUrl("https://coursedesign.onrender.com").href,
+    ).toBe(
+      "https://coursedesign.onrender.com/?authError=authentication-failed",
+    );
+  });
+
   it("locks the provider, tenant, redirect and seven-day host-only cookie", () => {
     expect(parseAuthenticationConfig(SERVER_ENVIRONMENT)).toMatchObject({
       provider: "workos",

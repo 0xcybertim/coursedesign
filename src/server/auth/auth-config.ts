@@ -56,6 +56,10 @@ function exactOrigin(value: string, name: string): string {
   return url.origin;
 }
 
+export function authenticationFailureUrl(baseUrl: string): URL {
+  return new URL("/?authError=authentication-failed", baseUrl);
+}
+
 export function parseAuthenticationConfig(
   environment: Environment = process.env,
 ): AuthenticationConfig {

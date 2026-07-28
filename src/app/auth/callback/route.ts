@@ -1,7 +1,10 @@
 import { handleAuth } from "@workos-inc/authkit-nextjs";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { parseAuthenticationConfig } from "@/server/auth/auth-config";
+import {
+  authenticationFailureUrl,
+  parseAuthenticationConfig,
+} from "@/server/auth/auth-config";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,11 +22,8 @@ export async function GET(request: NextRequest) {
         throw new Error("A verified email is required.");
       }
     },
-    onError({ request: callbackRequest }) {
-      return NextResponse.redirect(
-        new URL("/?authError=authentication-failed", callbackRequest.url),
-        303,
-      );
+    onError() {
+      return NextResponse.redirect(authenticationFailureUrl(config.baseUrl), 303);
     },
   })(request);
 }
